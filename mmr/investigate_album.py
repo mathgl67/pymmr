@@ -60,7 +60,7 @@ class InvestigateAlbum:
       if m:
         i=1
         for attr in keys.split(' '):
-          setattr(album, attr, m.group(i))
+          setattr(album, attr, m.group(i).replace('_', ' '))
           i+=1
     
     self._append_(album)
