@@ -19,7 +19,7 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from ID3 import *
+from mutagen.mp3 import MP3
 
 class FileMp3:
   def __init__(self, file):
@@ -43,17 +43,17 @@ class FileMp3:
     return str
 
   def __parse_tags__(self):
-    tags = ID3(self.__file__._fullpath_)
-    if tags.has_key('ARTIST'):
-      self._artist_ = tags['ARTIST']
-    if tags.has_key('ALBUM'):
-      self._title_ = tags['ALBUM']
-    if tags.has_key('YEAR'):
-      self._year_ = tags['YEAR']
-    if tags.has_key('GENRE'):
-      self._genre_ = tags['GENRE']
-    if tags.has_key('TITLE'):
-      self._track_ = tags['TITLE']
-    if tags.has_key('TRACK'):
-      self._number_ = tags['TRACK']
+    tags = MP3(self.__file__._fullpath_)
+    if tags.has_key('artist'):
+      self._artist_ = str(tags.get('artist'))
+    if tags.has_key('album'):
+      self._title_ = str(tags.get('album'))
+    if tags.has_key('date'):
+      self._year_ = str(tags.get('year'))
+    if tags.has_key('genre'):
+      self._genre_ = str(tags.get('genre'))
+    if tags.has_key('title'):
+      self._track_ = str(tags.get('title'))
+    if tags.has_key('tracknumber'):
+      self._number_ = str(tags.get('tracknumber'))
 
