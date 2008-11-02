@@ -49,7 +49,7 @@ class FileFlac:
     if tags.has_key('album'):
       self._title_ = str(tags.get('album'))
     if tags.has_key('date'):
-      self._year_ = str(tags.get('year'))
+      self._year_ = str(tags.get('date'))
     if tags.has_key('genre'):
       self._genre_ = str(tags.get('genre'))
     if tags.has_key('title'):
