@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+# vi:ai:et:ts=2 sw=2
+#
+# PyMmr My Music Renamer
+# Copyright (C) 2007  mathgl67@gmail.com
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License along
+#   with this program; if not, write to the Free Software Foundation, Inc.,
+#   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+import sys
+import mmr
+from optparse import OptionParser
+
+#init argv parser
+usage = "usage: %prog [options] <music_directory>"
+parser = OptionParser(usage=usage, version="%s %s" % (mmr.prog, mmr.version))
+
+#add option
+parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False, help="make lot of noise")
+parser.add_option("-i", "--interface", dest="interface", default="text", help="Select user interface")
+
+#parse
+(options, args) = parser.parse_args()
+
+#check args
+if len(args) < 1:
+  parser.print_help()
+  sys.exit(1)
+
+#load interface
+try:
+  interface = __import__("mmr.interfaces.%s" % options.interface, globals(),
+                         locals(), ["mmr", "interface"])
+  interface = interface.Interface()
+except:
+  print "could not load '%s' interface" % options.interface
+  sys.exit(1)
+
+interface.welcome()
+
+folder = mmr.Folder(args[0])
+print folder
+
+investigate_album = mmr.InvestigateAlbum(folder)
+investigate_album.do_by_regex()
+investigate_album.do_by_tag()
+investigate_album.do_by_mix()
+investigate_album.sort()
+
+print investigate_album
+
