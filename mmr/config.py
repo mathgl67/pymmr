@@ -19,14 +19,17 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from config import Config
-from album import Album
-from track import Track
-from folder import Folder
-from file import File
-from file_mp3 import FileMp3
-from investigate_album import InvestigateAlbum
+import yaml
 
-prog = 'pymmr'
-version = '0.1-rc1'
+class Config:
 
+  def __init__(self, file_name):
+    self._file_name_ = file_name
+    self._load_file()
+
+  def _load_file(self):
+    self._file_ = yaml.load(file(self._file_name_, 'rb').read())
+    self._data_ = self._file_['pymmr']
+
+  def __getattr__(self, name):
+    return self._data_[name]
