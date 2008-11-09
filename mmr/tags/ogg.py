@@ -26,18 +26,6 @@ import mutagen.oggvorbis
 from abstract_tag import AbstractTag
 
 class Ogg(AbstractTag):
-  def _parse_(self):
-    tags_config = {
-      'artist': 'artist',
-      'album': 'album',
-      'date': 'year',
-      'genre': 'genre',
-      'title': 'title',
-      'tracknumber': 'tracknumber',
-    }
-
-    tags = mutagen.oggvorbis.OggVorbis(self._file_._fullpath_)
-    for key, value in tags_config.items():
-      #print "key: %s real: %s val: %s" % (key, value, tags.get(value))
-      if tags.has_key(value):
-        self._data_[key] = unicode(tags.get(value)[0])
+  def _setUp_(self):
+    self._tag_list_['date'] = 'year'
+    self._mutagen_ = mutagen.oggvorbis.OggVorbis(self._file_._fullpath_)

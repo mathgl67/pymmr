@@ -22,12 +22,13 @@
 #
 
 
-import mutagen
+import mutagen.easyid3
 from abstract_tag import AbstractTag
 
 class Mp3(AbstractTag):
-  def _parse_(self):
-    tags_config = {
+  def _setUp_(self):
+    self._mutagen_ = mutagen.easyid3.EasyID3(self._file_._fullpath_)
+    self._tag_list = {
       'artist': 'TPE1',
       'album': 'TALB',
       'date': 'TDRC',
@@ -35,9 +36,3 @@ class Mp3(AbstractTag):
       'title': 'TIT2',
       'tracknumber': 'TRCK',
     }
-
-    tags = mutagen.mp3.MP3(self._file_._fullpath_)
-    for key, value in tags_config.items():
-      #print "key: %s real: %s val: %s" % (key, value, tags.get(value))
-      if tags.has_key(value):
-        self._data_[key] = unicode(tags.get(value))

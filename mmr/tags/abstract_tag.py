@@ -23,8 +23,19 @@
 
 class AbstractTag:
   def __init__(self, file):
+    # set default values
     self._file_ = file
     self._data_ = {}
+    self._tag_list_ = {
+      'artist': 'artist',
+      'album': 'album',
+      'date': 'date',
+      'genre': 'genre',
+      'title': 'title',
+      'tracknumber': 'tracknumber',
+    }
+    # do the job
+    self._setUp_()
     self._parse_()
 
   def __str__(self):
@@ -41,5 +52,10 @@ class AbstractTag:
       return self._data_[name]
     raise AttributeError, name
 
-  def _parse_(self):
+  def _setUp_(self):
     pass
+
+  def _parse_(self):
+    for key, value in self._tag_list_.items():
+      if self._mutagen_.has_key(value):
+        self._data_[key] = unicode(self._mutagen_.get(value)[0])
