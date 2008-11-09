@@ -21,31 +21,23 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import os
-from file import *
 
-class Folder:
+import mutagen
+from abstract_tag import AbstractTag
 
-  def __init__(self, fullpath):
-    self._fullpath_ = fullpath
-    self.__retrieve_dir_name__()
-    self.__retrieve_file_list__()
+class Mp3(AbstractTag):
+  def _parse_(self):
+    tags_config = {
+      'artist': 'TPE1',
+      'album': 'TALB',
+      'date': 'TDRC',
+      'genre': 'TCON',
+      'title': 'TIT2',
+      'tracknumber': 'TRCK',
+    }
 
-  def __retrieve_dir_name__(self):
-    str = self._fullpath_.split('/')
-    self._name_ = str[len(str)-1]
-    self._path_ = self._fullpath_.replace(self._name_, '')
-
-  def __retrieve_file_list__(self):
-    self._files_ = list()
-    for f in os.listdir(self._fullpath_):
-      file = File(self, f)
-      self._files_.append(file)
-    self._files_.sort()
-
-  def __str__(self):
-    str = "folder '%s' path '%s'" % (self._name_, self._path_)
-    for f in self._files_:
-      str += '\n' + f.__str__()
-    return str
-
+    tags = mutagen.mp3.MP3(self._file_._fullpath_)
+    for key, value in tags_config.items():
+      #print "key: %s real: %s val: %s" % (key, value, tags.get(value))
+      if tags.has_key(value):
+        self._data_[key] = unicode(tags.get(value))

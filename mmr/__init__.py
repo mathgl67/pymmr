@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # vi:ai:et:ts=2 sw=2
 #
+# -*- coding: utf8 -*-
+#
 # PyMmr My Music Renamer
 # Copyright (C) 2007  mathgl67@gmail.com
 #
@@ -26,6 +28,7 @@ from folder import Folder
 from file import File
 from file_mp3 import FileMp3
 from investigate_album import InvestigateAlbum
+from tags import Tag
 
 prog = 'pymmr'
 version = '0.1-rc1'

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # vi:ai:et:ts=2 sw=2
 #
+# -*- coding: utf8 -*-
+#
 # PyMmr My Music Renamer
 # Copyright (C) 2007  mathgl67@gmail.com
 #

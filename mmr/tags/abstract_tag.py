@@ -21,31 +21,25 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import os
-from file import *
-
-class Folder:
-
-  def __init__(self, fullpath):
-    self._fullpath_ = fullpath
-    self.__retrieve_dir_name__()
-    self.__retrieve_file_list__()
-
-  def __retrieve_dir_name__(self):
-    str = self._fullpath_.split('/')
-    self._name_ = str[len(str)-1]
-    self._path_ = self._fullpath_.replace(self._name_, '')
-
-  def __retrieve_file_list__(self):
-    self._files_ = list()
-    for f in os.listdir(self._fullpath_):
-      file = File(self, f)
-      self._files_.append(file)
-    self._files_.sort()
+class AbstractTag:
+  def __init__(self, file):
+    self._file_ = file
+    self._data_ = {}
+    self._parse_()
 
   def __str__(self):
-    str = "folder '%s' path '%s'" % (self._name_, self._path_)
-    for f in self._files_:
-      str += '\n' + f.__str__()
+    str  = 'artist=' + self.artist
+    str += 'album=' + self.album
+    str += 'title=' + self.title
+    str += 'date=' + self.date
+    str += 'genre=' + self.genre
+    str += 'tracknumber=' + self.tracknumber
     return str
 
+  def __getattr__(self, name):
+    if self._data_.has_key(name):
+      return self._data_[name]
+    raise AttributeError, name
+
+  def _parse_(self):
+    pass

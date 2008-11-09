@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # vi:ai:et:ts=2 sw=2
 #
+# -*- coding: utf8 -*-
+#
 # PyMmr My Music Renamer
 # Copyright (C) 2007  mathgl67@gmail.com
 #
@@ -31,7 +33,7 @@ class FileFlac:
     self._track_ = None
     self._number_ = None
 
-    self.__parse_tags__()  
+    self.__parse_tags__()
 
   def __str__(self):
     str  = "_artist_='%s' " % self._artist_

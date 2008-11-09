@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # vi:ai:et:ts=2 sw=2
 #
+# -*- coding: utf8 -*-
+#
 # PyMmr My Music Renamer
 # Copyright (C) 2007  mathgl67@gmail.com
 #
@@ -23,12 +25,12 @@ class Album:
   def __init__(self, by):
     self.__by__ = by
     self.__score__ = 0
-    self.__keys__ = ('_artist_', '_title_', '_genre_', '_year_')
+    self.__keys__ = ('artist', 'album', 'genre', 'date')
 
-    self._artist_ = None
-    self._title_ = None
-    self._genre_ = None
-    self._year_ = None
+    self.artist = None
+    self.album = None
+    self.genre = None
+    self.date = None
 
   def __cmp__(self, other):
     if self.__score__ < other.__score__:
@@ -49,7 +51,7 @@ class Album:
     for key in self.__keys__:
       if getattr(self, key):
         found += 1
-    
+
     if self.__by__ == 'mix':
       score = 90
     elif self.__by__ == 'tag':
@@ -58,6 +60,6 @@ class Album:
       score = 10
     else:
       score = 0
-    
+
     self.__score__ = score + (found * 100)
 

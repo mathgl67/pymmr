@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # vi:ai:et:ts=2 sw=2
 #
+# -*- coding: utf8 -*-
+#
 # PyMmr My Music Renamer
 # Copyright (C) 2007  mathgl67@gmail.com
 #
@@ -49,9 +51,9 @@ class InvestigateAlbum:
   def do_by_regex(self):
     album = Album("regexp")
     regexs = {
-      "_artist_ _title_ _year_":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
-      "_artist_ _title_":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
-      "_title_":"^([\\d\\w_\ ]+)$"
+      "artist album date":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
+      "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
+      "album":"^([\\d\\w_\ ]+)$"
     }
 
     for keys, regex in regexs.iteritems():
@@ -62,9 +64,9 @@ class InvestigateAlbum:
         for attr in keys.split(' '):
           setattr(album, attr, m.group(i).replace('_', ' '))
           i+=1
-    
+
     self._append_(album)
-  
+
   def __do_by_tag_name__(self, album, tag):
     possibilities = dict()
 
@@ -72,19 +74,22 @@ class InvestigateAlbum:
       if (f._type_ != "ogg") and (f._type_ != "mp3") and (f._type_ != "flac"):
         continue
 
-      maybe = getattr(f._extra_data_, tag)
-      if possibilities.has_key(maybe):
-        possibilities[maybe] += 1
-      else:
-        possibilities[maybe] = 1
+      try:
+        maybe = getattr(f._extra_data_, tag)
+        if possibilities.has_key(maybe):
+          possibilities[maybe] += 1
+        else:
+          possibilities[maybe] = 1
+      except:
+        pass
 
-    max = 0
-    prefered = None
-    for key, value in possibilities.iteritems():
-      if value > max:
-        prefered = key
-        max = value
-    
+      max = 0
+      prefered = None
+      for key, value in possibilities.iteritems():
+        if value > max:
+          prefered = key
+          max = value
+
     setattr(album, tag, prefered)
 
 
@@ -92,8 +97,8 @@ class InvestigateAlbum:
     album = Album("tag")
     for key in album.__keys__:
       self.__do_by_tag_name__(album, key)
-    self._append_(album) 
-    
+    self._append_(album)
+
   def do_by_mix(self):
     album = Album("mix")
     for res in self.__results__:

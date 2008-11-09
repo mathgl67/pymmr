@@ -21,31 +21,15 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import os
-from file import *
+from mp3 import Mp3
+from flac import Flac
 
-class Folder:
-
-  def __init__(self, fullpath):
-    self._fullpath_ = fullpath
-    self.__retrieve_dir_name__()
-    self.__retrieve_file_list__()
-
-  def __retrieve_dir_name__(self):
-    str = self._fullpath_.split('/')
-    self._name_ = str[len(str)-1]
-    self._path_ = self._fullpath_.replace(self._name_, '')
-
-  def __retrieve_file_list__(self):
-    self._files_ = list()
-    for f in os.listdir(self._fullpath_):
-      file = File(self, f)
-      self._files_.append(file)
-    self._files_.sort()
-
-  def __str__(self):
-    str = "folder '%s' path '%s'" % (self._name_, self._path_)
-    for f in self._files_:
-      str += '\n' + f.__str__()
-    return str
-
+class Tag:
+  @staticmethod
+  def get(file):
+    type = file.getType()
+    if type == 'mp3':
+      return Mp3(file)
+    elif type == 'flac':
+      return Flac(file)
+    return None
