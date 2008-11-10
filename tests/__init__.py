@@ -23,8 +23,7 @@
 
 import unittest
 
-from tag_mp3 import TestTag
-#from tag_flac import TestTagFlac
+from tag import TestTag
 
 all_tests = unittest.TestSuite([
   TestTag.suite(),
