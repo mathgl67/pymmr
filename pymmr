@@ -79,4 +79,5 @@ investigate_album.do()
 
 investigate_album.sort()
 
-print investigate_album
+a = investigate_album.__repr__()
+print a.encode('UTF-8')

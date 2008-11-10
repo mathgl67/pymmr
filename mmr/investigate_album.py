@@ -31,11 +31,11 @@ class InvestigateAlbum:
 
   def __repr__(self):
     lines = []
-    lines.append('<InvestigateAlbum>')
+    lines.append(u"<InvestigateAlbum>")
     for res in self.__results__:
-      lines.append(repr(res))
-    lines.append('</InvestigateAlbum>')
-    return "\n".join(lines)
+      lines.append(res.__repr__())
+    lines.append(u"</InvestigateAlbum>")
+    return u"\n".join(lines)
 
   def _append_(self, album):
     album._calculate_score_()
