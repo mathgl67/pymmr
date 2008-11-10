@@ -22,7 +22,7 @@
 #
 
 class Track:
-  def __init__(self):
-    self._number_ = None
-    self._title_ = None
+    def __init__(self):
+        self._number_ = None
+        self._title_ = None
 

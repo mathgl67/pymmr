@@ -24,39 +24,38 @@
 import mmr
 
 class File:
+    def __init__(self, folder, file_name):
+        self._name_ =  file_name
+        self._folder_ = folder
+        self._fullpath_ = '%s/%s' % (folder._fullpath_, self._name_)
+        self.__search_type__()
+        self.__retrieve_extra_data__()
 
-  def __init__(self, folder, file_name):
-    self._name_ =  file_name
-    self._folder_ = folder
-    self._fullpath_ = '%s/%s' % (folder._fullpath_, self._name_)
-    self.__search_type__()
-    self.__retrieve_extra_data__()
+    def __cmp__(self, other):
+        return cmp(self._name_, other._name_)
 
-  def __cmp__(self, other):
-    return cmp(self._name_, other._name_)
+    def __search_type__(self):
+        self._type_ = 'unknown'
+        if '.jpg' in self._name_:
+            self._type_ = 'jpg'
+        elif '.mp3' in self._name_:
+            self._type_ = 'mp3'
+        elif '.ogg' in self._name_:
+            self._type_ = 'ogg'
+        elif '.flac' in self._name_:
+            self._type_ = 'flac'
+        elif '.m3u' in self._name_:
+            self._type_ = 'm3u'
+        elif '.sfv' in self._name_:
+            self._type_ = 'sfv'
+        elif '.nfo' in self._name_:
+            self._type_ = 'nfo'
 
-  def __search_type__(self):
-    self._type_ = 'unknown'
-    if '.jpg' in self._name_:
-      self._type_ = 'jpg'
-    elif '.mp3' in self._name_:
-      self._type_ = 'mp3'
-    elif '.ogg' in self._name_:
-      self._type_ = 'ogg'
-    elif '.flac' in self._name_:
-      self._type_ = 'flac'
-    elif '.m3u' in self._name_:
-      self._type_ = 'm3u'
-    elif '.sfv' in self._name_:
-      self._type_ = 'sfv'
-    elif '.nfo' in self._name_:
-      self._type_ = 'nfo'
+    def getType(self):
+        return self._type_
 
-  def getType(self):
-    return self._type_
+    def __retrieve_extra_data__(self):
+        self._extra_data_ = mmr.tags.Tag.get(self)
 
-  def __retrieve_extra_data__(self):
-    self._extra_data_ = mmr.tags.Tag.get(self)
-
-  def __repr__(self):
-    return '<File name="%s" type="%s">' % (self._name_, self._type_)
+    def __repr__(self):
+        return '<File name="%s" type="%s">' % (self._name_, self._type_)

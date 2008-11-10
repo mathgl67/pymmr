@@ -22,14 +22,17 @@
 #
 
 from mp3 import Mp3
+from ogg import Ogg
 from flac import Flac
 
 class Tag:
-  @staticmethod
-  def get(file):
-    type = file.getType()
-    if type == 'mp3':
-      return Mp3(file)
-    elif type == 'flac':
-      return Flac(file)
-    return None
+    @staticmethod
+    def get(file):
+        type = file.getType()
+        if type == 'mp3':
+            return Mp3(file)
+        if type == 'ogg':
+            return Ogg(file)
+        elif type == 'flac':
+            return Flac(file)
+        return None

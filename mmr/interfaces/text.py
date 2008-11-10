@@ -25,11 +25,11 @@ import mmr
 
 class Interface:
 
-  def welcome(self):
-    print "Welcome to My Music Renamer version %s" % (mmr.version)
-    print "Copyright (C) 2007 mathgl67@gmail.com"
-    print "My Music Renamer comes with ABSOLUTELY NO WARRANTY;"
-    print "This is free software; Release under GPL;"
-    print
+    def welcome(self):
+        print "Welcome to My Music Renamer version %s" % (mmr.version)
+        print "Copyright (C) 2007 mathgl67@gmail.com"
+        print "My Music Renamer comes with ABSOLUTELY NO WARRANTY;"
+        print "This is free software; Release under GPL;"
+        print
 
 

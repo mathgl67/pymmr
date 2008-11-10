@@ -27,24 +27,24 @@ from abstract_investigate import AbstractInvestigate
 import re
 
 class Investigate(AbstractInvestigate):
-  def _setUp_(self):
-    self._album_ = mmr.Album('regexp')
+    def _setUp_(self):
+        self._album_ = mmr.Album('regexp')
 
-  def _do_album_(self):
-    regexs = {
-      "artist album year":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
-      "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
-      "artist album": "^([\\d\\w_\ \'\.]+)\ -\ ([\\d\\w_\ \'\.]+)$",
-      "album":"^([\\d\\w_\ ]+)$"
-    }
+    def _do_album_(self):
+        regexs = {
+            "artist album year":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
+            "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
+            "artist album": "^([\\d\\w_\ \'\.]+)\ -\ ([\\d\\w_\ \'\.]+)$",
+            "album":"^([\\d\\w_\ ]+)$"
+        }
 
-    for keys, regex in regexs.iteritems():
-      p = re.compile(regex)
-      m = p.match(self._folder_._name_)
-      if m:
-        i=1
-        for attr in keys.split(' '):
-          setattr(self._album_, attr, m.group(i).replace('_', ' '))
-          i+=1
+        for keys, regex in regexs.iteritems():
+            p = re.compile(regex)
+            m = p.match(self._folder_._name_)
+            if m:
+                i=1
+                for attr in keys.split(' '):
+                    setattr(self._album_, attr, m.group(i).replace('_', ' '))
+                    i+=1
 
-    return self._album_
+        return self._album_

@@ -25,12 +25,12 @@ import mmr
 from abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
-  def _setUp_(self):
-    self._album_ = mmr.Album("mix")
+    def _setUp_(self):
+        self._album_ = mmr.Album("mix")
 
-  def _do_album_(self):
-    for res in self._album_list_:
-      for key in self._album_.__keys__:
-        if not getattr(self._album_, key):
-          setattr(self._album_, key, getattr(res, key))
-    return self._album_
+    def _do_album_(self):
+        for res in self._album_list_:
+            for key in self._album_.__keys__:
+                if not getattr(self._album_, key):
+                    setattr(self._album_, key, getattr(res, key))
+        return self._album_

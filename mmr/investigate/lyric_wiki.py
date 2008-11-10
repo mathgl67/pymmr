@@ -29,35 +29,35 @@ from xml.dom import minidom, Node
 import urlparse, httplib, urllib
 
 class Investigate(AbstractInvestigate):
-  def _setUp_(self):
-    self._album_ = mmr.Album('lyric_wiki')
+    def _setUp_(self):
+        self._album_ = mmr.Album('lyric_wiki')
 
-  def _do_album_(self):
-    url = urlparse.urlparse('http://lyricwiki.org')
-    resource = 'api.php'
-    args = { 'func':'getArtist', 'fmt': 'xml', 'artist': '' }
+    def _do_album_(self):
+        url = urlparse.urlparse('http://lyricwiki.org')
+        resource = 'api.php'
+        args = { 'func':'getArtist', 'fmt': 'xml', 'artist': '' }
 
-    for res in self._album_list_:
-      if res.artist:
-        args['artist'] = res.artist.encode('UTF-8')
-        path = '/%s?%s' % (resource, urllib.urlencode(args))
-        conn = httplib.HTTPConnection(url.netloc)
-        conn.request('GET', path)
-        resp = conn.getresponse()
-        dom = minidom.parseString(resp.read())
-        albums = dom.getElementsByTagName('albums').item(0)
+        for res in self._album_list_:
+            if res.artist:
+                args['artist'] = res.artist.encode('UTF-8')
+                path = '/%s?%s' % (resource, urllib.urlencode(args))
+                conn = httplib.HTTPConnection(url.netloc)
+                conn.request('GET', path)
+                resp = conn.getresponse()
+                dom = minidom.parseString(resp.read())
+                albums = dom.getElementsByTagName('albums').item(0)
 
-        match = False
-        for node in albums.childNodes:
-          if node.nodeType == Node.ELEMENT_NODE:
-            if node.tagName == 'album':
-              match = False
-              if node.firstChild.data == res.album:
-                match = True
-                self._album_.artist = res.artist
-                self._album_.album  = res.album
-            elif node.tagName == 'year':
-                if match and node.firstChild:
-                  self._album_.year = node.firstChild.data
+                match = False
+                for node in albums.childNodes:
+                    if (node.nodeType == Node.ELEMENT_NODE and
+                        node.tagName == 'album'):
+                        match = False
+                        if node.firstChild.data == res.album:
+                            match = True
+                            self._album_.artist = res.artist
+                            self._album_.album  = res.album
+                        elif (node.tagName == 'year' and match and
+                              node.firstChild):
+                            self._album_.year = node.firstChild.data
 
-    return self._album_
+            return self._album_

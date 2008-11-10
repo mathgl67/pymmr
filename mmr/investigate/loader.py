@@ -22,8 +22,8 @@
 #
 
 class Loader:
-  @staticmethod
-  def load_by_name(name, folder, album_list):
-      module = __import__("mmr.investigate.%s" % (name),
-                          globals(), locals(), ["mmr", "investigate"])
-      return module.Investigate(folder, album_list)
+    @staticmethod
+    def load_by_name(name, folder, album_list):
+        module = __import__("mmr.investigate.%s" % (name),
+                            globals(), locals(), ["mmr", "investigate"])
+        return module.Investigate(folder, album_list)

@@ -24,14 +24,13 @@
 import yaml
 
 class Config:
+    def __init__(self, file_name):
+        self._file_name_ = file_name
+        self._load_file()
 
-  def __init__(self, file_name):
-    self._file_name_ = file_name
-    self._load_file()
+    def _load_file(self):
+        self._file_ = yaml.load(file(self._file_name_, 'rb').read())
+        self._data_ = self._file_['pymmr']
 
-  def _load_file(self):
-    self._file_ = yaml.load(file(self._file_name_, 'rb').read())
-    self._data_ = self._file_['pymmr']
-
-  def __getattr__(self, name):
-    return self._data_[name]
+    def __getattr__(self, name):
+        return self._data_[name]

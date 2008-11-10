@@ -22,42 +22,42 @@
 #
 
 class AbstractTag:
-  def __init__(self, file):
-    # set default values
-    self._file_ = file
-    self._data_ = {}
-    self._tag_list_ = {
-      'artist': 'artist',
-      'album': 'album',
-      'year': 'year',
-      'genre': 'genre',
-      'title': 'title',
-      'tracknumber': 'tracknumber',
-    }
-    # do the job
-    self._setUp_()
-    self._parse_()
+    def __init__(self, file):
+        # set default values
+        self._file_ = file
+        self._data_ = {}
+        self._tag_list_ = {
+            'artist': 'artist',
+            'album': 'album',
+            'year': 'year',
+            'genre': 'genre',
+            'title': 'title',
+            'tracknumber': 'tracknumber',
+        }
+        # do the job
+        self._setUp_()
+        self._parse_()
 
-  def __repr__(self):
-    lines = []
-    lines.append('artist=' + self.artist)
-    lines.append('album=' + self.album)
-    lines.append('title=' + self.title)
-    lines.append('year=' + self.year)
-    lines.append('genre=' + self.genre)
-    lines.append('tracknumber=' + self.tracknumber)
-    return "\n".join(lines)
+    def __repr__(self):
+        lines = []
+        lines.append('artist=' + self.artist)
+        lines.append('album=' + self.album)
+        lines.append('title=' + self.title)
+        lines.append('year=' + self.year)
+        lines.append('genre=' + self.genre)
+        lines.append('tracknumber=' + self.tracknumber)
+        return "\n".join(lines)
 
-  def __getattr__(self, name):
-    if self._data_.has_key(name):
-      return self._data_[name]
-    raise AttributeError, name
+    def __getattr__(self, name):
+        if self._data_.has_key(name):
+            return self._data_[name]
+        raise AttributeError, name
 
-  def _setUp_(self):
-    pass
+    def _setUp_(self):
+        pass
 
-  def _parse_(self):
-    for key, value in self._tag_list_.items():
-      if self._mutagen_.has_key(value):
-        bytes = self._mutagen_.get(value)[0]
-        self._data_[key] = unicode(bytes)
+    def _parse_(self):
+        for key, value in self._tag_list_.items():
+            if self._mutagen_.has_key(value):
+                bytes = self._mutagen_.get(value)[0]
+                self._data_[key] = unicode(bytes)

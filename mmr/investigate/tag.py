@@ -25,35 +25,36 @@ import mmr
 from abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
-  def _setUp_(self):
-    self._album_ = mmr.Album('tag')
+    def _setUp_(self):
+        self._album_ = mmr.Album('tag')
 
-  def _do_album_by_tag_name_(self, tag):
-    possibilities = dict()
+    def _do_album_by_tag_name_(self, tag):
+        possibilities = dict()
 
-    for f in self._folder_._files_:
-      if (f._type_ != "ogg") and (f._type_ != "mp3") and (f._type_ != "flac"):
-        continue
+        for f in self._folder_._files_:
+            if (f._type_ != "ogg" and f._type_ != "mp3" and
+               f._type_ != "flac"):
+                continue
 
-      try:
-        maybe = getattr(f._extra_data_, tag)
-        if possibilities.has_key(maybe):
-          possibilities[maybe] += 1
-        else:
-          possibilities[maybe] = 1
-      except:
-        pass
+        try:
+            maybe = getattr(f._extra_data_, tag)
+            if possibilities.has_key(maybe):
+                possibilities[maybe] += 1
+            else:
+                possibilities[maybe] = 1
+        except:
+            pass
 
-      max = 0
-      prefered = None
-      for key, value in possibilities.iteritems():
-        if value > max:
-          prefered = key
-          max = value
+        max = 0
+        prefered = None
+        for key, value in possibilities.iteritems():
+            if value > max:
+                prefered = key
+                max = value
 
-    setattr(self._album_, tag, prefered)
+        setattr(self._album_, tag, prefered)
 
-  def _do_album_(self):
-    for key in self._album_.__keys__:
-      self._do_album_by_tag_name_(key)
-    return self._album_
+    def _do_album_(self):
+        for key in self._album_.__keys__:
+            self._do_album_by_tag_name_(key)
+        return self._album_

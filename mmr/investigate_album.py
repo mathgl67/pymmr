@@ -25,34 +25,35 @@ from album import Album
 import investigate
 
 class InvestigateAlbum:
-  def __init__(self, folder):
-    self.__folder__ = folder
-    self.__results__ = list()
+    def __init__(self, folder):
+        self.__folder__ = folder
+        self.__results__ = list()
 
-  def __repr__(self):
-    lines = []
-    lines.append(u"<InvestigateAlbum>")
-    for res in self.__results__:
-      lines.append(res.__repr__())
-    lines.append(u"</InvestigateAlbum>")
-    return u"\n".join(lines)
+    def __repr__(self):
+        lines = []
+        lines.append(u"<InvestigateAlbum>")
+        for res in self.__results__:
+            lines.append(res.__repr__())
+            lines.append(u"</InvestigateAlbum>")
+        return u"\n".join(lines)
 
-  def _append_(self, album):
-    album._calculate_score_()
-    self.__results__.append(album)
+    def _append_(self, album):
+        album._calculate_score_()
+        self.__results__.append(album)
 
-  def count(self, album):
-    return len(self.__results__)
+    def count(self, album):
+        return len(self.__results__)
 
-  def get_album(self, num):
-    return self.__results__[num]
+    def get_album(self, num):
+        return self.__results__[num]
 
-  def sort(self):
-    self.__results__.sort()
+    def sort(self):
+        self.__results__.sort()
 
-  def do(self):
-    module_list = ['tag', 'regexp', 'lyric_wiki', 'mix']
-    for module_name in module_list:
-      module = investigate.Loader.load_by_name(module_name, self.__folder__,
-                                               self.__results__)
-      self._append_(module._do_album_())
+    def do(self):
+        module_list = ['tag', 'regexp', 'lyric_wiki', 'mix']
+        for module_name in module_list:
+            module = investigate.Loader.load_by_name(module_name,
+                                                     self.__folder__,
+                                                     self.__results__)
+            self._append_(module._do_album_())
