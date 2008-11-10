@@ -25,6 +25,8 @@ import yaml
 
 class Config:
     def __init__(self, file_name):
+        self._file_ = None
+        self._data_ = None
         self._file_name_ = file_name
         self._load_file()
 

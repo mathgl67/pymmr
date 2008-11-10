@@ -31,30 +31,31 @@ class Investigate(AbstractInvestigate):
     def _do_album_by_tag_name_(self, tag):
         possibilities = dict()
 
-        for f in self._folder_._files_:
-            if (f._type_ != "ogg" and f._type_ != "mp3" and
-               f._type_ != "flac"):
+        for file_obj in self._folder_.get_files():
+            if (file_obj.get_type() != "ogg" and
+                file_obj.get_type() != "mp3" and
+                file_obj.get_type() != "flac"):
                 continue
 
-        try:
-            maybe = getattr(f._extra_data_, tag)
-            if possibilities.has_key(maybe):
-                possibilities[maybe] += 1
-            else:
-                possibilities[maybe] = 1
-        except:
-            pass
+            try:
+                maybe = getattr(file_obj.get_tags(), tag)
+                if possibilities.has_key(maybe):
+                    possibilities[maybe] += 1
+                else:
+                    possibilities[maybe] = 1
+            except:
+                pass
 
-        max = 0
+        max_value = 0
         prefered = None
         for key, value in possibilities.iteritems():
-            if value > max:
+            if value > max_value:
                 prefered = key
-                max = value
+                max_value = value
 
         setattr(self._album_, tag, prefered)
 
-    def _do_album_(self):
+    def do_album(self):
         for key in self._album_.__keys__:
             self._do_album_by_tag_name_(key)
         return self._album_

@@ -33,11 +33,11 @@ class InvestigateAlbum:
         lines.append(u"<InvestigateAlbum>")
         for res in self.__results__:
             lines.append(res.__repr__())
-            lines.append(u"</InvestigateAlbum>")
+        lines.append(u"</InvestigateAlbum>")
         return u"\n".join(lines)
 
     def _append_(self, album):
-        album._calculate_score_()
+        album.calculate_score()
         self.__results__.append(album)
 
     def count(self):
@@ -49,9 +49,9 @@ class InvestigateAlbum:
     def sort(self):
         self.__results__.sort()
 
-    def do(self):
+    def investigate(self):
         module_list = ['tag', 'regexp', 'lyric_wiki', 'mix']
         for module_name in module_list:
             module = Loader.load_by_name(module_name, self.__folder__,
                                          self.__results__)
-            self._append_(module._do_album_())
+            self._append_(module.do_album())

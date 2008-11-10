@@ -60,6 +60,9 @@ class File:
     def get_type(self):
         return self._type_
 
+    def get_tags(self):
+        return self._extra_data_
+
     def get_fullpath(self):
         return self._fullpath_
 

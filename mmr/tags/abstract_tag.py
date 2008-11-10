@@ -22,9 +22,9 @@
 #
 
 class AbstractTag:
-    def __init__(self, file):
+    def __init__(self, file_obj):
         # set default values
-        self._file_ = file
+        self._file_ = file_obj
         self._data_ = {}
         self._mutagen_ = None
         self._tag_list_ = {

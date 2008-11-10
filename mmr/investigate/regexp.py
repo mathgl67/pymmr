@@ -30,7 +30,7 @@ class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('regexp')
 
-    def _do_album_(self):
+    def do_album(self):
         regexs = {
             "artist album year":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
             "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
@@ -39,12 +39,12 @@ class Investigate(AbstractInvestigate):
         }
 
         for keys, regex in regexs.iteritems():
-            p = re.compile(regex)
-            m = p.match(self._folder_._name_)
-            if m:
+            re_compiled = re.compile(regex)
+            match = re_compiled.match(self._folder_.get_name())
+            if match:
                 index = 1
                 for attr in keys.split(' '):
-                    value = m.group(index).replace('_', ' ')
+                    value = match.group(index).replace('_', ' ')
                     setattr(self._album_, attr, value)
                     index += 1
 

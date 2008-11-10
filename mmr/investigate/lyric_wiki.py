@@ -32,7 +32,7 @@ class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('lyric_wiki')
 
-    def _do_album_(self):
+    def do_album(self):
         url = urlparse.urlparse('http://lyricwiki.org')
         resource = 'api.php'
         args = { 'func':'getArtist', 'fmt': 'xml', 'artist': '' }

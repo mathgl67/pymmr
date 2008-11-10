@@ -60,6 +60,9 @@ class Folder:
     def get_name(self):
         return self._name_
 
+    def get_files(self):
+        return self._files_
+
     def get_path(self):
         return self._path_
 

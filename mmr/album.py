@@ -50,7 +50,7 @@ class Album:
         lines.append(u"</album>")
         return u"\n".join(lines)
 
-    def _calculate_score_(self):
+    def calculate_score(self):
         found = 0
         for key in self.__keys__:
             if getattr(self, key):

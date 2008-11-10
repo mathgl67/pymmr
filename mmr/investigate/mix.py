@@ -28,7 +28,7 @@ class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album("mix")
 
-    def _do_album_(self):
+    def do_album(self):
         for res in self._album_list_:
             for key in self._album_.__keys__:
                 if not getattr(self._album_, key):

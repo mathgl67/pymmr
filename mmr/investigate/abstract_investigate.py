@@ -31,5 +31,5 @@ class AbstractInvestigate:
     def _set_up_(self):
         pass
 
-    def _do_album_(self):
+    def do_album(self):
         pass
