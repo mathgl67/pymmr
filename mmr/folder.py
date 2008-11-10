@@ -22,7 +22,7 @@
 #
 
 import os
-from file import *
+from file import File
 
 class Folder:
 

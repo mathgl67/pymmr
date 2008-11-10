@@ -41,7 +41,7 @@ class Album:
 
   def __repr__(self):
     lines = []
-    lines.append('<album by="%s" score "%d">' % (self.__by__, self.__score__))
+    lines.append('<album by="%s" score="%d">' % (self.__by__, self.__score__))
     for key in self.__keys__:
       lines.append('<%s>%s</%s>' % (key, getattr(self, key), key))
     lines.append('</album>')
