@@ -29,7 +29,7 @@ class AbstractTag:
     self._tag_list_ = {
       'artist': 'artist',
       'album': 'album',
-      'date': 'date',
+      'year': 'year',
       'genre': 'genre',
       'title': 'title',
       'tracknumber': 'tracknumber',
@@ -42,7 +42,7 @@ class AbstractTag:
     str  = 'artist=' + self.artist
     str += 'album=' + self.album
     str += 'title=' + self.title
-    str += 'date=' + self.date
+    str += 'year=' + self.year
     str += 'genre=' + self.genre
     str += 'tracknumber=' + self.tracknumber
     return str

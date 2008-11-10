@@ -22,10 +22,9 @@
 #
 
 
-import mutagen
+import mutagen.flac
 from abstract_tag import AbstractTag
 
 class Flac(AbstractTag):
   def _setUp_(self):
-    self._tag_list_['date'] = 'year'
     self._mutagen_ = mutagen.flac.FLAC(self._file_._fullpath_)

@@ -26,7 +26,6 @@ from album import Album
 from track import Track
 from folder import Folder
 from file import File
-from file_mp3 import FileMp3
 from investigate_album import InvestigateAlbum
 from tags import Tag
 

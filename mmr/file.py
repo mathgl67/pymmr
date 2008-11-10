@@ -23,9 +23,6 @@
 
 import mmr
 
-from file_mp3 import FileMp3
-from file_flac import FileFlac
-
 class File:
 
   def __init__(self, folder, file_name):

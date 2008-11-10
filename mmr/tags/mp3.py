@@ -28,11 +28,4 @@ from abstract_tag import AbstractTag
 class Mp3(AbstractTag):
   def _setUp_(self):
     self._mutagen_ = mutagen.easyid3.EasyID3(self._file_._fullpath_)
-    self._tag_list = {
-      'artist': 'TPE1',
-      'album': 'TALB',
-      'date': 'TDRC',
-      'genre': 'TCON',
-      'title': 'TIT2',
-      'tracknumber': 'TRCK',
-    }
+    self._tag_list_['year'] = 'date'

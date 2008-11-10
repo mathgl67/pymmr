@@ -43,7 +43,7 @@ class TestTag(unittest.TestCase):
     self.assertEquals(self.tag.title, u'title')
 
   def testDate(self):
-    self.assertEquals(self.tag.date, u'2000')
+    self.assertEquals(self.tag.year, u'2000')
 
   def testGenre(self):
     self.assertEquals(self.tag.genre, u'genre')

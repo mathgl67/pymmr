@@ -27,5 +27,4 @@ from abstract_tag import AbstractTag
 
 class Ogg(AbstractTag):
   def _setUp_(self):
-    self._tag_list_['date'] = 'year'
     self._mutagen_ = mutagen.oggvorbis.OggVorbis(self._file_._fullpath_)

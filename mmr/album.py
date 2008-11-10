@@ -25,12 +25,11 @@ class Album:
   def __init__(self, by):
     self.__by__ = by
     self.__score__ = 0
-    self.__keys__ = ('artist', 'album', 'genre', 'date')
+    self.__keys__ = ('artist', 'album', 'genre', 'year')
 
-    self.artist = None
-    self.album = None
-    self.genre = None
-    self.date = None
+    # set all keys to None
+    for key in self.__keys__:
+      setattr(self, key, None)
 
   def __cmp__(self, other):
     if self.__score__ < other.__score__:

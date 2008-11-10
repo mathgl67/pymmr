@@ -51,7 +51,7 @@ class InvestigateAlbum:
   def do_by_regex(self):
     album = Album("regexp")
     regexs = {
-      "artist album date":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
+      "artist album year":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
       "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
       "album":"^([\\d\\w_\ ]+)$"
     }
