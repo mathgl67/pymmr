@@ -68,6 +68,7 @@ interface.welcome()
 
 folder = mmr.Folder(args[0])
 print folder
+print
 
 investigate_album = mmr.InvestigateAlbum(folder)
 investigate_album.do_by_regex()

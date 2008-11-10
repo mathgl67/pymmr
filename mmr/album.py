@@ -39,11 +39,13 @@ class Album:
     else:
       return 0
 
-  def __str__(self):
-    str = "album by '%s' score '%d' " % (self.__by__, self.__score__)
+  def __repr__(self):
+    lines = []
+    lines.append('<album by="%s" score "%d">' % (self.__by__, self.__score__))
     for key in self.__keys__:
-      str += "%s='%s' " % (key, getattr(self, key))
-    return str
+      lines.append('<%s>%s</%s>' % (key, getattr(self, key), key))
+    lines.append('</album>')
+    return "\n".join(lines)
 
   def _calculate_score_(self):
     found = 0

@@ -43,9 +43,11 @@ class Folder:
       self._files_.append(file)
     self._files_.sort()
 
-  def __str__(self):
-    str = "folder '%s' path '%s'" % (self._name_, self._path_)
+  def __repr__(self):
+    lines = []
+    lines.append('<Folder name="%s" path="%s">' % (self._name_, self._path_))
     for f in self._files_:
-      str += '\n' + f.__str__()
-    return str
+      lines.append(repr(f))
+    lines.append('</Folder>')
+    return "\n".join(lines)
 

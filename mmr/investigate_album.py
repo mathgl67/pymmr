@@ -29,11 +29,13 @@ class InvestigateAlbum:
     self.__folder__ = folder
     self.__results__ = list()
 
-  def __str__(self):
-    str = "InvestigateAlbum results:"
+  def __repr__(self):
+    lines = []
+    lines.append('<InvestigateAlbum>')
     for res in self.__results__:
-      str += "\n" + res.__str__()
-    return str
+      lines.append(repr(res))
+    lines.append('</InvestigateAlbum>')
+    return "\n".join(lines)
 
   def _append_(self, album):
     album._calculate_score_()

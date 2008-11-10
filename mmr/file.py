@@ -58,7 +58,5 @@ class File:
   def __retrieve_extra_data__(self):
     self._extra_data_ = mmr.tags.Tag.get(self)
 
-  def __str__(self):
-    str = "file '%s' type '%s'" % (self._name_, self._type_)
-    return str
-
+  def __repr__(self):
+    return '<File name="%s" type="%s">' % (self._name_, self._type_)
