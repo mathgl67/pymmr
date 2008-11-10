@@ -34,7 +34,7 @@ class Investigate(AbstractInvestigate):
     regexs = {
       "artist album year":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
       "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
-      "artist album": "^([\\d\\w_\ \']+)\ -\ ([\\d\\w_\ \']+)$",
+      "artist album": "^([\\d\\w_\ \'\.]+)\ -\ ([\\d\\w_\ \'\.]+)$",
       "album":"^([\\d\\w_\ ]+)$"
     }
 
