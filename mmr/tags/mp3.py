@@ -21,9 +21,8 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-
+from mmr.tags.abstract_tag import AbstractTag
 import mutagen.easyid3
-from abstract_tag import AbstractTag
 
 class Mp3(AbstractTag):
     def _setUp_(self):

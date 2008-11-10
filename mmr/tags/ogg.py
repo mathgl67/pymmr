@@ -22,8 +22,8 @@
 #
 
 
+from mmr.tags.abstract_tag import AbstractTag
 import mutagen.oggvorbis
-from abstract_tag import AbstractTag
 
 class Ogg(AbstractTag):
     def _setUp_(self):

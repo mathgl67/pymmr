@@ -21,12 +21,12 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import mmr
-from abstract_investigate import AbstractInvestigate
+from mmr.album import Album
+from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
     def _setUp_(self):
-        self._album_ = mmr.Album('tag')
+        self._album_ = Album('tag')
 
     def _do_album_by_tag_name_(self, tag):
         possibilities = dict()

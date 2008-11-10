@@ -21,14 +21,15 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from config import Config
-from album import Album
-from track import Track
-from folder import Folder
-from file import File
-from investigate_album import InvestigateAlbum
-from tags import Tag
+from mmr.config import Config
+from mmr.album import Album
+from mmr.track import Track
+from mmr.folder import Folder
+from mmr.file import File
+from mmr.investigate_album import InvestigateAlbum
+from mmr.tags import Tag
 
-prog = 'pymmr'
-version = '0.1-rc1'
-
+MMR = {
+    'prog': 'pymmr',
+    'version': '0.1-rc1'
+}

@@ -27,12 +27,15 @@ class File:
     def __init__(self, folder, file_name):
         self._name_ =  file_name
         self._folder_ = folder
-        self._fullpath_ = '%s/%s' % (folder._fullpath_, self._name_)
+        self._fullpath_ = '%s/%s' % (folder.get_fullpath(), self._name_)
+        self._type_ = None
+        self._extra_data_ = None
+
         self.__search_type__()
         self.__retrieve_extra_data__()
 
     def __cmp__(self, other):
-        return cmp(self._name_, other._name_)
+        return cmp(self._name_, other.get_name())
 
     def __search_type__(self):
         self._type_ = 'unknown'
@@ -51,7 +54,10 @@ class File:
         elif '.nfo' in self._name_:
             self._type_ = 'nfo'
 
-    def getType(self):
+    def get_name(self):
+        return self._name_
+
+    def get_type(self):
         return self._type_
 
     def __retrieve_extra_data__(self):

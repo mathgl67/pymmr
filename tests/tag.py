@@ -54,12 +54,15 @@ class TestTag(unittest.TestCase):
 
 class TestTagMp3(TestTag):
   def setUp(self):
-    self.tag = mmr.tags.Mp3(mmr.File(mmr.Folder('tests/data'), 'silence.mp3'))
+    self.tag = mmr.tags.mp3.Mp3(mmr.File(mmr.Folder('tests/data'),
+                                'silence.mp3'))
 
 class TestTagFlac(TestTag):
   def setUp(self):
-    self.tag = mmr.tags.Flac(mmr.File(mmr.Folder('tests/data'), 'silence.flac'))
+    self.tag = mmr.tags.flac.Flac(mmr.File(mmr.Folder('tests/data'),
+'silence.flac'))
 
 class TestTagOgg(TestTag):
   def setUp(self):
-    self.tag = mmr.tags.Ogg(mmr.File(mmr.Folder('tests/data'), 'silence.ogg'))
+    self.tag = mmr.tags.ogg.Ogg(mmr.File(mmr.Folder('tests/data'),
+'silence.ogg'))

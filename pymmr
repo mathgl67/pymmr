@@ -27,7 +27,10 @@ from optparse import OptionParser
 
 #init argv parser
 usage = "usage: %prog [options] <music_directory>"
-parser = OptionParser(usage=usage, version="%s %s" % (mmr.prog, mmr.version))
+parser = OptionParser(usage=usage, version="%s %s" % (
+    mmr.MMR['prog'],
+    mmr.MMR['version']
+))
 
 #add option
 parser.add_option(

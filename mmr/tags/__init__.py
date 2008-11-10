@@ -21,7 +21,4 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from tag import Tag
-from mp3 import Mp3
-from flac import Flac
-from ogg import Ogg
+from mmr.tags.tag import Tag

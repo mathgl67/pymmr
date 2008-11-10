@@ -28,7 +28,7 @@ from flac import Flac
 class Tag:
     @staticmethod
     def get(file):
-        type = file.getType()
+        type = file.get_type()
         if type == 'mp3':
             return Mp3(file)
         if type == 'ogg':

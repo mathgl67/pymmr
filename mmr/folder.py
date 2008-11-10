@@ -22,20 +22,20 @@
 #
 
 import os
-from file import File
+from mmr.file import File
 
 class Folder:
     def __init__(self, fullpath):
         self._fullpath_ = fullpath
-        self.__retrieve_dir_name__()
-        self.__retrieve_file_list__()
+        self._retrieve_dir_name_()
+        self._retrieve_file_list_()
 
-    def __retrieve_dir_name__(self):
+    def _retrieve_dir_name_(self):
         str = self._fullpath_.split('/')
         self._name_ = str[len(str)-1]
         self._path_ = self._fullpath_.replace(self._name_, '')
 
-    def __retrieve_file_list__(self):
+    def _retrieve_file_list_(self):
         self._files_ = list()
         for f in os.listdir(self._fullpath_):
             file = File(self, f)
@@ -52,3 +52,6 @@ class Folder:
 
         lines.append('</Folder>')
         return "\n".join(lines)
+
+    def get_fullpath(self):
+        return self._fullpath_

@@ -21,8 +21,7 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from album import Album
-import investigate
+from mmr.investigate.loader import Loader
 
 class InvestigateAlbum:
     def __init__(self, folder):
@@ -53,7 +52,6 @@ class InvestigateAlbum:
     def do(self):
         module_list = ['tag', 'regexp', 'lyric_wiki', 'mix']
         for module_name in module_list:
-            module = investigate.Loader.load_by_name(module_name,
-                                                     self.__folder__,
-                                                     self.__results__)
+            module = Loader.load_by_name(module_name, self.__folder__,
+                                         self.__results__)
             self._append_(module._do_album_())

@@ -21,14 +21,14 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import mmr
-from abstract_investigate import AbstractInvestigate
+from mmr.album import Album
+from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 import re
 
 class Investigate(AbstractInvestigate):
     def _setUp_(self):
-        self._album_ = mmr.Album('regexp')
+        self._album_ = Album('regexp')
 
     def _do_album_(self):
         regexs = {
