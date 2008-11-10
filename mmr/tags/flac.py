@@ -25,5 +25,5 @@ from mmr.tags.abstract_tag import AbstractTag
 import mutagen.flac
 
 class Flac(AbstractTag):
-    def _setUp_(self):
-        self._mutagen_ = mutagen.flac.FLAC(self._file_._fullpath_)
+    def _set_up_(self):
+        self._mutagen_ = mutagen.flac.FLAC(self._file_.get_fullpath())

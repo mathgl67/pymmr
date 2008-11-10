@@ -25,6 +25,6 @@ from mmr.tags.abstract_tag import AbstractTag
 import mutagen.easyid3
 
 class Mp3(AbstractTag):
-    def _setUp_(self):
-        self._mutagen_ = mutagen.easyid3.EasyID3(self._file_._fullpath_)
+    def _set_up_(self):
+        self._mutagen_ = mutagen.easyid3.EasyID3(self._file_.get_fullpath())
         self._tag_list_['year'] = 'date'

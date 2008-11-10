@@ -25,7 +25,7 @@ from mmr.album import Album
 from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
-    def _setUp_(self):
+    def _set_up_(self):
         self._album_ = Album("mix")
 
     def _do_album_(self):

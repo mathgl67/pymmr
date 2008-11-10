@@ -69,7 +69,7 @@ except:
 
 interface.welcome()
 
-folder = mmr.Folder(args[0])
+folder = mmr.folder.Folder(args[0])
 print folder
 print
 

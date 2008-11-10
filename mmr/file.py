@@ -60,6 +60,9 @@ class File:
     def get_type(self):
         return self._type_
 
+    def get_fullpath(self):
+        return self._fullpath_
+
     def __retrieve_extra_data__(self):
         self._extra_data_ = mmr.tags.Tag.get(self)
 

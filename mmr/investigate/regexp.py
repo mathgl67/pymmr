@@ -27,7 +27,7 @@ from mmr.investigate.abstract_investigate import AbstractInvestigate
 import re
 
 class Investigate(AbstractInvestigate):
-    def _setUp_(self):
+    def _set_up_(self):
         self._album_ = Album('regexp')
 
     def _do_album_(self):
@@ -42,9 +42,10 @@ class Investigate(AbstractInvestigate):
             p = re.compile(regex)
             m = p.match(self._folder_._name_)
             if m:
-                i=1
+                index = 1
                 for attr in keys.split(' '):
-                    setattr(self._album_, attr, m.group(i).replace('_', ' '))
-                    i+=1
+                    value = m.group(index).replace('_', ' ')
+                    setattr(self._album_, attr, value)
+                    index += 1
 
         return self._album_

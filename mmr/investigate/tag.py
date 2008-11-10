@@ -25,7 +25,7 @@ from mmr.album import Album
 from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
-    def _setUp_(self):
+    def _set_up_(self):
         self._album_ = Album('tag')
 
     def _do_album_by_tag_name_(self, tag):

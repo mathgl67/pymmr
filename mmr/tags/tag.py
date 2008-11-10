@@ -21,18 +21,18 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mp3 import Mp3
-from ogg import Ogg
-from flac import Flac
+from mmr.tags.mp3 import Mp3
+from mmr.tags.ogg import Ogg
+from mmr.tags.flac import Flac
 
 class Tag:
     @staticmethod
-    def get(file):
-        type = file.get_type()
-        if type == 'mp3':
-            return Mp3(file)
-        if type == 'ogg':
-            return Ogg(file)
-        elif type == 'flac':
-            return Flac(file)
+    def get(file_obj):
+        file_type = file_obj.get_type()
+        if file_type == 'mp3':
+            return Mp3(file_obj)
+        if file_type == 'ogg':
+            return Ogg(file_obj)
+        elif file_type == 'flac':
+            return Flac(file_obj)
         return None

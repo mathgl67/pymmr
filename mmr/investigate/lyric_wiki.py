@@ -29,7 +29,7 @@ from xml.dom import minidom, Node
 import urlparse, httplib, urllib
 
 class Investigate(AbstractInvestigate):
-    def _setUp_(self):
+    def _set_up_(self):
         self._album_ = Album('lyric_wiki')
 
     def _do_album_(self):

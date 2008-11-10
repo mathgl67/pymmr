@@ -25,9 +25,10 @@ class AbstractInvestigate:
     def __init__(self, folder, album_list):
         self._folder_ = folder
         self._album_list_ = album_list
-        self._setUp_()
+        self._album_ = None
+        self._set_up_()
 
-    def _setUp_(self):
+    def _set_up_(self):
         pass
 
     def _do_album_(self):

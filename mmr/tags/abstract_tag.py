@@ -26,6 +26,7 @@ class AbstractTag:
         # set default values
         self._file_ = file
         self._data_ = {}
+        self._mutagen_ = None
         self._tag_list_ = {
             'artist': 'artist',
             'album': 'album',
@@ -35,7 +36,7 @@ class AbstractTag:
             'tracknumber': 'tracknumber',
         }
         # do the job
-        self._setUp_()
+        self._set_up_()
         self._parse_()
 
     def __repr__(self):
@@ -53,7 +54,7 @@ class AbstractTag:
             return self._data_[name]
         raise AttributeError, name
 
-    def _setUp_(self):
+    def _set_up_(self):
         pass
 
     def _parse_(self):

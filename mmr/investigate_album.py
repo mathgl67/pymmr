@@ -40,7 +40,7 @@ class InvestigateAlbum:
         album._calculate_score_()
         self.__results__.append(album)
 
-    def count(self, album):
+    def count(self):
         return len(self.__results__)
 
     def get_album(self, num):

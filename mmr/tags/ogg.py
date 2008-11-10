@@ -26,5 +26,5 @@ from mmr.tags.abstract_tag import AbstractTag
 import mutagen.oggvorbis
 
 class Ogg(AbstractTag):
-    def _setUp_(self):
-        self._mutagen_ = mutagen.oggvorbis.OggVorbis(self._file_._fullpath_)
+    def _set_up_(self):
+        self._mutagen_ = mutagen.oggvorbis.OggVorbis(self._file_.get_fullpath())

@@ -26,20 +26,24 @@ from mmr.file import File
 
 class Folder:
     def __init__(self, fullpath):
+        self._name_ = None
+        self._path_ = None
+        self._files_ = None
         self._fullpath_ = fullpath
+
         self._retrieve_dir_name_()
         self._retrieve_file_list_()
 
     def _retrieve_dir_name_(self):
-        str = self._fullpath_.split('/')
-        self._name_ = str[len(str)-1]
+        path_array = self._fullpath_.split('/')
+        self._name_ = path_array[len(path_array) - 1]
         self._path_ = self._fullpath_.replace(self._name_, '')
 
     def _retrieve_file_list_(self):
-        self._files_ = list()
-        for f in os.listdir(self._fullpath_):
-            file = File(self, f)
-            self._files_.append(file)
+        self._files_ = []
+        for file_path in os.listdir(self._fullpath_):
+            file_obj = File(self, file_path)
+            self._files_.append(file_obj)
         self._files_.sort()
 
     def __repr__(self):
@@ -47,11 +51,17 @@ class Folder:
         lines.append('<Folder name="%s" path="%s">' % (self._name_,
                      self._path_))
 
-        for f in self._files_:
-            lines.append(repr(f))
+        for file_obj in self._files_:
+            lines.append(repr(file_obj))
 
         lines.append('</Folder>')
         return "\n".join(lines)
+
+    def get_name(self):
+        return self._name_
+
+    def get_path(self):
+        return self._path_
 
     def get_fullpath(self):
         return self._fullpath_
