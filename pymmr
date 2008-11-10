@@ -71,9 +71,12 @@ print folder
 print
 
 investigate_album = mmr.InvestigateAlbum(folder)
-investigate_album.do_by_regex()
-investigate_album.do_by_tag()
-investigate_album.do_by_mix()
+investigate_album.do()
+
+#investigate_album.do_by_regex()
+#investigate_album.do_by_tag()
+#investigate_album.do_by_mix()
+
 investigate_album.sort()
 
 print investigate_album

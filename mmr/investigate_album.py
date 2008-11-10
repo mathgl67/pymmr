@@ -21,8 +21,8 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import re
 from album import Album
+import investigate
 
 class InvestigateAlbum:
   def __init__(self, folder):
@@ -50,63 +50,10 @@ class InvestigateAlbum:
   def sort(self):
     self.__results__.sort()
 
-  def do_by_regex(self):
-    album = Album("regexp")
-    regexs = {
-      "artist album year":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
-      "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
-      "artist album": "^([\\d\\w_\ \']+)\ -\ ([\\d\\w_\ \']+)$",
-      "album":"^([\\d\\w_\ ]+)$"
-    }
-
-    for keys, regex in regexs.iteritems():
-      p = re.compile(regex)
-      m = p.match(self.__folder__._name_)
-      if m:
-        i=1
-        for attr in keys.split(' '):
-          setattr(album, attr, m.group(i).replace('_', ' '))
-          i+=1
-
-    self._append_(album)
-
-  def __do_by_tag_name__(self, album, tag):
-    possibilities = dict()
-
-    for f in self.__folder__._files_:
-      if (f._type_ != "ogg") and (f._type_ != "mp3") and (f._type_ != "flac"):
-        continue
-
-      try:
-        maybe = getattr(f._extra_data_, tag)
-        if possibilities.has_key(maybe):
-          possibilities[maybe] += 1
-        else:
-          possibilities[maybe] = 1
-      except:
-        pass
-
-      max = 0
-      prefered = None
-      for key, value in possibilities.iteritems():
-        if value > max:
-          prefered = key
-          max = value
-
-    setattr(album, tag, prefered)
-
-
-  def do_by_tag(self):
-    album = Album("tag")
-    for key in album.__keys__:
-      self.__do_by_tag_name__(album, key)
-    self._append_(album)
-
-  def do_by_mix(self):
-    album = Album("mix")
-    for res in self.__results__:
-      for key in album.__keys__:
-        if not getattr(album, key):
-          setattr(album, key, getattr(res, key))
-    self._append_(album)
-
+  def do(self):
+    tag = investigate.Tag(self.__folder__, self.__results__)
+    self._append_(tag._do_album_())
+    regexp = investigate.Regexp(self.__folder__, self.__results__)
+    self._append_(regexp._do_album_())
+    mix = investigate.Mix(self.__folder__, self.__results__)
+    self._append_(mix._do_album_())
