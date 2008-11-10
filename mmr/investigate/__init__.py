@@ -21,6 +21,4 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mix import Mix
-from regexp import Regexp
-from tag import Tag
+from loader import Loader

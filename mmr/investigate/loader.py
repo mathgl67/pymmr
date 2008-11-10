@@ -21,16 +21,9 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import mmr
-from abstract_investigate import AbstractInvestigate
-
-class Investigate(AbstractInvestigate):
-  def _setUp_(self):
-    self._album_ = mmr.Album("mix")
-
-  def _do_album_(self):
-    for res in self._album_list_:
-      for key in self._album_.__keys__:
-        if not getattr(self._album_, key):
-          setattr(self._album_, key, getattr(res, key))
-    return self._album_
+class Loader:
+  @staticmethod
+  def load_by_name(name, folder, album_list):
+      module = __import__("mmr.investigate.%s" % (name),
+                          globals(), locals(), ["mmr", "investigate"])
+      return module.Investigate(folder, album_list)

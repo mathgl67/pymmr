@@ -51,9 +51,8 @@ class InvestigateAlbum:
     self.__results__.sort()
 
   def do(self):
-    tag = investigate.Tag(self.__folder__, self.__results__)
-    self._append_(tag._do_album_())
-    regexp = investigate.Regexp(self.__folder__, self.__results__)
-    self._append_(regexp._do_album_())
-    mix = investigate.Mix(self.__folder__, self.__results__)
-    self._append_(mix._do_album_())
+    module_list = ['tag', 'regexp', 'lyric_wiki', 'mix']
+    for module_name in module_list:
+      module = investigate.Loader.load_by_name(module_name, self.__folder__,
+                                               self.__results__)
+      self._append_(module._do_album_())

@@ -26,7 +26,7 @@ from abstract_investigate import AbstractInvestigate
 
 import re
 
-class Regexp(AbstractInvestigate):
+class Investigate(AbstractInvestigate):
   def _setUp_(self):
     self._album_ = mmr.Album('regexp')
 
