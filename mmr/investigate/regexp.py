@@ -22,6 +22,7 @@
 #
 
 from mmr.album import Album
+from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 import re
@@ -29,6 +30,7 @@ import re
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('regexp')
+        self._track_ = Track('regexp')
 
     def do_album(self):
         regexs = {
@@ -49,3 +51,6 @@ class Investigate(AbstractInvestigate):
                     index += 1
 
         return self._album_
+
+    def do_track(self, file_obj):
+        return self._track_

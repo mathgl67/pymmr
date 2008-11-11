@@ -24,34 +24,34 @@
 from mmr.config import Config
 from mmr.investigate.loader import Loader
 
-class InvestigateAlbum:
+class InvestigateTrack:
     def __init__(self, folder):
-        self.__folder__ = folder
-        self.__results__ = []
+        self._folder_ = folder
+        self._results_ = {}
+        self._init_result_()
+
+    def _init_result_(self):
+        for file_obj in self._folder_.get_files():
+            self._results_[file_obj.get_name()] = []
+
 
     def __repr__(self):
         lines = []
-        lines.append(u"<InvestigateAlbum>")
-        for res in self.__results__:
-            lines.append(res.__repr__())
-        lines.append(u"</InvestigateAlbum>")
+        lines.append(u"<InvestigateTrack>")
+        for file_name, result in self._results_.items():
+            lines.append(u"<File name=\"%s\">" % unicode(file_name,
+                'ISO8859-15')) # should not be here.. !
+            for track in result:
+                lines.append(track.__repr__())
+            lines.append(u"</File>")
+        lines.append(u"</InvestigateTrack>")
         return u"\n".join(lines)
-
-    def _append_(self, album):
-        album.calculate_score()
-        self.__results__.append(album)
-
-    def count(self):
-        return len(self.__results__)
-
-    def get_album(self, num):
-        return self.__results__[num]
-
-    def sort(self):
-        self.__results__.sort()
 
     def investigate(self):
         for module_name in Config().investigater:
-            module = Loader.load_by_name(module_name, self.__folder__,
-                                         self.__results__)
-            self._append_(module.do_album())
+            module = Loader.load_by_name(module_name, self._folder_,
+                                         self._results_)
+            for file_obj in self._folder_.get_files():
+                self._results_[file_obj.get_name()].append(
+                    module.do_track(file_obj)
+                )

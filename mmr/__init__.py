@@ -29,6 +29,7 @@ from mmr.track import Track
 from mmr.folder import Folder
 from mmr.file import File
 from mmr.investigate_album import InvestigateAlbum
+from mmr.investigate_track import InvestigateTrack
 from mmr.tags import Tag
 
 MMR = {

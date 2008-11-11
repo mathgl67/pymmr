@@ -22,7 +22,17 @@
 #
 
 class Track:
-    def __init__(self):
-        self._number_ = None
+    def __init__(self, investigater):
+        self._investigater_ = investigater
+        self._score_ = None
+        self._tracknumber_ = None
         self._title_ = None
 
+    def __repr__(self):
+        string  = u'<track investigater="%s" score="%s"'
+        string += u' tracknumber="%s" title="%s"/>'
+
+        return string % (
+            self._investigater_, self._score_,
+            self._tracknumber_, self._title_
+        )

@@ -76,12 +76,12 @@ print
 
 investigate_album = mmr.InvestigateAlbum(folder)
 investigate_album.investigate()
-
-#investigate_album.do_by_regex()
-#investigate_album.do_by_tag()
-#investigate_album.do_by_mix()
-
 investigate_album.sort()
 
-a = investigate_album.__repr__()
-print a.encode('UTF-8')
+print investigate_album.__repr__().encode('UTF-8')
+print
+
+investigate_track = mmr.InvestigateTrack(folder)
+investigate_track.investigate()
+
+print investigate_track.__repr__().encode('UTF-8')

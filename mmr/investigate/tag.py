@@ -22,11 +22,13 @@
 #
 
 from mmr.album import Album
+from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('tag')
+        self._track_ = Track('tag')
 
     def _do_album_by_tag_name_(self, tag):
         possibilities = dict()
@@ -59,3 +61,6 @@ class Investigate(AbstractInvestigate):
         for key in self._album_.get_keys():
             self._do_album_by_tag_name_(key)
         return self._album_
+
+    def do_track(self, file_obj):
+        return self._track_

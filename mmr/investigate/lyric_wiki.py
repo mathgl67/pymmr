@@ -22,6 +22,7 @@
 #
 
 from mmr.album import Album
+from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 from xml.dom import minidom, Node
@@ -31,6 +32,7 @@ import urlparse, httplib, urllib
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('lyric_wiki')
+        self._track_ = Track('lyric_wiki')
 
     def do_album(self):
         url = urlparse.urlparse('http://lyricwiki.org')
@@ -62,3 +64,6 @@ class Investigate(AbstractInvestigate):
                         self._album_.year = node.firstChild.data
 
             return self._album_
+
+    def do_track(self, file_obj):
+        return self._track_

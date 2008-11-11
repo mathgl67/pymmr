@@ -26,10 +26,14 @@ class AbstractInvestigate:
         self._folder_ = folder
         self._album_list_ = album_list
         self._album_ = None
+        self._track_ = None
         self._set_up_()
 
     def _set_up_(self):
         pass
 
     def do_album(self):
+        pass
+
+    def do_track(self, file_obj):
         pass

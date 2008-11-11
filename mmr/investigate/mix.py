@@ -22,11 +22,13 @@
 #
 
 from mmr.album import Album
+from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
-        self._album_ = Album("mix")
+        self._album_ = Album('mix')
+        self._track_ = Track('mix')
 
     def do_album(self):
         for res in self._album_list_:
@@ -34,3 +36,6 @@ class Investigate(AbstractInvestigate):
                 if not getattr(self._album_, key):
                     setattr(self._album_, key, getattr(res, key))
         return self._album_
+
+    def do_track(self, file_obj):
+        return self._track_

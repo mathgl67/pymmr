@@ -24,19 +24,25 @@
 import yaml
 
 class Config:
-
-    class __impl__:
+    """Config class"""
+    class _impl:
+        """The implementation class"""
         def __init__(self):
+            """Constructor: initialize data"""
             self._file_ = None
             self._data_ = None
             self._file_name_ = None
 
         def load_file(self, file_name):
+            """Load a yaml file
+                file_name -- a file name
+            """
             self._file_name_ = file_name
             self._file_ = yaml.load(file(self._file_name_, 'rb').read())
             self._data_ = self._file_['pymmr']
 
         def __getattr__(self, attr):
+            """Override magic method to access direct to data"""
             if self._data_.has_key(attr):
                 return self._data_[attr]
             raise AttributeError, attr
@@ -44,12 +50,15 @@ class Config:
     __instance__ = None
 
     def __init__(self):
+        """Singleton constructor"""
         if Config.__instance__ is None:
-            Config.__instance__ = Config.__impl__()
+            Config.__instance__ = Config._impl()
         self.__dict__['_Config__instance__'] = Config.__instance__
 
     def __getattr__(self, attr):
+        """Overide magic method to get values from self.__instance__"""
         return getattr(self.__instance__, attr)
 
     def __setattr__(self, attr, value):
+        """Overide magic method to set values to self.__instance__"""
         return setattr(self.__instance__, attr, value)
