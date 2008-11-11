@@ -21,23 +21,35 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+"""This file contain the File class"""
+
 import mmr
 
 class File:
+    """Class represent a file"""
+
     def __init__(self, folder, file_name):
+        """Contructor:
+            initialize data, search file_type and retrieve tags
+
+            folder -- Folder object of the file
+            file_name -- the file name
+        """
         self._name_ =  file_name
         self._folder_ = folder
         self._fullpath_ = '%s/%s' % (folder.get_fullpath(), self._name_)
         self._type_ = None
         self._extra_data_ = None
 
-        self.__search_type__()
-        self.__retrieve_extra_data__()
+        self._search_type_()
+        self._retrieve_extra_data_()
 
     def __cmp__(self, other):
+        """Copare two File object by name"""
         return cmp(self._name_, other.get_name())
 
-    def __search_type__(self):
+    def _search_type_(self):
+        """Search file type"""
         self._type_ = 'unknown'
         if '.jpg' in self._name_:
             self._type_ = 'jpg'
@@ -55,19 +67,25 @@ class File:
             self._type_ = 'nfo'
 
     def get_name(self):
+        """Return file name"""
         return self._name_
 
     def get_type(self):
+        """Return file type"""
         return self._type_
 
     def get_tags(self):
+        """Return tags"""
         return self._extra_data_
 
     def get_fullpath(self):
+        """Return fullpath"""
         return self._fullpath_
 
-    def __retrieve_extra_data__(self):
+    def _retrieve_extra_data_(self):
+        """Parse tags"""
         self._extra_data_ = mmr.tags.Tag.get(self)
 
     def __repr__(self):
+        """Return a string representing the object"""
         return '<File name="%s" type="%s">' % (self._name_, self._type_)

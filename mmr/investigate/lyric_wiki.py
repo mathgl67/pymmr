@@ -56,8 +56,9 @@ class Investigate(AbstractInvestigate):
                             match = True
                             self._album_.artist = res.artist
                             self._album_.album  = res.album
-                        elif (node.tagName == 'year' and match and
-                              node.firstChild):
-                            self._album_.year = node.firstChild.data
+                    elif (node.nodeType == Node.ELEMENT_NODE and
+                          node.tagName == 'year'and match and
+                          node.firstChild):
+                        self._album_.year = node.firstChild.data
 
             return self._album_

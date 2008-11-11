@@ -30,7 +30,7 @@ class Investigate(AbstractInvestigate):
 
     def do_album(self):
         for res in self._album_list_:
-            for key in self._album_.__keys__:
+            for key in self._album_.get_keys():
                 if not getattr(self._album_, key):
                     setattr(self._album_, key, getattr(res, key))
         return self._album_

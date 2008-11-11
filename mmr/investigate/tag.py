@@ -56,6 +56,6 @@ class Investigate(AbstractInvestigate):
         setattr(self._album_, tag, prefered)
 
     def do_album(self):
-        for key in self._album_.__keys__:
+        for key in self._album_.get_keys():
             self._do_album_by_tag_name_(key)
         return self._album_

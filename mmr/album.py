@@ -21,48 +21,67 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+"""This file contain the Album class"""
+
 class Album:
-    def __init__(self, by):
-        self.__by__ = by
-        self.__score__ = 0
-        self.__keys__ = ('artist', 'album', 'genre', 'year')
+    """This represent an Album"""
+
+    def __init__(self, investigater):
+        """Constructor: initialize data
+
+          investigater -- the module who provide data
+        """
+        self._investigater_ = investigater
+        self._score_ = 0
+        self._keys_ = ('artist', 'album', 'genre', 'year')
 
         # set all keys to None
-        for key in self.__keys__:
+        for key in self._keys_:
             setattr(self, key, None)
 
     def __cmp__(self, other):
-        if self.__score__ < other.__score__:
+        """Compare two object by score"""
+        if self._score_ < other.get_score():
             return 1
-        elif self.__score__ > other.__score__:
+        elif self._score_ > other.get_score():
             return -1
         else:
             return 0
 
     def __repr__(self):
+        """Return a representation of this object"""
         lines = []
-        lines.append(u"<album by=\"%s\" score=\"%d\">" % (self.__by__,
-                     self.__score__))
+        lines.append(u"<album investigater=\"%s\" score=\"%d\">" % (
+                     self._investigater_, self._score_))
 
-        for key in self.__keys__:
+        for key in self.get_keys():
             lines.append(u"<%s>%s</%s>" % (key, getattr(self, key), key))
 
         lines.append(u"</album>")
         return u"\n".join(lines)
 
     def calculate_score(self):
+        """Calc a score for theses entries"""
         found = 0
-        for key in self.__keys__:
+        for key in self._keys_:
             if getattr(self, key):
                 found += 1
 
-        if self.__by__ == 'mix':
+        if self._investigater_ == 'mix':
             score = 90
-        elif self.__by__ == 'tag':
+        elif self._investigater_ == 'tag':
             score = 50
-        elif self.__by__ == 'regexp':
+        elif self._investigater_ == 'regexp':
             score = 10
         else:
             score = 0
 
-        self.__score__ = score + (found * 100)
+        self._score_ = score + (found * 100)
+
+    def get_score(self):
+        """Return the score"""
+        return self._score_
+
+    def get_keys(self):
+        """Return keys"""
+        return self._keys_

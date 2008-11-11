@@ -21,6 +21,8 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+"""pymmr - pyMyMusicRenamer"""
+
 from mmr.config import Config
 from mmr.album import Album
 from mmr.track import Track
