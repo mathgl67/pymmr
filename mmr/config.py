@@ -24,15 +24,32 @@
 import yaml
 
 class Config:
-    def __init__(self, file_name):
-        self._file_ = None
-        self._data_ = None
-        self._file_name_ = file_name
-        self._load_file()
 
-    def _load_file(self):
-        self._file_ = yaml.load(file(self._file_name_, 'rb').read())
-        self._data_ = self._file_['pymmr']
+    class __impl__:
+        def __init__(self):
+            self._file_ = None
+            self._data_ = None
+            self._file_name_ = None
 
-    def __getattr__(self, name):
-        return self._data_[name]
+        def load_file(self, file_name):
+            self._file_name_ = file_name
+            self._file_ = yaml.load(file(self._file_name_, 'rb').read())
+            self._data_ = self._file_['pymmr']
+
+        def __getattr__(self, attr):
+            if self._data_.has_key(attr):
+                return self._data_[attr]
+            raise AttributeError, attr
+
+    __instance__ = None
+
+    def __init__(self):
+        if Config.__instance__ is None:
+            Config.__instance__ = Config.__impl__()
+        self.__dict__['_Config__instance__'] = Config.__instance__
+
+    def __getattr__(self, attr):
+        return getattr(self.__instance__, attr)
+
+    def __setattr__(self, attr, value):
+        return setattr(self.__instance__, attr, value)

@@ -21,6 +21,7 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.config import Config
 from mmr.investigate.loader import Loader
 
 class InvestigateAlbum:
@@ -50,8 +51,7 @@ class InvestigateAlbum:
         self.__results__.sort()
 
     def investigate(self):
-        module_list = ['tag', 'regexp', 'lyric_wiki', 'mix']
-        for module_name in module_list:
+        for module_name in Config().investigater:
             module = Loader.load_by_name(module_name, self.__folder__,
                                          self.__results__)
             self._append_(module.do_album())

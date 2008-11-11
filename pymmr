@@ -53,7 +53,8 @@ if len(args) < 1:
 
 #load config file
 try:
-  config = mmr.Config(options.config)
+  config = mmr.Config()
+  config.load_file(options.config)
 except:
   print 'could not load/parse config file (%s)' % options.config
   sys.exit(1)
@@ -64,7 +65,7 @@ try:
                          locals(), ["mmr", "interface"])
   interface = interface.Interface()
 except:
-  print "could not load '%s' interface" % options.interface
+  print "could not load '%s' interface" % config.interface
   sys.exit(1)
 
 interface.welcome()
