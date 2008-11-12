@@ -21,6 +21,7 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.config import Config
 from mmr.album import Album
 from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
@@ -30,17 +31,9 @@ import re
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('regexp')
-        self._track_ = Track('regexp')
 
     def do_album(self):
-        regexs = {
-            "artist album year":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+).+([\\d]{4})",
-            "artist album":"^([\\d\\w_\ ]+)-([\\d\\w_\ ]+)$",
-            "artist album": "^([\\d\\w_\ \'\.]+)\ -\ ([\\d\\w_\ \'\.]+)$",
-            "album":"^([\\d\\w_\ ]+)$"
-        }
-
-        for keys, regex in regexs.iteritems():
+        for keys, regex in Config().regexp['album'].iteritems():
             re_compiled = re.compile(regex)
             match = re_compiled.match(self._folder_.get_name())
             if match:
@@ -53,4 +46,18 @@ class Investigate(AbstractInvestigate):
         return self._album_
 
     def do_track(self, file_obj):
+        self._track_ = Track('regexp')
+        for keys, regex in Config().regexp['track'].iteritems():
+            print "check", keys, "with", regex, "for", file_obj.get_name()
+            re_compiled = re.compile(regex)
+            match = re_compiled.match(file_obj.get_name())
+            if match:
+                print "match!"
+                index = 1
+                for attr in keys.split(' '):
+                    value = match.group(index).replace('_', ' ')
+                    setattr(self._track_, attr, unicode(value, 'ISO-8859-15'))
+                    index += 1
+            else:
+                print "no match!"
         return self._track_
