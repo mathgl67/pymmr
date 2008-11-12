@@ -48,16 +48,12 @@ class Investigate(AbstractInvestigate):
     def do_track(self, file_obj):
         self._track_ = Track('regexp')
         for keys, regex in Config().regexp['track'].iteritems():
-            print "check", keys, "with", regex, "for", file_obj.get_name()
             re_compiled = re.compile(regex)
             match = re_compiled.match(file_obj.get_name())
             if match:
-                print "match!"
                 index = 1
                 for attr in keys.split(' '):
                     value = match.group(index).replace('_', ' ')
                     setattr(self._track_, attr, unicode(value, 'ISO-8859-15'))
                     index += 1
-            else:
-                print "no match!"
         return self._track_
