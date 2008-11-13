@@ -61,7 +61,12 @@ class Investigate(AbstractInvestigate):
             self._do_album_by_tag_name_(key)
         return self._album_
 
-    def do_track(self, file_obj):
+    def do_track(self, file_obj, result_array):
+        if (file_obj.get_type() != "ogg" and
+            file_obj.get_type() != "mp3" and
+            file_obj.get_type() != "flac"):
+            return None
+
         track = Track('tag')
         tags = file_obj.get_tags()
 

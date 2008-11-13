@@ -35,6 +35,7 @@ class AbstractTag:
             'title': 'title',
             'tracknumber': 'tracknumber',
         }
+
         # do the job
         self._set_up_()
         self._parse_()
@@ -59,6 +60,7 @@ class AbstractTag:
 
     def _parse_(self):
         for key, value in self._tag_list_.items():
+            self._data_[key] = None
             if self._mutagen_.has_key(value):
                 bytes = self._mutagen_.get(value)[0]
                 self._data_[key] = unicode(bytes)

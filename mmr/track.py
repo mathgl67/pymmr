@@ -25,6 +25,7 @@ class Track:
     def __init__(self, investigater):
         self._investigater_ = investigater
         self._score_ = None
+        self._keys_ = [ 'tracknumber', 'title' ]
         self.tracknumber = None
         self.title = None
 
@@ -36,3 +37,6 @@ class Track:
             self._investigater_, self._score_,
             self.tracknumber, self.title
         )
+
+    def get_keys(self):
+        return self._keys_

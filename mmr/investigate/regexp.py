@@ -45,7 +45,7 @@ class Investigate(AbstractInvestigate):
 
         return self._album_
 
-    def do_track(self, file_obj):
+    def do_track(self, file_obj, result_array):
         self._track_ = Track('regexp')
         for keys, regex in Config().regexp['track'].iteritems():
             re_compiled = re.compile(regex)

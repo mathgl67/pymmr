@@ -52,6 +52,7 @@ class InvestigateTrack:
             module = Loader.load_by_name(module_name, self._folder_,
                                          self._results_)
             for file_obj in self._folder_.get_files():
-                self._results_[file_obj.get_name()].append(
-                    module.do_track(file_obj)
-                )
+                track = module.do_track(file_obj, self._results_[file_obj.get_name()])
+                if track:
+                    self._results_[file_obj.get_name()].append(track)
+

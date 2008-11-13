@@ -26,7 +26,7 @@ class AbstractInvestigate:
         self._folder_ = folder
         self._album_list_ = album_list
         self._album_ = None
-        self._track_ = None
+        self._tracks_ = {}
         self._set_up_()
 
     def _set_up_(self):
@@ -35,5 +35,5 @@ class AbstractInvestigate:
     def do_album(self):
         pass
 
-    def do_track(self, file_obj):
+    def do_track(self, file_obj, result_array):
         pass
