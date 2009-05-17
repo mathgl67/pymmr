@@ -86,4 +86,4 @@ class Investigate(AbstractInvestigate):
         if self._tracks_.has_key(tracknumber):
             return self._tracks_[tracknumber]
 
-        return Track('kkkk')
+        return None
