@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # vi:ai:et:ts=2 sw=2
 #
 # -*- coding: utf8 -*-
@@ -22,6 +23,8 @@
 #
 
 """This file contain the Album class"""
+
+from mmr.config import Config
 
 class Album:
     """This represent an Album"""
@@ -67,14 +70,10 @@ class Album:
             if getattr(self, key):
                 found += 1
 
-        if self._investigater_ == 'mix':
-            score = 90
-        elif self._investigater_ == 'tag':
-            score = 50
-        elif self._investigater_ == 'regexp':
-            score = 10
-        else:
-            score = 0
+        score = Config().score['default']
+        for module, base_score in Config().score.items():
+            if self._investigater_ == module:
+                score = base_score
 
         self._score_ = score + (found * 100)
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # vi:ai:et:ts=2 sw=2
 #
 # -*- coding: utf8 -*-
@@ -21,6 +22,8 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.config import Config
+
 class Track:
     def __init__(self, investigater):
         self._investigater_ = investigater
@@ -28,6 +31,21 @@ class Track:
         self._keys_ = [ 'tracknumber', 'title' ]
         self.tracknumber = None
         self.title = None
+
+
+    def calculate_score(self):
+        """Calc a score for theses entries"""
+        found = 0
+        for key in self._keys_:
+            if getattr(self, key):
+                found += 1
+
+        score = Config().score['default']
+        for module, base_score in Config().score.items():
+            if self._investigater_ == module:
+                score = base_score
+
+        self._score_ = score + (found * 100)
 
     def __repr__(self):
         string  = u'<track investigater="%s" score="%s"'

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # vi:ai:et:ts=2 sw=2
 #
 # -*- coding: utf8 -*-
@@ -54,5 +55,6 @@ class InvestigateTrack:
             for file_obj in self._folder_.get_files():
                 track = module.do_track(file_obj, self._results_[file_obj.get_name()])
                 if track:
+                    track.calculate_score()
                     self._results_[file_obj.get_name()].append(track)
 
