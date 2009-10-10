@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # vi:ai:et:ts=2 sw=2
 #
 # -*- coding: utf8 -*-
