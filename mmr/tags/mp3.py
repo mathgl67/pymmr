@@ -22,7 +22,16 @@
 #
 
 from mmr.tags.abstract_tag import AbstractTag
-import mutagen.easyid3
+
+# Display a fatal error when mutagen is not installed.
+# Yaml is require to parse the config file.
+try:
+  import mutagen.easyid3
+except ImportError as exception:
+  print "FATAL: Mutagen python module is require and must be installed. (python-mutagen)" 
+  import sys 
+  sys.exit(1)
+
 
 class Mp3(AbstractTag):
     def _set_up_(self):

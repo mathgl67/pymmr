@@ -21,7 +21,15 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import yaml
+# Display a fatal error when yaml is not installed.
+# Yaml is require to parse the config file.
+try:
+  import yaml
+except ImportError as exception:
+  print "FATAL: Yaml python module is require and must be installed. (python-yaml)" 
+  import sys 
+  sys.exit(1)
+
 
 class Config:
     """Config class"""
