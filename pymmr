@@ -21,67 +21,7 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import sys
-import mmr
-from optparse import OptionParser
+from mmr.main import Main
 
-#init argv parser
-usage = "usage: %prog [options] <music_directory>"
-parser = OptionParser(usage=usage, version="%s %s" % (
-    mmr.MMR['prog'],
-    mmr.MMR['version']
-))
+m = Main()
 
-#add option
-parser.add_option(
-  "-v", "--verbose", action="store_true", dest="verbose", default=False,
-  help="make lot of noise"
-)
-
-parser.add_option(
-  "-c", "--config", dest="config", default="pymmr.cfg",
-  help="Use a specific config file"
-)
-
-#parse
-(options, args) = parser.parse_args()
-
-#check args
-if len(args) < 1:
-  parser.print_help()
-  sys.exit(1)
-
-#load config file
-try:
-  config = mmr.Config()
-  config.load_file(options.config)
-except:
-  print 'could not load/parse config file (%s)' % options.config
-  sys.exit(1)
-
-#load interface
-try:
-  interface = __import__("mmr.interfaces.%s" % config.interface, globals(),
-                         locals(), ["mmr", "interface"])
-  interface = interface.Interface()
-except:
-  print "could not load '%s' interface" % config.interface
-  sys.exit(1)
-
-interface.welcome()
-
-folder = mmr.folder.Folder(args[0])
-print folder
-print
-
-investigate_album = mmr.InvestigateAlbum(folder)
-investigate_album.investigate()
-investigate_album.sort()
-
-print investigate_album.__repr__().encode('UTF-8')
-print
-
-investigate_track = mmr.InvestigateTrack(folder)
-investigate_track.investigate()
-
-print investigate_track.__repr__().encode('UTF-8')
