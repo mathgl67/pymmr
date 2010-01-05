@@ -26,59 +26,45 @@ from mmr.album import Album
 from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
 
-from xml.dom import minidom, Node
+# Display a fatal error when SOAPpy is not installed.
+try:
+  from SOAPpy import WSDL
+except ImportError as exception:
+  print "FATAL: SOAPpy python module is require and must be installed. (python-soappy)" 
+  import sys 
+  sys.exit(1)
 
-import urlparse, httplib, urllib
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
+        self._url_ = 'http://lyrics.wikia.com/server.php?wsdl'
+        self._wsdl_ = WSDL.Proxy(self._url_)
         self._album_ = Album('lyric_wiki')
 
     def do_album(self):
-        url = urlparse.urlparse('http://lyricwiki.org')
-        resource = 'api.php'
-        args = { 'func':'getArtist', 'fmt': 'xml', 'artist': '' }
-
-        for res in self._album_list_:
-            if res.artist:
-                args['artist'] = res.artist.encode('UTF-8')
-                path = '/%s?%s' % (resource, urllib.urlencode(args))
-                conn = httplib.HTTPConnection(url.netloc)
-                conn.request('GET', path)
-                resp = conn.getresponse()
-                dom = minidom.parseString(resp.read())
-                albums = dom.getElementsByTagName('albums').item(0)
-
-                match = False
-                for node in albums.childNodes:
-                    if (node.nodeType == Node.ELEMENT_NODE and
-                        node.tagName == 'album'):
-                        match = False
-                        if node.firstChild.data == res.album:
-                            match = True
-                            self._album_.artist = res.artist
-                            self._album_.album  = res.album
-                    elif (node.nodeType == Node.ELEMENT_NODE and
-                          node.tagName == 'year' and match and
-                          node.firstChild):
-                        self._album_.year = node.firstChild.data
-                    elif (node.nodeType == Node.ELEMENT_NODE and
-                          node.tagName == 'songs' and match):
-                        index = 1
-                        for item in node.childNodes:
-                            if (item.nodeType == Node.ELEMENT_NODE and
-                                node.tagName == 'songs'):
-
-                                track = Track('lyric_wiki')
-                                track.tracknumber = index
-                                track.title = item.firstChild.data
-
-                                self._tracks_[index] = track
-                                index += 1
-
-            return self._album_
+      for res in self._album_list_:
+        if res.artist:
+          result = self._wsdl_.getArtist(res.artist)
+                
+          match = False
+          for album in result.albums:
+            if album['album'] == res.album:
+              match = True
+              self._album_.artist = res.artist  
+              self._album_.album  = album['album'] 
+              self._album_.year = album['year']
+              index = 0
+              for song in album['songs']:
+                track = Track('lyric_wiki')
+                track.tracknumber = index
+                track.title = song
+                self._tracks_[index] = track
+                index += 1
+         
+      return self._album_
 
     def do_track(self, file_obj, result_array):
+
         tracknumber = None
         for result in result_array:
             if result.tracknumber:
