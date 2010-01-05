@@ -53,7 +53,7 @@ class Investigate(AbstractInvestigate):
               self._album_.artist = res.artist  
               self._album_.album  = album['album'] 
               self._album_.year = album['year']
-              index = 0
+              index = 1 
               for song in album['songs']:
                 track = Track('lyric_wiki')
                 track.tracknumber = index
@@ -64,13 +64,19 @@ class Investigate(AbstractInvestigate):
       return self._album_
 
     def do_track(self, file_obj, result_array):
+        number = None
+        title = None
 
-        tracknumber = None
         for result in result_array:
             if result.tracknumber:
-                tracknumber = int(result.tracknumber)
+                number = int(result.tracknumber)
+            if result.title:
+                title = result.title
 
-        if self._tracks_.has_key(tracknumber):
-            return self._tracks_[tracknumber]
+            for index, track in self._tracks_.iteritems():
+              if track.tracknumber == number:
+                return track
+              if track.title == title:
+                return track
 
         return None
