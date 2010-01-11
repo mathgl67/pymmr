@@ -4,9 +4,13 @@ from optparse import OptionParser
 
 class Main:
   def __init__(self):
+    pass
+
+  def run(self):
     self.welcome()
     self.parse_args()
     self.load_config()
+    self.folder()
     self.test()
 
   def welcome(self):
@@ -55,20 +59,28 @@ class Main:
       print 'could not load/parse config file (%s)' % self.options.config
       sys.exit(1)
 
+  def folder(self):
+    if self.options.verbose:
+      print "Folder: analyse '%s'..." % (self.args[0])
+
+    self.folder = mmr.folder.Folder(self.args[0])
+    if self.options.verbose:
+      print "Folder: done. result..."
+      print self.folder.__repr__().encode('UTF-8')
+
+
+  def album(self):
+    pass 
 
   def test(self):
-    folder = mmr.folder.Folder(self.args[0])
-    print folder
-    print
-    
-    investigate_album = mmr.InvestigateAlbum(folder)
+    investigate_album = mmr.InvestigateAlbum(self.folder)
     investigate_album.investigate()
     investigate_album.sort()
 
     print investigate_album.__repr__().encode('UTF-8')
     print
 
-    investigate_track = mmr.InvestigateTrack(folder)
+    investigate_track = mmr.InvestigateTrack(self.folder)
     investigate_track.investigate()
     
     print investigate_track.__repr__().encode('UTF-8') 

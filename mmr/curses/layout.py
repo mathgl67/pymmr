@@ -21,8 +21,12 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mmr.main import Main
+from mmr.curses.widget import Widget, Pos, Size
 
-m = Main()
-m.run()
+class Layout(Widget):
+  pass
+
+class VerticalLayout(Layout):
+  def display(self):
+    super(VerticalLayout, self).display()
 

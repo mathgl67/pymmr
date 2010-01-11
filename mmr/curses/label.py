@@ -21,8 +21,37 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mmr.main import Main
+from mmr.curses.widget import Widget
 
-m = Main()
-m.run()
+class Label(Widget):
+  def __init__(self):
+    super(Label, self).__init__()
+    self.text = "" 
+
+  def set_text(self, text):
+    self.text = text    
+
+  def get_text_line_list(self):
+    size = self.get_parent().get_max_size()
+    tmp=""
+    r=[]
+    for ch in self.text:
+      # max line size
+      if len(tmp) == size.width - 2:
+        r.append(tmp)
+        tmp = ""
+      # linejump
+      if ch == '\n':
+        r.append(tmp)
+        tmp = ""
+        continue
+      tmp = tmp + ch
+    r.append(tmp)
+    return r 
+
+  def display(self):
+    l = 0
+    for line in self.get_text_line_list():
+      self.get_parent()._handle.addstr(self._pos.line+l, self._pos.col, line)
+      l = l + 1
 

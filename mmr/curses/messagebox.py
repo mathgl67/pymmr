@@ -21,8 +21,32 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mmr.main import Main
+import curses
+from mmr.curses.widget import Pos
+from mmr.curses.window import Window
+from mmr.curses.label import Label
 
-m = Main()
-m.run()
+class MessageBox(Window):
+  def __init__(self):
+    super(MessageBox, self).__init__()
+    # set default
+    self.title = ""
+    self.text = ""
 
+  def set_title(self, title):
+    self.title = title
+
+  def set_text(self, text):
+    self.text = text
+
+  def setup(self):
+    label = Label()
+    label.set_text(self.text)
+    label.set_pos(Pos(1, 3))
+    self.child_add(label)
+
+  def display(self):
+    super(MessageBox, self).display()
+    self._handle.hline(2, 1, curses.ACS_HLINE, self._size.width - 2)
+    self._handle.addstr(1,1, self.title)
+   
