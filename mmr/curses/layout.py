@@ -27,6 +27,36 @@ class Layout(Widget):
   pass
 
 class VerticalLayout(Layout):
+  def __init__(self):
+    super(VerticalLayout, self).__init__()
+    self._shared = False
+    self._max_size = None
+
+  def set_shared(self):
+    self._shared = True
+
+  def get_max_size(self):
+    return self._max_size 
+
+  def _display_shared(self):
+    child_nbr = len(self._child_list)
+    size_div = Size(child_nbr,child_nbr)
+    parent = self.get_parent()
+    if parent:
+      size = parent.get_max_size()
+      shared_size = size / size_div
+
+      self._max_size = Size(size.width, shared_size.height)
+
+      line_pos = 1
+      for child in self._child_list:
+        child.set_pos(Pos(1, line_pos))
+        line_pos = line_pos + shared_size.height
+
   def display(self):
+    if self._shared:
+      self._display_shared()
+   
     super(VerticalLayout, self).display()
+
 

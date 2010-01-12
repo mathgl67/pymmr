@@ -40,6 +40,11 @@ class Window(Widget):
 
 
   # getter
+  def get_parent_window(self):
+    # overide default Widget function
+    # to return me to child
+    return self
+
   def get_max_size(self):
     size = Size()
     if self._handle:

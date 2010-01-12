@@ -36,10 +36,16 @@ class Size(object):
   def __str__(self):
     return "(width=%d;height=%d)" % (self.width, self.height)
 
+  def __add__(self, other):
+    return Size(self.width + other.width, self.height + other.height)
+
+  def __div__(self, other):
+    return Size(self.width / other.width, self.height / other.height)
+
 class Pos(object):
-  def __init__(self, x = -1, y = -1):
-    self.col = x
-    self.line = y
+  def __init__(self, col = -1, line = -1):
+    self.col = col
+    self.line = line
 
   def is_valid(self):
     if self.col < 0:
@@ -65,6 +71,14 @@ class Widget(object):
   # getter
   def get_parent(self):
     return self._parent
+
+  def get_parent_window(self):
+    # this function is overide in window class to return
+    # the window class. here we just have to call parent function
+    # if there is a parent.
+    if self._parent:
+      return self._parent.get_parent_window()
+    return None
 
   # setter
   def set_parent(self, parent):
@@ -97,6 +111,12 @@ class Widget(object):
   def event_clear(self):
     self._event_list.clear() 
 
+  # probe size
+  def probe_size(self):
+    size = Size(0, 0)
+    for child in self._child_list:
+      size = size + child.probe_size()
+    return size
 
   # setup
   def setup(self):

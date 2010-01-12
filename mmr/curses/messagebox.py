@@ -24,7 +24,9 @@
 import curses
 from mmr.curses.widget import Pos
 from mmr.curses.window import Window
+from mmr.curses.layout import VerticalLayout
 from mmr.curses.label import Label
+from mmr.curses.hr import Hr
 
 class MessageBox(Window):
   def __init__(self):
@@ -40,13 +42,24 @@ class MessageBox(Window):
     self.text = text
 
   def setup(self):
-    label = Label()
-    label.set_text(self.text)
-    label.set_pos(Pos(1, 3))
-    self.child_add(label)
+    layout = VerticalLayout()
+    layout.set_shared()
+    self.child_add(layout)
+
+    title = Label()
+    title.set_text(self.title)
+    layout.child_add(title)
+
+    hr = Hr()
+    hr.set_max_size()
+    layout.child_add(hr)
+
+    text = Label()
+    text.set_text(self.text)
+    layout.child_add(text)
 
   def display(self):
     super(MessageBox, self).display()
-    self._handle.hline(2, 1, curses.ACS_HLINE, self._size.width - 2)
-    self._handle.addstr(1,1, self.title)
+    #self._handle.hline(2, 1, curses.ACS_HLINE, self._size.width - 2)
+    #self._handle.addstr(1,1, self.title)
    
