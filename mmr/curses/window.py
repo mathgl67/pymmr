@@ -29,13 +29,11 @@ class Window(Widget):
   def __init__(self):
     super(Window, self).__init__()
     self._center = False
+    self._max_size = False
 
   # setter
   def set_max_size(self):
-    if self._parent:
-      self.set_size(self.get_parent().get_max_size())
-      return True
-    return False
+    self._max_size = True
 
   def set_center(self):
     self._center = True
@@ -60,11 +58,20 @@ class Window(Widget):
     self.set_pos(Pos(parent_size.width / 2 - self._size.width / 2,
                      parent_size.height / 2 - self._size.height /2))
 
+  def _display_max_size(self):
+    if self._parent:
+      self.set_size(self.get_parent().get_max_size())
+      return True
+    return False
+
   # display
   def display(self):
     # task before display
     if self._center:
       self._display_center()
+
+    if self._max_size:
+      self._display_max_size()
 
     # display a window
     # must be safe: screen doesn't have parent
