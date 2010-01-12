@@ -22,7 +22,7 @@
 #
 
 import curses
-from mmr.curses.widget import Widget
+from mmr.curses.widget import Widget, Size
 
 class Hr(Widget):
   def __init__(self):
@@ -31,6 +31,9 @@ class Hr(Widget):
 
   def set_max_size(self):
     self._max_size = True
+
+  def probe_height(self):
+    return 1 + super(Hr, self).probe_height()
 
   def _display_max_size(self):
     parent = self.get_parent()

@@ -21,38 +21,22 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mmr.curses.widget import Widget
+from mmr.curses.widget import Widget, Size
 
 class Label(Widget):
-  def __init__(self):
+  def __init__(self, text=""):
     super(Label, self).__init__()
-    self.text = "" 
+    self.text = text 
 
   def set_text(self, text):
     self.text = text    
 
-  def get_text_line_list(self):
-    size = self.get_parent().get_max_size()
-    tmp=""
-    r=[]
-    for ch in self.text:
-      # max line size
-      if len(tmp) == size.width - 2:
-        r.append(tmp)
-        tmp = ""
-      # linejump
-      if ch == '\n':
-        r.append(tmp)
-        tmp = ""
-        continue
-      tmp = tmp + ch
-    r.append(tmp)
-    return r 
+  def probe_height(self):
+    return 1 + super(Label, self).probe_height()
+
+  def probe_width(self):
+    return len(self.text) + super(Label, self).probe_width()
 
   def display(self):
-    l = 0
-    for line in self.get_text_line_list():
-#      print self._pos, self._size, line
-      self.get_parent_window()._handle.addstr(self._pos.line+l, self._pos.col, line)
-      l = l + 1
+    self.get_parent_window()._handle.addstr(self._pos.line, self._pos.col, self.text)
 

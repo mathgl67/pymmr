@@ -36,9 +36,6 @@ class Size(object):
   def __str__(self):
     return "(width=%d;height=%d)" % (self.width, self.height)
 
-  def __add__(self, other):
-    return Size(self.width + other.width, self.height + other.height)
-
   def __div__(self, other):
     return Size(self.width / other.width, self.height / other.height)
 
@@ -112,11 +109,17 @@ class Widget(object):
     self._event_list.clear() 
 
   # probe size
-  def probe_size(self):
-    size = Size(0, 0)
+  def probe_width(self):
+    width = 0
     for child in self._child_list:
-      size = size + child.probe_size()
-    return size
+      width = width + child.probe_width()
+    return width
+
+  def probe_height(self):
+    height = 0
+    for child in self._child_list:
+      height = height + child.probe_height()
+    return height
 
   # setup
   def setup(self):

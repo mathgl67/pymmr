@@ -26,6 +26,9 @@ import mmr
 from mmr.curses.screen import Screen
 from mmr.curses.messagebox import MessageBox
 from mmr.curses.widget import Size
+from mmr.curses.window import Window
+from mmr.curses.label import Label
+from mmr.curses.layout import HorizontalLayout
 
 class Main:
   def __init__(self):
@@ -84,9 +87,28 @@ class Main:
     mb.event_add(ord(' '), self.interface_next)
 
     return mb
+
+  def win3(self):
+    w1 = Window()
+    w1.set_max_size()
+    
+    la1 = HorizontalLayout()
+    la1.set_probed()
+    w1.child_add(la1)
+
+    l1 = Label("Hello")
+    la1.child_add(l1)
+
+    l2 = Label("World")
+    la1.child_add(l2)
+    
+    w1.event_add(ord(' '), self.interface_next)
+
+    return w1
     
   def run(self):
     self.interface_add(self.welcome())
     self.interface_add(self.win2())
+    self.interface_add(self.win3())
     self.loop()
 
