@@ -29,6 +29,7 @@ from mmr.curses.widget import Size
 from mmr.curses.window import Window
 from mmr.curses.label import Label
 from mmr.curses.layout import HorizontalLayout
+from mmr.curses.vr import Vr
 
 class Main:
   def __init__(self):
@@ -98,6 +99,10 @@ class Main:
 
     l1 = Label("Hello")
     la1.child_add(l1)
+
+    vr1 = Vr()
+    vr1.set_max_size()
+    la1.child_add(vr1)
 
     l2 = Label("World")
     la1.child_add(l2)
