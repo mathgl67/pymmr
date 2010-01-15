@@ -41,6 +41,41 @@ class Main:
   def on_menuitem_quit_activate(self, widget, data=None):
     gtk.main_quit()
 
+  def on_button_investigate_clicked(self, widget, data=None):
+    print "investigate"
+    if self._cur_folder:
+      self.album_store.clear()
+      self._cur_investigate_album = mmr.InvestigateAlbum(self._cur_folder)
+      self._cur_investigate_album.investigate()
+      self._cur_investigate_album.sort()
+    
+      # update album_view
+      for result in self._cur_investigate_album.__results__:
+        self.album_store.append([
+          result._investigater_,
+          result._score_,
+          result.artist,
+          result.album,
+          result.genre,
+          result.year
+        ])
+
+  def on_button_validate_activate(self, widget, data=None):
+    pass
+
+  def on_button_set_activate(self, widget, data=None):
+    pass
+
+  def on_folder_view_row_activated(self, treeview, path, view_column):
+    self.selection = self.folder_view.get_selection()
+    if self.selection:
+      model, iter = self.selection.get_selected()
+      if iter:
+        self._cur_folder = self.folder_store.get_folder(iter)
+        print "update to %s" % (self._cur_folder._name_)
+        # should update...
+        self.update_album()
+
   def on_imagemenuitem_list_add_activate(self, widget, data=None):
     dialog = gtk.FileChooserDialog(
       title="Directory selection",
@@ -68,16 +103,7 @@ class Main:
   def on_imagemenuitem_list_investigate_activate(self, widget, data=None):
     self.test = "" 
 
-  def investigate(self):
-    self.folder = mmr.folder.Folder(folder_path)
-    self.investigate_album = mmr.InvestigateAlbum(self.folder)
-    self.investigate_album.investigate()
-
-    # update investigator
-    for result in self.investigate_album.__results__:
-      self.investigator_store.append(None, [result._investigater_, result._score_, result.artist, result.album, result.genre, result.year])
-
-
+  
   # helper function
   def error_message(self, message):
     # print on console
@@ -122,6 +148,9 @@ class Main:
     self.folder_view = builder.get_object("folder_view")
     self.interface_folder_view_init()
 
+    self.album_view = builder.get_object("album_view")
+    self.interface_album_view_init()
+
     builder.connect_signals(self)
 
   def interface_folder_view_init(self):
@@ -138,20 +167,20 @@ class Main:
     tree.append_column(col)
     return col
 
-  def interface_init_investigator(self):
-    self.investigator_store = gtk.TreeStore(str, str, str, str, str, str)
-    self.investigator_tree.set_model(self.investigator_store)
+  def interface_album_view_init(self):
+    self.album_store = gtk.ListStore(str, str, str, str, str, str)
+    self.album_view.set_model(self.album_store)
 
-    self.investigator_col = {} 
-    self.investigator_col['Name'] = self.interface_init_col_text(self.investigator_tree, 'Name', 0)
-    self.investigator_col['Score'] = self.interface_init_col_text(self.investigator_tree, 'Score', 1)
-    self.investigator_col['Artist'] = self.interface_init_col_text(self.investigator_tree, 'Artist', 2)
-    self.investigator_col['Album'] = self.interface_init_col_text(self.investigator_tree, 'Album', 3)
-    self.investigator_col['Genre'] = self.interface_init_col_text(self.investigator_tree, 'Genre', 4)
-    self.investigator_col['Year'] = self.interface_init_col_text(self.investigator_tree, 'Year', 5)
+    self.album_col = {} 
+    self.album_col['Name'] = self.interface_init_col_text(self.album_view, 'Name', 0)
+    self.album_col['Score'] = self.interface_init_col_text(self.album_view, 'Score', 1)
+    self.album_col['Artist'] = self.interface_init_col_text(self.album_view, 'Artist', 2)
+    self.album_col['Album'] = self.interface_init_col_text(self.album_view, 'Album', 3)
+    self.album_col['Genre'] = self.interface_init_col_text(self.album_view, 'Genre', 4)
+    self.album_col['Year'] = self.interface_init_col_text(self.album_view, 'Year', 5)
 
   def __init__(self):
-    self.folder_list = []
+    self._cur_folder = None
 
     self.interface_load()
     self.config_load()
