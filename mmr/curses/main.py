@@ -73,7 +73,7 @@ class Main:
     mb = MessageBox()
     mb.set_title("Welcome to My Music Renamer version %s" % (mmr.MMR['version']))
     mb.set_text("Copyright (C) 2007 mathgl67@gmail.com\nMy Music Renamer comes with ABSOLUTELY NO WARRANTY;\nThis is free software; Release under GPL;")
-    mb.set_size(Size(80,25))
+    mb.set_size(Size(70,20))
     mb.set_center()
     mb.event_add(ord(' '), self.interface_next)
 
