@@ -34,6 +34,12 @@ class Folder:
         self._retrieve_dir_name_()
         self._retrieve_file_list_()
 
+        self._album_ = None
+        self._tracks_ = None
+
+        self._investigate_album_ = None
+        self._investigate_tracks_ = None
+
     def _retrieve_dir_name_(self):
         path_array = self._fullpath_.split('/')
         self._name_ = path_array[len(path_array) - 1]

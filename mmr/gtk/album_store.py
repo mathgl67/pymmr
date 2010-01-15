@@ -21,15 +21,27 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-class Loader:
-    _modules_ = {}
-    @staticmethod
-    def load_by_name(name, folder, album_list):
-#        if Loader._modules_.has_key(name):
-#            return Loader._modules_[name]
+import gtk
 
-        module = __import__("mmr.investigate.%s" % (name),
-                            globals(), locals(), ["mmr", "investigate"])
+class AlbumStore(gtk.ListStore):
+  def __init__(self):
+    super(AlbumStore, self).__init__(str, int, str, str, str, str)
+    self._album_list = {}
 
-        Loader._modules_[name] = module.Investigate(folder, album_list)
-        return Loader._modules_[name]
+  def append(self, album):
+    iter = super(AlbumStore, self).append([
+            album._investigater_,
+            album._score_,
+            album.artist,
+            album.album,
+            album.genre,
+            album.year
+    ])
+
+    iter_path = self.get_string_from_iter(iter)
+    self._album_list[iter_path] = album
+
+  def get_album(self, iter):
+    iter_path = self.get_string_from_iter(iter)
+    return self._album_list[iter_path]
+

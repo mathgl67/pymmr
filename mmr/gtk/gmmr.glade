@@ -245,7 +245,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="activate" handler="on_button_set_activate"/>
+                            <signal name="clicked" handler="on_button_set_clicked"/>
                           </object>
                           <packing>
                             <property name="position">1</property>

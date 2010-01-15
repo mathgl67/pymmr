@@ -32,6 +32,7 @@ except ImportError as exception:
   sys.exit(1)
 
 from mmr.gtk.folder_store import FolderStore
+from mmr.gtk.album_store import AlbumStore
 
 class Main:
   # signals
@@ -44,32 +45,28 @@ class Main:
   def on_button_investigate_clicked(self, widget, data=None):
     print "investigate"
     if self._cur_folder:
-      self.album_store.clear()
-      self._cur_investigate_album = mmr.InvestigateAlbum(self._cur_folder)
-      self._cur_investigate_album.investigate()
-      self._cur_investigate_album.sort()
-    
-      # update album_view
-      for result in self._cur_investigate_album.__results__:
-        self.album_store.append([
-          result._investigater_,
-          result._score_,
-          result.artist,
-          result.album,
-          result.genre,
-          result.year
-        ])
 
+      self._cur_folder._investigate_album_ = mmr.InvestigateAlbum(self._cur_folder)
+      self._cur_folder._investigate_album_.investigate()
+      self._cur_folder._investigate_album_.sort()
+
+      self.update_album()
+    
   def on_button_validate_activate(self, widget, data=None):
     pass
 
-  def on_button_set_activate(self, widget, data=None):
-    pass
+  def on_button_set_clicked(self, widget, data=None):
+    print "set!"
+    selection = self.album_view.get_selection()
+    if selection:
+      model, iter = selection.get_selected()
+      if iter:
+        self._cur_folder.album = self.album_store.get_album(iter)
 
   def on_folder_view_row_activated(self, treeview, path, view_column):
-    self.selection = self.folder_view.get_selection()
-    if self.selection:
-      model, iter = self.selection.get_selected()
+    selection = self.folder_view.get_selection()
+    if selection:
+      model, iter = selection.get_selected()
       if iter:
         self._cur_folder = self.folder_store.get_folder(iter)
         print "update to %s" % (self._cur_folder._name_)
@@ -103,6 +100,21 @@ class Main:
   def on_imagemenuitem_list_investigate_activate(self, widget, data=None):
     self.test = "" 
 
+  # update
+  def update_album(self):
+    if self._cur_folder:
+      # update album entry 
+      if self._cur_folder._album_:
+        self.entry_artist.set_text(self._cur_folder._album_.artist)
+        self.entry_album.set_text(self._cur_folder._album_.album)
+        self.entry_genre.set_text(self._cur_folder._album_.genre)
+        self.entry_year.set_text(self._cur_folder._album_.year)
+
+      # update album_view
+      self.album_store.clear()
+      if self._cur_folder._investigate_album_:
+        for result in self._cur_folder._investigate_album_.__results__:
+          self.album_store.append(result)
   
   # helper function
   def error_message(self, message):
@@ -148,6 +160,11 @@ class Main:
     self.folder_view = builder.get_object("folder_view")
     self.interface_folder_view_init()
 
+    self.entry_artist = builder.get_object("entry_artist")
+    self.entry_album = builder.get_object("entry_album")
+    self.entry_genre = builder.get_object("entry_genre")
+    self.entry_year = builder.get_object("entry_year")
+
     self.album_view = builder.get_object("album_view")
     self.interface_album_view_init()
 
@@ -168,7 +185,7 @@ class Main:
     return col
 
   def interface_album_view_init(self):
-    self.album_store = gtk.ListStore(str, str, str, str, str, str)
+    self.album_store = AlbumStore()
     self.album_view.set_model(self.album_store)
 
     self.album_col = {} 
