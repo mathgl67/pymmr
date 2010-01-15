@@ -31,6 +31,8 @@ except ImportError as exception:
   print "FATAL: Gtk python module is require and must be installed." 
   sys.exit(1)
 
+from mmr.gtk.folder_store import FolderStore
+
 class Main:
   # signals
   def on_main_window_destroy(self, widget, data=None):
@@ -39,7 +41,7 @@ class Main:
   def on_menuitem_quit_activate(self, widget, data=None):
     gtk.main_quit()
 
-  def on_menuitem_open_activate(self, widget, data=None):
+  def on_imagemenuitem_list_add_activate(self, widget, data=None):
     dialog = gtk.FileChooserDialog(
       title="Directory selection",
       parent=self.main_window,
@@ -49,21 +51,32 @@ class Main:
     )
     response = dialog.run()
     if response == gtk.RESPONSE_ACCEPT:
-      folder_path = dialog.get_filename() 
-      self.statusbar_push("Analyse folder: %s ..." % folder_path)
-      self.folder = mmr.folder.Folder(folder_path)
-      self.statusbar_push("Analyse folder: %s done." % folder_path)
-
-      self.statusbar_push("Investigate on Album")
-      self.investigate_album = mmr.InvestigateAlbum(self.folder)
-      self.investigate_album.investigate()
-      self.statusbar_push("Investigate on Album done.")
-
-      # update investigator
-      for result in self.investigate_album.__results__:
-        self.investigator_store.append(None, [result._investigater_, result._score_, result.artist, result.album, result.genre, result.year])
+      folder_path = dialog.get_filename()
+      folder = mmr.Folder(folder_path)
+      if folder:
+        self.folder_store.append(folder)
 
     dialog.destroy()
+  
+  def on_imagemenuitem_list_remove_activate(self, widget, data=None):
+    self.selection = self.folder_view.get_selection()
+    if self.selection:
+      model, iter = self.selection.get_selected()
+      if iter:
+        self.folder_store.remove(iter)
+
+  def on_imagemenuitem_list_investigate_activate(self, widget, data=None):
+    self.test = "" 
+
+  def investigate(self):
+    self.folder = mmr.folder.Folder(folder_path)
+    self.investigate_album = mmr.InvestigateAlbum(self.folder)
+    self.investigate_album.investigate()
+
+    # update investigator
+    for result in self.investigate_album.__results__:
+      self.investigator_store.append(None, [result._investigater_, result._score_, result.artist, result.album, result.genre, result.year])
+
 
   # helper function
   def error_message(self, message):
@@ -103,32 +116,43 @@ class Main:
     self.statusbar = builder.get_object("statusbar")
     self.statusbar_ctx = self.statusbar.get_context_id("StatusBar")
 
-    self.investigator_tree = builder.get_object("investigator_view")
-    self.interface_init_investigator()
+    # create a text render
+    self.cell_render_text = gtk.CellRendererText()
+
+    self.folder_view = builder.get_object("folder_view")
+    self.interface_folder_view_init()
 
     builder.connect_signals(self)
 
-  def interface_init_investigator_col(self, name, id):
-    self.investigator_col[name] = gtk.TreeViewColumn(name)
-    self.investigator_col[name].pack_start(self.cell, True)
-    self.investigator_col[name].add_attribute(self.cell, 'text', id)
-    self.investigator_tree.append_column(self.investigator_col[name])
+  def interface_folder_view_init(self):
+    self.folder_store = FolderStore() 
+    self.folder_view.set_model(self.folder_store)
+    self.folder_col = {}
+    self.folder_col['Name'] = self.interface_init_col_text(self.folder_view, 'Name', 0) 
+    self.folder_col['Path'] = self.interface_init_col_text(self.folder_view, 'Path', 1)
+
+  def interface_init_col_text(self, tree, name, id):
+    col = gtk.TreeViewColumn(name)
+    col.pack_start(self.cell_render_text, True)
+    col.add_attribute(self.cell_render_text, 'text', id)
+    tree.append_column(col)
+    return col
 
   def interface_init_investigator(self):
     self.investigator_store = gtk.TreeStore(str, str, str, str, str, str)
     self.investigator_tree.set_model(self.investigator_store)
 
-    self.cell = gtk.CellRendererText()
-
     self.investigator_col = {} 
-    self.interface_init_investigator_col('Name', 0)
-    self.interface_init_investigator_col('Score', 1)
-    self.interface_init_investigator_col('Artist', 2)
-    self.interface_init_investigator_col('Album', 3)
-    self.interface_init_investigator_col('Genre', 4)
-    self.interface_init_investigator_col('Year', 5)
+    self.investigator_col['Name'] = self.interface_init_col_text(self.investigator_tree, 'Name', 0)
+    self.investigator_col['Score'] = self.interface_init_col_text(self.investigator_tree, 'Score', 1)
+    self.investigator_col['Artist'] = self.interface_init_col_text(self.investigator_tree, 'Artist', 2)
+    self.investigator_col['Album'] = self.interface_init_col_text(self.investigator_tree, 'Album', 3)
+    self.investigator_col['Genre'] = self.interface_init_col_text(self.investigator_tree, 'Genre', 4)
+    self.investigator_col['Year'] = self.interface_init_col_text(self.investigator_tree, 'Year', 5)
 
   def __init__(self):
+    self.folder_list = []
+
     self.interface_load()
     self.config_load()
 
