@@ -74,7 +74,7 @@ class Main:
         # should update...
         self.update_album()
 
-  def on_imagemenuitem_list_add_activate(self, widget, data=None):
+  def on_toolbutton_list_add_clicked(self, widget, data=None):
     dialog = gtk.FileChooserDialog(
       title="Directory selection",
       parent=self.main_window,
@@ -91,7 +91,7 @@ class Main:
 
     dialog.destroy()
   
-  def on_imagemenuitem_list_remove_activate(self, widget, data=None):
+  def on_toolbutton_list_rem_clicked(self, widget, data=None):
     self.selection = self.folder_view.get_selection()
     if self.selection:
       model, iter = self.selection.get_selected()
