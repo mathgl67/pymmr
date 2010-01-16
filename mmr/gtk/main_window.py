@@ -112,8 +112,18 @@ class MainWindow(object):
 
       self._update_album_()
     
-  def on_button_validate_activate(self, widget, data=None):
-    pass
+  def on_button_validate_clicked(self, widget, data=None):
+    print "validate!" 
+    if self._cur_folder_:
+      self._cur_folder_._album_ = mmr.Album('validate')
+      self._cur_folder_._album_.artist = self._widgets_['album']['artist'].get_text()
+      self._cur_folder_._album_.album = self._widgets_['album']['album'].get_text()
+      self._cur_folder_._album_.genre = self._widgets_['album']['genre'].get_text()
+      try:
+        self._cur_folder_._album_.year = int(self._widgets_['album']['year'].get_text())
+      except:
+        err = ErrorMessage("Cannot convert year to integer!")
+        err.display()
 
   def on_button_set_clicked(self, widget, data=None):
     print "set!"
@@ -155,8 +165,4 @@ class MainWindow(object):
     iter = self._views_['folder'].get_selected()
     if iter:
       self._views_['folder'].remove(iter)
-
-  def on_imagemenuitem_list_investigate_activate(self, widget, data=None):
-    self.test = "" 
-
 
