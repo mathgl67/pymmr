@@ -61,7 +61,8 @@ class Main:
     if selection:
       model, iter = selection.get_selected()
       if iter:
-        self._cur_folder.album = self.album_store.get_album(iter)
+        self._cur_folder._album_ = self.album_store.get_album(iter)
+        self.update_album()
 
   def on_folder_view_row_activated(self, treeview, path, view_column):
     selection = self.folder_view.get_selection()
@@ -108,7 +109,7 @@ class Main:
         self.entry_artist.set_text(self._cur_folder._album_.artist)
         self.entry_album.set_text(self._cur_folder._album_.album)
         self.entry_genre.set_text(self._cur_folder._album_.genre)
-        self.entry_year.set_text(self._cur_folder._album_.year)
+        self.entry_year.set_text(str(self._cur_folder._album_.year))
 
       # update album_view
       self.album_store.clear()

@@ -47,6 +47,7 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem_list_add">
                         <property name="label">gtk-add</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_imagemenuitem_list_add_activate"/>
                       </object>
@@ -55,6 +56,7 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem_list_remove">
                         <property name="label">gtk-remove</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_imagemenuitem_list_remove_activate"/>
                       </object>
@@ -123,6 +125,24 @@
               <object class="GtkNotebook" id="notebook1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <child>
+                  <object class="GtkFileChooserWidget" id="filechooserwidget1">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="action">select-folder</property>
+                    <property name="create_folders">False</property>
+                  </object>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">page 3</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                    <property name="tab_fill">False</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
@@ -289,6 +309,9 @@
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
                 <child type="tab">
                   <object class="GtkLabel" id="label1">
@@ -296,6 +319,7 @@
                     <property name="label" translatable="yes">Album</property>
                   </object>
                   <packing>
+                    <property name="position">1</property>
                     <property name="tab_fill">False</property>
                   </packing>
                 </child>
@@ -307,7 +331,7 @@
                     <property name="receives_default">True</property>
                   </object>
                   <packing>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child type="tab">
@@ -316,7 +340,7 @@
                     <property name="label" translatable="yes">Tracks</property>
                   </object>
                   <packing>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                     <property name="tab_fill">False</property>
                   </packing>
                 </child>
