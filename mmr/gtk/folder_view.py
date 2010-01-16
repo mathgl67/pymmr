@@ -23,25 +23,33 @@
 
 import gtk
 
-class AlbumStore(gtk.ListStore):
-  def __init__(self):
-    super(AlbumStore, self).__init__(str, int, str, str, str, str)
-    self._album_list = {}
+from mmr.gtk.view import View
 
-  def append(self, album):
-    iter = super(AlbumStore, self).append([
-            album._investigater_,
-            album._score_,
-            album.artist,
-            album.album,
-            album.genre,
-            album.year
+class FolderView(View):
+  def __init__(self, view):
+    # view and model
+    super(FolderView, self).__init__(view)
+    self.__init_store__(gtk.ListStore(str, str))
+    # create cols
+    self.__init_column_list__([
+      {"name": "Name", "type": "text", "id": 0},
+      {"name": "Path", "type": "text", "id": 1},
     ])
+    # data
+    self._folder_list_ = {}
 
-    iter_path = self.get_string_from_iter(iter)
-    self._album_list[iter_path] = album
 
-  def get_album(self, iter):
-    iter_path = self.get_string_from_iter(iter)
-    return self._album_list[iter_path]
+  def get_folder(self, iter):
+    iter_path = self._store_.get_string_from_iter(iter)
+    return self._folder_list_[iter_path]
+
+  def append(self, folder):
+    iter = self._store_.append([folder._name_, folder._path_])
+    iter_path = self._store_.get_string_from_iter(iter)
+    self._folder_list_[iter_path] = folder
+
+  def remove(self, iter):
+    iter_path = self._store_.get_string_from_iter(iter)
+    del self._folder_list_[iter_path]
+    self._store_.remove(iter)
 

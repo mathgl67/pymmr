@@ -22,23 +22,21 @@
 #
 
 import gtk
+import sys
 
-class FolderStore(gtk.ListStore):
-  def __init__(self):
-    super(FolderStore, self).__init__(str, str)
-    self._folder_list = {}
+class ErrorMessage(object):
+  def __init__(self, message):
+    self._message_ = message
 
-  def append(self, folder):
-    iter = super(FolderStore, self).append([folder._name_, folder._path_])
-    iter_path = self.get_string_from_iter(iter)
-    self._folder_list[iter_path] = folder
-
-  def remove(self, iter):
-    iter_path = self.get_string_from_iter(iter)
-    del self._folder_list[iter_path]
-    super(FolderStore, self).remove(iter)
-
-  def get_folder(self, iter):
-    iter_path = self.get_string_from_iter(iter)
-    return self._folder_list[iter_path]
+  def display(self):
+    # display to console
+    print "ERROR:", self._message_
+    # create a dialog
+    dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, self._message_)
+    dialog.run()
+    dialog.destroy()
+  
+  def display_and_exit(self):
+    self.display()
+    sys.exit(1)
 
