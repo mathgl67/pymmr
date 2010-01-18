@@ -33,13 +33,14 @@ class Investigate(AbstractInvestigate):
         possibilities = dict()
 
         for file_obj in self._folder_.get_files():
-            if (file_obj.get_type() != "ogg" and
-                file_obj.get_type() != "mp3" and
-                file_obj.get_type() != "flac"):
+            if (file_obj.extension != ".ogg" and
+
+                file_obj.extension != ".mp3" and
+                file_obj.extension != ".flac"):
                 continue
 
             try:
-                maybe = getattr(file_obj.get_tags(), tag)
+                maybe = getattr(file_obj.tags, tag)
                 if possibilities.has_key(maybe):
                     possibilities[maybe] += 1
                 else:
@@ -62,13 +63,13 @@ class Investigate(AbstractInvestigate):
         return self._album_
 
     def do_track(self, file_obj, result_array):
-        if (file_obj.get_type() != "ogg" and
-            file_obj.get_type() != "mp3" and
-            file_obj.get_type() != "flac"):
+        if (file_obj.extension != ".ogg" and
+            file_obj.extension != ".mp3" and
+            file_obj.extension != ".flac"):
             return None
 
         track = Track('tag')
-        tags = file_obj.get_tags()
+        tags = file_obj.tags
 
         if tags.tracknumber:
             track.tracknumber = tags.tracknumber

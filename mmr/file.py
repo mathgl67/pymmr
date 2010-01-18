@@ -23,69 +23,94 @@
 
 """This file contain the File class"""
 
-import mmr
+import os
+from mmr.tags.tag import Tag
 
-class File:
-    """Class represent a file"""
+class File(object):
+  """This class reprensent a file stored in a Folder"""
 
-    def __init__(self, folder, file_name):
-        """Contructor:
-            initialize data, search file_type and retrieve tags
+  def __init__(self, name=None, path=None, extension=None, parent=None):
+    """Constructor function.
+         name: set the file name (eg: file.ext)
+         path: set the file path (eg: /home/user)
+         extension: set the file extension (eg: .ext)"""
+    self.name = name 
+    self.path = path
+    self.extension = extension
+    self.parent = parent
 
-            folder -- Folder object of the file
-            file_name -- the file name
-        """
-        self._name_ =  file_name
-        self._folder_ = folder
-        self._fullpath_ = '%s/%s' % (folder.get_fullpath(), self._name_)
-        self._type_ = None
-        self._extra_data_ = None
+  def __str__(self):
+    """Return representation of file"""
+    return  "<File name='%{name}s' extension='%{extension}s' path='%{path}s' />" % self.get_dict()
 
-        self._search_type_()
-        self._retrieve_extra_data_()
+  def get_dict(self):
+    """Return a dict who dump all object data"""
+    return {
+      "name": self.name,
+      "extension": self.extension,
+      "path": self.path,
+      "parent": self.parent,
+    }
 
-    def __cmp__(self, other):
-        """Copare two File object by name"""
-        return cmp(self._name_, other.get_name())
+  def get_fullpath(self):
+    """Return the object fullpath (eg: /home/user/file.ext)"""
+    return os.path.join(self.path, self.name)
 
-    def _search_type_(self):
-        """Search file type"""
-        self._type_ = 'unknown'
-        if '.jpg' in self._name_:
-            self._type_ = 'jpg'
-        elif '.mp3' in self._name_:
-            self._type_ = 'mp3'
-        elif '.ogg' in self._name_:
-            self._type_ = 'ogg'
-        elif '.flac' in self._name_:
-            self._type_ = 'flac'
-        elif '.m3u' in self._name_:
-            self._type_ = 'm3u'
-        elif '.sfv' in self._name_:
-            self._type_ = 'sfv'
-        elif '.nfo' in self._name_:
-            self._type_ = 'nfo'
+  # prototype function
+  def _explore_meta_data_(self):
+    """This functoin could be implemente by child class"""
+    pass
 
-    def get_name(self):
-        """Return file name"""
-        return self._name_
+  # factory
+  @staticmethod
+  def factory(fullpath):
+    """This is the factory function of the file class.
+       This look at the extension to determine a class to
+       use (eg: AudioFile for mp3 file) and fill data"""
 
-    def get_type(self):
-        """Return file type"""
-        return self._type_
+    # define extension and class
+    ext_class = {
+      ".mp3": FileAudio,
+      ".flac": FileAudio,
+      ".ogg": FileAudio,
+    }
 
-    def get_tags(self):
-        """Return tags"""
-        return self._extra_data_
+    file = None
 
-    def get_fullpath(self):
-        """Return fullpath"""
-        return self._fullpath_
+    # retrieve base information
+    splitpath = os.path.split(fullpath)
+    name = splitpath[1]
+    path = splitpath[0]
+    extension = None
 
-    def _retrieve_extra_data_(self):
-        """Parse tags"""
-        self._extra_data_ = mmr.tags.Tag.get(self)
+    # create a specific object if extension is found in dict
+    splitext = os.path.splitext(fullpath)
+    if splitext[1] is not "":
+      extension = splitext[1]
+      if extension in ext_class.keys():
+        file = ext_class[extension]()
+      
+    # else create a default object 
+    if not file:
+      file = File()
 
-    def __repr__(self):
-        """Return a string representing the object"""
-        return '<File name="%s" type="%s">' % (self._name_, self._type_)
+    file.name = name 
+    file.path = path
+    file.extension = extension
+
+    file._explore_meta_data_()
+
+    return file
+    
+"""FileAudio class add a tags field"""
+class FileAudio(File):
+  def __init__(self):
+    """define tags property"""
+    super(FileAudio, self).__init__()
+    self.tags = None
+
+  def _explore_meta_data_(self):
+    """This function explore audio file tag by using mmr.tags. 
+       This function is called by the File.factory static function."""
+    self.tags = Tag.get(self)
+

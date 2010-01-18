@@ -27,12 +27,11 @@ from mmr.tags.flac import Flac
 
 class Tag:
     @staticmethod
-    def get(file_obj):
-        file_type = file_obj.get_type()
-        if file_type == 'mp3':
-            return Mp3(file_obj)
-        if file_type == 'ogg':
-            return Ogg(file_obj)
-        elif file_type == 'flac':
-            return Flac(file_obj)
+    def get(file):
+        if file.extension == '.mp3':
+            return Mp3(file)
+        if file.extension == '.ogg':
+            return Ogg(file)
+        elif file.extension == '.flac':
+            return Flac(file)
         return None

@@ -34,11 +34,13 @@ class Folder:
         self._retrieve_dir_name_()
         self._retrieve_file_list_()
 
+        # this should be here ?
         self._album_ = None
         self._tracks_ = None
 
         self._investigate_album_ = None
         self._investigate_tracks_ = None
+        # this should be here ?
 
     def _retrieve_dir_name_(self):
         path_array = self._fullpath_.split('/')
@@ -48,7 +50,7 @@ class Folder:
     def _retrieve_file_list_(self):
         self._files_ = []
         for file_path in os.listdir(self._fullpath_):
-            file_obj = File(self, file_path)
+            file_obj = File.factory(os.path.join(self._fullpath_, file_path))
             self._files_.append(file_obj)
         self._files_.sort()
 

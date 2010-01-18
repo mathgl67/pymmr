@@ -23,7 +23,10 @@
 
 import gtk
 
-import mmr
+from mmr.folder import Folder
+from mmr.album import Album
+from mmr.investigate_album import InvestigateAlbum
+from mmr.investigate_track import InvestigateTrack
 from mmr.gtk.error_message import ErrorMessage
 from mmr.gtk.folder_view import FolderView
 from mmr.gtk.album_view import AlbumView
@@ -89,12 +92,17 @@ class MainWindow(object):
   # update function
   def _update_album_(self):
     if self._cur_folder_:
-      # update album entry 
-      if self._cur_folder_._album_:
-        self._widgets_['album']['artist'].set_text(self._cur_folder_._album_.artist)
-        self._widgets_['album']['album'].set_text(self._cur_folder_._album_.album)
-        self._widgets_['album']['genre'].set_text(self._cur_folder_._album_.genre)
-        self._widgets_['album']['year'].set_text(str(self._cur_folder_._album_.year))
+      # update album entry
+      album = self._cur_folder_._album_
+      if album:
+        if album.artist:
+          self._widgets_['album']['artist'].set_text(album.artist)
+        if album.album:
+          self._widgets_['album']['album'].set_text(album.album)
+        if album.genre:
+          self._widgets_['album']['genre'].set_text(album.genre)
+        if album.year:
+          self._widgets_['album']['year'].set_text(str(album.year))
 
       # update album_view
       self._views_['album'].clear()
@@ -112,7 +120,7 @@ class MainWindow(object):
   def on_button_investigate_clicked(self, widget, data=None):
     print "investigate"
     if self._cur_folder_:
-      self._cur_folder_._investigate_album_ = mmr.InvestigateAlbum(self._cur_folder_)
+      self._cur_folder_._investigate_album_ = InvestigateAlbum(self._cur_folder_)
       self._cur_folder_._investigate_album_.investigate()
       self._cur_folder_._investigate_album_.sort()
 
@@ -121,7 +129,7 @@ class MainWindow(object):
   def on_button_validate_clicked(self, widget, data=None):
     print "validate!" 
     if self._cur_folder_:
-      self._cur_folder_._album_ = mmr.Album('validate')
+      self._cur_folder_._album_ = Album('validate')
       self._cur_folder_._album_.artist = self._widgets_['album']['artist'].get_text()
       self._cur_folder_._album_.album = self._widgets_['album']['album'].get_text()
       self._cur_folder_._album_.genre = self._widgets_['album']['genre'].get_text()
@@ -158,7 +166,7 @@ class MainWindow(object):
     if response == gtk.RESPONSE_ACCEPT:
       folder_path = dialog.get_filename()
       try:
-        folder = mmr.Folder(folder_path)
+        folder = Folder(folder_path)
         if folder:
           self._views_['folder'].append(folder)
       except:

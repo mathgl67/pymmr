@@ -24,7 +24,9 @@
 import unittest
 
 from tag import TestTag
+from file import TestFile
 
 all_tests = unittest.TestSuite([
+  TestFile.suite(),
   TestTag.suite(),
 ])

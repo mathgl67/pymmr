@@ -22,7 +22,6 @@
 #
 
 import sys 
-import mmr
 
 # Display a fatal error when gtk is not installed.
 try:
@@ -31,6 +30,7 @@ except ImportError as exception:
   print "FATAL: Gtk python module is require and must be installed." 
   sys.exit(1)
 
+from mmr.config import Config
 from mmr.gtk.main_window import MainWindow
 from mmr.gtk.error_message import ErrorMessage
 
@@ -39,7 +39,7 @@ class Main:
   def _config_load_(self):
     #load config file
     try:
-      self._config_ = mmr.Config()
+      self._config_ = Config()
       self._config_.load_file("pymmr.cfg")
       self._main_window_.set_statusbar_text("Config file loaded.")
     except:

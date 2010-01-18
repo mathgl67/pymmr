@@ -22,7 +22,12 @@
 #
 
 import unittest
-import mmr
+
+from mmr.file import File
+
+from mmr.tags.mp3 import Mp3
+from mmr.tags.ogg import Ogg
+from mmr.tags.flac import Flac
 
 class TestTag(unittest.TestCase):
   @staticmethod
@@ -54,15 +59,13 @@ class TestTag(unittest.TestCase):
 
 class TestTagMp3(TestTag):
   def setUp(self):
-    self.tag = mmr.tags.mp3.Mp3(mmr.File(mmr.Folder('tests/data'),
-                                'silence.mp3'))
+    self.tag = Mp3(File.factory('tests/data/tags/silence.mp3'))
 
 class TestTagFlac(TestTag):
   def setUp(self):
-    self.tag = mmr.tags.flac.Flac(mmr.File(mmr.Folder('tests/data'),
-'silence.flac'))
+    self.tag = Flac(File.factory('tests/data/tags/silence.flac'))
 
 class TestTagOgg(TestTag):
   def setUp(self):
-    self.tag = mmr.tags.ogg.Ogg(mmr.File(mmr.Folder('tests/data'),
-'silence.ogg'))
+    self.tag = Ogg(File.factory('tests/data/tags/silence.ogg'))
+
