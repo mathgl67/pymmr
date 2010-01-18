@@ -27,6 +27,8 @@ import mmr
 from mmr.gtk.error_message import ErrorMessage
 from mmr.gtk.folder_view import FolderView
 from mmr.gtk.album_view import AlbumView
+from mmr.gtk.tracks_investigation_view import TracksInvestigationView
+from mmr.gtk.tracks_view import TracksView
 
 class MainWindow(object):
   def __init__(self):
@@ -65,15 +67,19 @@ class MainWindow(object):
         "year": self._builder_.get_object("entry_year"),
       },
       "album_view": self._builder_.get_object("album_view"),
+      "tracks_investigation_view": self._builder_.get_object("view_tracks_investigation"),
+      "tracks_view": self._builder_.get_object("view_tracks_result"),
     }
 
   def __init_views__(self):
     self._views_ = {
       "folder": FolderView(self._widgets_["folder_view"]),
       "album": AlbumView(self._widgets_["album_view"]),
+      "tracks_investigation": TracksInvestigationView(self._widgets_["tracks_investigation_view"]),
+      "tracks_view": TracksView(self._widgets_["tracks_view"]),
     }
 
-  # utile
+  # util
   def show(self):
     self._window_.show()
 
