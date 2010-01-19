@@ -33,7 +33,7 @@ class InvestigateTrack:
 
     def _init_result_(self):
         for file_obj in self._folder_.get_files():
-            self._results_[file_obj.get_name()] = []
+            self._results_[file_obj.name] = []
 
 
     def __repr__(self):
@@ -53,8 +53,8 @@ class InvestigateTrack:
             module = Loader.load_by_name(module_name, self._folder_,
                                          self._results_)
             for file_obj in self._folder_.get_files():
-                track = module.do_track(file_obj, self._results_[file_obj.get_name()])
+                track = module.do_track(file_obj, self._results_[file_obj.name])
                 if track:
                     track.calculate_score()
-                    self._results_[file_obj.get_name()].append(track)
+                    self._results_[file_obj.name].append(track)
 

@@ -30,3 +30,4 @@ all_tests = unittest.TestSuite([
   TestFile.suite(),
   TestTag.suite(),
 ])
+

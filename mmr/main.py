@@ -22,8 +22,14 @@
 #
 
 import sys
-import mmr
 from optparse import OptionParser
+
+import mmr
+
+from mmr.config import Config
+from mmr.folder import Folder
+from mmr.investigate_album import InvestigateAlbum
+from mmr.investigate_track import InvestigateTrack
 
 class Main:
   def __init__(self):
@@ -76,7 +82,7 @@ class Main:
   def load_config(self):
     #load config file
     try:
-      self.config = mmr.Config()
+      self.config = Config()
       self.config.load_file(self.options.config)
     except:
       print 'could not load/parse config file (%s)' % self.options.config
@@ -86,7 +92,7 @@ class Main:
     if self.options.verbose:
       print "Folder: analyse '%s'..." % (self.args[0])
 
-    self.folder = mmr.folder.Folder(self.args[0])
+    self.folder = Folder(self.args[0])
     if self.options.verbose:
       print "Folder: done. result..."
       print self.folder.__repr__().encode('UTF-8')
@@ -96,14 +102,14 @@ class Main:
     pass 
 
   def test(self):
-    investigate_album = mmr.InvestigateAlbum(self.folder)
+    investigate_album = InvestigateAlbum(self.folder)
     investigate_album.investigate()
     investigate_album.sort()
 
     print investigate_album.__repr__().encode('UTF-8')
     print
 
-    investigate_track = mmr.InvestigateTrack(self.folder)
+    investigate_track = InvestigateTrack(self.folder)
     investigate_track.investigate()
     
     print investigate_track.__repr__().encode('UTF-8') 

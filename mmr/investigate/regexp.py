@@ -49,7 +49,7 @@ class Investigate(AbstractInvestigate):
         self._track_ = Track('regexp')
         for keys, regex in Config().regexp['track'].iteritems():
             re_compiled = re.compile(regex)
-            match = re_compiled.match(file_obj.get_name())
+            match = re_compiled.match(file_obj.name)
             if match:
                 index = 1
                 for attr in keys.split(' '):
