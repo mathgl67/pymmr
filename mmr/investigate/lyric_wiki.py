@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -28,11 +27,11 @@ from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 # Display a fatal error when SOAPpy is not installed.
 try:
-  from SOAPpy import WSDL
+    from SOAPpy import WSDL
 except ImportError as exception:
-  print "FATAL: SOAPpy python module is require and must be installed. (python-soappy)" 
-  import sys 
-  sys.exit(1)
+    print "FATAL: SOAPpy python module is require and must be installed. (python-soappy)"
+    import sys
+    sys.exit(1)
 
 
 class Investigate(AbstractInvestigate):
@@ -42,26 +41,26 @@ class Investigate(AbstractInvestigate):
         self._album_ = Album('lyric_wiki')
 
     def do_album(self):
-      for res in self._album_list_:
-        if res.artist:
-          result = self._wsdl_.getArtist(res.artist)
-                
-          match = False
-          for album in result.albums:
-            if album['album'] == res.album:
-              match = True
-              self._album_.artist = res.artist  
-              self._album_.album  = album['album'] 
-              self._album_.year = album['year']
-              index = 1 
-              for song in album['songs']:
-                track = Track('lyric_wiki')
-                track.tracknumber = index
-                track.title = song
-                self._tracks_[index] = track
-                index += 1
-         
-      return self._album_
+        for res in self._album_list_:
+            if res.artist:
+                result = self._wsdl_.getArtist(res.artist)
+
+                match = False
+                for album in result.albums:
+                    if album['album'] == res.album:
+                        match = True
+                        self._album_.artist = res.artist
+                        self._album_.album  = album['album']
+                        self._album_.year = album['year']
+                        index = 1
+                        for song in album['songs']:
+                            track = Track('lyric_wiki')
+                            track.tracknumber = index
+                            track.title = song
+                            self._tracks_[index] = track
+                            index += 1
+
+        return self._album_
 
     def do_track(self, file_obj, result_array):
         number = None
@@ -74,9 +73,9 @@ class Investigate(AbstractInvestigate):
                 title = result.title
 
             for index, track in self._tracks_.iteritems():
-              if track.tracknumber == number:
-                return track
-              if track.title == title:
-                return track
+                if track.tracknumber == number:
+                    return track
+                if track.title == title:
+                    return track
 
         return None

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -24,19 +24,18 @@
 from mmr.curses.widget import Widget, Size
 
 class Label(Widget):
-  def __init__(self, text=""):
-    super(Label, self).__init__()
-    self.text = text 
+    def __init__(self, text=""):
+        super(Label, self).__init__()
+        self.text = text
 
-  def set_text(self, text):
-    self.text = text    
+    def set_text(self, text):
+        self.text = text
 
-  def probe_height(self):
-    return 1 + super(Label, self).probe_height()
+    def probe_height(self):
+        return 1 + super(Label, self).probe_height()
 
-  def probe_width(self):
-    return len(self.text) + super(Label, self).probe_width()
+    def probe_width(self):
+        return len(self.text) + super(Label, self).probe_width()
 
-  def display(self):
-    self.get_parent_window()._handle.addstr(self._pos.line, self._pos.col, self.text)
-
+    def display(self):
+        self.get_parent_window()._handle.addstr(self._pos.line, self._pos.col, self.text)

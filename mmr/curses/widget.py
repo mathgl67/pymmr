@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -22,127 +22,125 @@
 #
 
 class Size(object):
-  def __init__(self, w = -1, h = -1 ):
-    self.width = w 
-    self.height = h
+    def __init__(self, w = -1, h = -1 ):
+        self.width = w
+        self.height = h
 
-  def is_valid(self):
-    if self.width < 0:
-      return False
-    if self.height < 0:
-      return False
-    return True
+    def is_valid(self):
+        if self.width < 0:
+            return False
+        if self.height < 0:
+            return False
+        return True
 
-  def __str__(self):
-    return "(width=%d;height=%d)" % (self.width, self.height)
+    def __str__(self):
+        return "(width=%d;height=%d)" % (self.width, self.height)
 
-  def __div__(self, other):
-    return Size(self.width / other.width, self.height / other.height)
+    def __div__(self, other):
+        return Size(self.width / other.width, self.height / other.height)
 
 class Pos(object):
-  def __init__(self, col = -1, line = -1):
-    self.col = col
-    self.line = line
+    def __init__(self, col = -1, line = -1):
+        self.col = col
+        self.line = line
 
-  def is_valid(self):
-    if self.col < 0:
-      return False
-    if self.line < 0:
-      return False
-    return True
+    def is_valid(self):
+        if self.col < 0:
+            return False
+        if self.line < 0:
+            return False
+        return True
 
-  def __str__(self):
-    return "(col=%d;line=%d)" % (self.col, self.line)
+    def __str__(self):
+        return "(col=%d;line=%d)" % (self.col, self.line)
 
 
 
 class Widget(object):
-  def __init__(self):
-    self._parent = None 
-    self._handle = None
-    self._pos = Pos(0,0) 
-    self._size = Size(0,0)
-    self._child_list = []
-    self._event_list = {} 
+    def __init__(self):
+        self._parent = None
+        self._handle = None
+        self._pos = Pos(0,0)
+        self._size = Size(0,0)
+        self._child_list = []
+        self._event_list = {}
 
-  # getter
-  def get_parent(self):
-    return self._parent
+    # getter
+    def get_parent(self):
+        return self._parent
 
-  def get_parent_window(self):
-    # this function is overide in window class to return
-    # the window class. here we just have to call parent function
-    # if there is a parent.
-    if self._parent:
-      return self._parent.get_parent_window()
-    return None
+    def get_parent_window(self):
+        # this function is overide in window class to return
+        # the window class. here we just have to call parent function
+        # if there is a parent.
+        if self._parent:
+            return self._parent.get_parent_window()
+        return None
 
-  # setter
-  def set_parent(self, parent):
-    self._parent = parent
+    # setter
+    def set_parent(self, parent):
+        self._parent = parent
 
-  def set_size(self, s):
-    self._size = s
+    def set_size(self, s):
+        self._size = s
 
-  def set_pos(self, p):
-    self._pos = p
+    def set_pos(self, p):
+        self._pos = p
 
-  # child management 
-  def child_add(self, child):
-    child.set_parent(self)
-    self._child_list.append(child)
+    # child management
+    def child_add(self, child):
+        child.set_parent(self)
+        self._child_list.append(child)
 
-  def child_rm(self, child):
-    self._child_list.remove(child)
+    def child_rm(self, child):
+        self._child_list.remove(child)
 
-  def child_clear(self):
-    self._child_list = []
+    def child_clear(self):
+        self._child_list = []
 
-  # event management
-  def event_add(self, e, f):
-    self._event_list[e] = f
+    # event management
+    def event_add(self, e, f):
+        self._event_list[e] = f
 
-  def event_rm(self, e):
-    del(self._event_list[e])
+    def event_rm(self, e):
+        del(self._event_list[e])
 
-  def event_clear(self):
-    self._event_list.clear() 
+    def event_clear(self):
+        self._event_list.clear()
 
-  # probe size
-  def probe_width(self):
-    width = 0
-    for child in self._child_list:
-      width = width + child.probe_width()
-    return width
+    # probe size
+    def probe_width(self):
+        width = 0
+        for child in self._child_list:
+            width = width + child.probe_width()
+        return width
 
-  def probe_height(self):
-    height = 0
-    for child in self._child_list:
-      height = height + child.probe_height()
-    return height
+    def probe_height(self):
+        height = 0
+        for child in self._child_list:
+            height = height + child.probe_height()
+        return height
 
-  # setup
-  def setup(self):
-    for child in self._child_list:
-      child.setup()
+    # setup
+    def setup(self):
+        for child in self._child_list:
+            child.setup()
 
-  # display
-  def display(self):
-    for child in self._child_list:
-      child.display()
-  
-  # refresh
-  def refresh(self):
-    for child in self._child_list:
-      child.refresh()
+    # display
+    def display(self):
+        for child in self._child_list:
+            child.display()
 
-  def event(self, e):
-    # check my event
-    if self._event_list.has_key(e):
-      self._event_list[e]()
+    # refresh
+    def refresh(self):
+        for child in self._child_list:
+            child.refresh()
 
-    # distribute to child
-    for child in self._child_list:
-      child.event(e)
+    def event(self, e):
+        # check my event
+        if self._event_list.has_key(e):
+            self._event_list[e]()
 
-
+        # distribute to child
+        for child in self._child_list:
+            child.event(e)

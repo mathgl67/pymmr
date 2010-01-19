@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -32,85 +32,84 @@ from mmr.investigate_album import InvestigateAlbum
 from mmr.investigate_track import InvestigateTrack
 
 class Main:
-  def __init__(self):
-    pass
+    def __init__(self):
+        pass
 
-  def run(self):
-    self.welcome()
-    self.parse_args()
-    self.load_config()
-    self.folder()
-    self.test()
+    def run(self):
+        self.welcome()
+        self.parse_args()
+        self.load_config()
+        self.folder()
+        self.test()
 
-  def welcome(self):
-    print "Welcome to My Music Renamer version %s" % (mmr.MMR['version'])
-    print "Copyright (C) 2007 mathgl67@gmail.com"
-    print "My Music Renamer comes with ABSOLUTELY NO WARRANTY;"
-    print "This is free software; Release under GPL;"
-    print
-
-
-  def parse_args(self):
-    """Parse commande line arguments"""
-
-    #init argv parser
-    usage = "usage: %prog [options] <music_directory>"
-    parser = OptionParser(usage=usage, version="%s %s" % (
-      mmr.MMR['prog'],
-      mmr.MMR['version']
-    ))
-
-    #add option
-    parser.add_option(
-      "-v", "--verbose", action="store_true", dest="verbose", default=False,
-      help="make lot of noise"
-    )
-
-    parser.add_option(
-      "-c", "--config", dest="config", default="pymmr.cfg",
-      help="Use a specific config file"
-    )
-
-    #parse
-    (self.options, self.args) = parser.parse_args()
-  
-    #check args
-    if len(self.args) < 1:
-      parser.print_help()
-      sys.exit(1)
-
-  def load_config(self):
-    #load config file
-    try:
-      self.config = Config()
-      self.config.load_file(self.options.config)
-    except:
-      print 'could not load/parse config file (%s)' % self.options.config
-      sys.exit(1)
-
-  def folder(self):
-    if self.options.verbose:
-      print "Folder: analyse '%s'..." % (self.args[0])
-
-    self.folder = Folder(self.args[0])
-    if self.options.verbose:
-      print "Folder: done. result..."
-      print self.folder.__repr__().encode('UTF-8')
+    def welcome(self):
+        print "Welcome to My Music Renamer version %s" % (mmr.MMR['version'])
+        print "Copyright (C) 2007 mathgl67@gmail.com"
+        print "My Music Renamer comes with ABSOLUTELY NO WARRANTY;"
+        print "This is free software; Release under GPL;"
+        print
 
 
-  def album(self):
-    pass 
+    def parse_args(self):
+        """Parse commande line arguments"""
 
-  def test(self):
-    investigate_album = InvestigateAlbum(self.folder)
-    investigate_album.investigate()
-    investigate_album.sort()
+        #init argv parser
+        usage = "usage: %prog [options] <music_directory>"
+        parser = OptionParser(usage=usage, version="%s %s" % (
+          mmr.MMR['prog'],
+          mmr.MMR['version']
+        ))
 
-    print investigate_album.__repr__().encode('UTF-8')
-    print
+        #add option
+        parser.add_option(
+          "-v", "--verbose", action="store_true", dest="verbose", default=False,
+          help="make lot of noise"
+        )
 
-    investigate_track = InvestigateTrack(self.folder)
-    investigate_track.investigate()
-    
-    print investigate_track.__repr__().encode('UTF-8') 
+        parser.add_option(
+          "-c", "--config", dest="config", default="pymmr.cfg",
+          help="Use a specific config file"
+        )
 
+        #parse
+        (self.options, self.args) = parser.parse_args()
+
+        #check args
+        if len(self.args) < 1:
+            parser.print_help()
+            sys.exit(1)
+
+    def load_config(self):
+        #load config file
+        try:
+            self.config = Config()
+            self.config.load_file(self.options.config)
+        except:
+            print 'could not load/parse config file (%s)' % self.options.config
+            sys.exit(1)
+
+    def folder(self):
+        if self.options.verbose:
+            print "Folder: analyse '%s'..." % (self.args[0])
+
+        self.folder = Folder(self.args[0])
+        if self.options.verbose:
+            print "Folder: done. result..."
+            print self.folder.__repr__().encode('UTF-8')
+
+
+    def album(self):
+        pass
+
+    def test(self):
+        investigate_album = InvestigateAlbum(self.folder)
+        investigate_album.investigate()
+        investigate_album.sort()
+
+        print investigate_album.__repr__().encode('UTF-8')
+        print
+
+        investigate_track = InvestigateTrack(self.folder)
+        investigate_track.investigate()
+
+        print investigate_track.__repr__().encode('UTF-8')

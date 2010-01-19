@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -30,42 +30,41 @@ from mmr.tags.ogg import Ogg
 from mmr.tags.flac import Flac
 
 class TestTag(unittest.TestCase):
-  @staticmethod
-  def suite():
-    return unittest.TestSuite([
-      unittest.TestLoader().loadTestsFromTestCase(TestTagMp3),
-      unittest.TestLoader().loadTestsFromTestCase(TestTagFlac),
-      unittest.TestLoader().loadTestsFromTestCase(TestTagOgg),
-    ])
+    @staticmethod
+    def suite():
+        return unittest.TestSuite([
+          unittest.TestLoader().loadTestsFromTestCase(TestTagMp3),
+          unittest.TestLoader().loadTestsFromTestCase(TestTagFlac),
+          unittest.TestLoader().loadTestsFromTestCase(TestTagOgg),
+        ])
 
-  def testArtist(self):
-    self.assertEquals(self.tag.artist, u'artist')
+    def testArtist(self):
+        self.assertEquals(self.tag.artist, u'artist')
 
-  def testAlbum(self):
-    self.assertEquals(self.tag.album, u'album')
+    def testAlbum(self):
+        self.assertEquals(self.tag.album, u'album')
 
-  def testTitle(self):
-    self.assertEquals(self.tag.title, u'title')
+    def testTitle(self):
+        self.assertEquals(self.tag.title, u'title')
 
-  def testDate(self):
-    self.assertEquals(self.tag.year, u'2000')
+    def testDate(self):
+        self.assertEquals(self.tag.year, u'2000')
 
-  def testGenre(self):
-    self.assertEquals(self.tag.genre, u'genre')
+    def testGenre(self):
+        self.assertEquals(self.tag.genre, u'genre')
 
-  def testTrackNumber(self):
-    self.assertEquals(self.tag.tracknumber, u'1')
+    def testTrackNumber(self):
+        self.assertEquals(self.tag.tracknumber, u'1')
 
 
 class TestTagMp3(TestTag):
-  def setUp(self):
-    self.tag = Mp3(File.factory('tests/data/tags/silence.mp3'))
+    def setUp(self):
+        self.tag = Mp3(File.factory('tests/data/tags/silence.mp3'))
 
 class TestTagFlac(TestTag):
-  def setUp(self):
-    self.tag = Flac(File.factory('tests/data/tags/silence.flac'))
+    def setUp(self):
+        self.tag = Flac(File.factory('tests/data/tags/silence.flac'))
 
 class TestTagOgg(TestTag):
-  def setUp(self):
-    self.tag = Ogg(File.factory('tests/data/tags/silence.ogg'))
-
+    def setUp(self):
+        self.tag = Ogg(File.factory('tests/data/tags/silence.ogg'))

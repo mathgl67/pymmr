@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -21,36 +21,35 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import sys 
+import sys
 
 # Display a fatal error when gtk is not installed.
 try:
-  import gtk
+    import gtk
 except ImportError as exception:
-  print "FATAL: Gtk python module is require and must be installed." 
-  sys.exit(1)
+    print "FATAL: Gtk python module is require and must be installed."
+    sys.exit(1)
 
 from mmr.config import Config
 from mmr.gtk.main_window import MainWindow
 from mmr.gtk.error_message import ErrorMessage
 
 class Main:
-  # initialize
-  def _config_load_(self):
-    #load config file
-    try:
-      self._config_ = Config()
-      self._config_.load_file("pymmr.cfg")
-      self._main_window_.set_statusbar_text("Config file loaded.")
-    except:
-      err = ErrorMessage("Cannot load config file: pymmr.cfg")
-      err.display_and_exit()
+    # initialize
+    def _config_load_(self):
+        #load config file
+        try:
+            self._config_ = Config()
+            self._config_.load_file("pymmr.cfg")
+            self._main_window_.set_statusbar_text("Config file loaded.")
+        except:
+            err = ErrorMessage("Cannot load config file: pymmr.cfg")
+            err.display_and_exit()
 
-  def __init__(self):
-    self._main_window_ = MainWindow()
-    self._config_load_()
-  
-  def run(self):
-    self._main_window_.show()
-    gtk.main()
+    def __init__(self):
+        self._main_window_ = MainWindow()
+        self._config_load_()
 
+    def run(self):
+        self._main_window_.show()
+        gtk.main()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -30,36 +30,35 @@ from mmr.curses.text import Text
 from mmr.curses.hr import Hr
 
 class MessageBox(Window):
-  def __init__(self):
-    super(MessageBox, self).__init__()
-    # set default
-    self.title = ""
-    self.text = ""
+    def __init__(self):
+        super(MessageBox, self).__init__()
+        # set default
+        self.title = ""
+        self.text = ""
 
-  def set_title(self, title):
-    self.title = title
+    def set_title(self, title):
+        self.title = title
 
-  def set_text(self, text):
-    self.text = text
+    def set_text(self, text):
+        self.text = text
 
-  def setup(self):
-    layout = VerticalLayout()
-    layout.set_probed()
-    self.child_add(layout)
+    def setup(self):
+        layout = VerticalLayout()
+        layout.set_probed()
+        self.child_add(layout)
 
-    title = Label()
-    title.set_text(self.title)
-    layout.child_add(title)
+        title = Label()
+        title.set_text(self.title)
+        layout.child_add(title)
 
-    hr = Hr()
-    hr.set_max_size()
-    layout.child_add(hr)
+        hr = Hr()
+        hr.set_max_size()
+        layout.child_add(hr)
 
-    text = Text()
-    text.set_text(self.text)
-    layout.child_add(text)
+        text = Text()
+        text.set_text(self.text)
+        layout.child_add(text)
 
-    hr2 = Hr()
-    hr2.set_max_size()
-    layout.child_add(hr2)
-
+        hr2 = Hr()
+        hr2.set_max_size()
+        layout.child_add(hr2)

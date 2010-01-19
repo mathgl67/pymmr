@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -25,18 +25,17 @@ import gtk
 import sys
 
 class ErrorMessage(object):
-  def __init__(self, message):
-    self._message_ = message
+    def __init__(self, message):
+        self._message_ = message
 
-  def display(self):
-    # display to console
-    print "ERROR:", self._message_
-    # create a dialog
-    dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, self._message_)
-    dialog.run()
-    dialog.destroy()
-  
-  def display_and_exit(self):
-    self.display()
-    sys.exit(1)
+    def display(self):
+        # display to console
+        print "ERROR:", self._message_
+        # create a dialog
+        dialog = gtk.MessageDialog(None, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, self._message_)
+        dialog.run()
+        dialog.destroy()
 
+    def display_and_exit(self):
+        self.display()
+        sys.exit(1)

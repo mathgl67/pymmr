@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -32,88 +32,87 @@ from mmr.curses.layout import HorizontalLayout
 from mmr.curses.vr import Vr
 
 class Main:
-  def __init__(self):
-    self._screen = Screen()
-    self._interface = None
-    self._interface_list = []
-    self._interface_curent = 0
+    def __init__(self):
+        self._screen = Screen()
+        self._interface = None
+        self._interface_list = []
+        self._interface_curent = 0
 
-  def loop(self):
-    self._screen.init()
-    while self._interface:
-      self._screen.clear()
-      self._screen.child_clear()
-      self._screen.child_add(self._interface)
+    def loop(self):
+        self._screen.init()
+        while self._interface:
+            self._screen.clear()
+            self._screen.child_clear()
+            self._screen.child_add(self._interface)
 
-      self._screen.setup()
-      self._screen.display()
-      self._screen.refresh() 
+            self._screen.setup()
+            self._screen.display()
+            self._screen.refresh()
 
-      e = self._screen.get_ch()
-      self._screen.event(e)
- 
-    self._screen.unload()
+            e = self._screen.get_ch()
+            self._screen.event(e)
 
-  def interface_add(self, interface):
-    self._interface_list.append(interface)
-    self.interface_update()
+        self._screen.unload()
 
-  def interface_update(self):
-    if self._interface_curent >= len(self._interface_list):
-      self._interface = None
-      return
-    self._interface = self._interface_list[self._interface_curent]
+    def interface_add(self, interface):
+        self._interface_list.append(interface)
+        self.interface_update()
 
-  def interface_next(self):
-    self._interface_curent = self._interface_curent + 1
-    self.interface_update()
+    def interface_update(self):
+        if self._interface_curent >= len(self._interface_list):
+            self._interface = None
+            return
+        self._interface = self._interface_list[self._interface_curent]
 
-  def welcome(self):
-    # prepare
-    mb = MessageBox()
-    mb.set_title("Welcome to My Music Renamer version %s" % (mmr.MMR['version']))
-    mb.set_text("Copyright (C) 2007 mathgl67@gmail.com\nMy Music Renamer comes with ABSOLUTELY NO WARRANTY;\nThis is free software; Release under GPL;")
-    mb.set_size(Size(70,20))
-    mb.set_center()
-    mb.event_add(ord(' '), self.interface_next)
+    def interface_next(self):
+        self._interface_curent = self._interface_curent + 1
+        self.interface_update()
 
-    return mb
+    def welcome(self):
+        # prepare
+        mb = MessageBox()
+        mb.set_title("Welcome to My Music Renamer version %s" % (mmr.MMR['version']))
+        mb.set_text("Copyright (C) 2007 mathgl67@gmail.com\nMy Music Renamer comes with ABSOLUTELY NO WARRANTY;\nThis is free software; Release under GPL;")
+        mb.set_size(Size(70,20))
+        mb.set_center()
+        mb.event_add(ord(' '), self.interface_next)
+
+        return mb
 
 
-  def win2(self):
-    mb = MessageBox()
-    mb.set_title("Windows 2 Title")
-    mb.set_text("blablablabla")
-    mb.set_max_size()
-    mb.event_add(ord(' '), self.interface_next)
+    def win2(self):
+        mb = MessageBox()
+        mb.set_title("Windows 2 Title")
+        mb.set_text("blablablabla")
+        mb.set_max_size()
+        mb.event_add(ord(' '), self.interface_next)
 
-    return mb
+        return mb
 
-  def win3(self):
-    w1 = Window()
-    w1.set_max_size()
-    
-    la1 = HorizontalLayout()
-    la1.set_probed()
-    w1.child_add(la1)
+    def win3(self):
+        w1 = Window()
+        w1.set_max_size()
 
-    l1 = Label("Hello")
-    la1.child_add(l1)
+        la1 = HorizontalLayout()
+        la1.set_probed()
+        w1.child_add(la1)
 
-    vr1 = Vr()
-    vr1.set_max_size()
-    la1.child_add(vr1)
+        l1 = Label("Hello")
+        la1.child_add(l1)
 
-    l2 = Label("World")
-    la1.child_add(l2)
-    
-    w1.event_add(ord(' '), self.interface_next)
+        vr1 = Vr()
+        vr1.set_max_size()
+        la1.child_add(vr1)
 
-    return w1
-    
-  def run(self):
-    self.interface_add(self.welcome())
-    self.interface_add(self.win2())
-    self.interface_add(self.win3())
-    self.loop()
+        l2 = Label("World")
+        la1.child_add(l2)
 
+        w1.event_add(ord(' '), self.interface_next)
+
+        return w1
+
+    def run(self):
+        self.interface_add(self.welcome())
+        self.interface_add(self.win2())
+        self.interface_add(self.win3())
+        self.loop()

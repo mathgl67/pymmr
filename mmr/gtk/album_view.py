@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -26,40 +26,39 @@ import gtk
 from mmr.gtk.view import View
 
 class AlbumView(View):
-  def __init__(self, view):
-    # view and model
-    super(AlbumView, self).__init__(view)
-    self.__init_store__(gtk.ListStore(str, int, str, str, str, str))
-    # data
-    self._album_list_ = {}
-    # create cols
-    self.__init_column_list__([
-      {"name": "Name", "type": "text", "id": 0},
-      {"name": "Score", "type": "text", "id": 1},
-      {"name": "Artist", "type": "text", "id": 2},
-      {"name": "Album", "type": "text", "id": 3},
-      {"name": "Genre", "type": "text", "id": 4},
-      {"name": "Year", "type": "text", "id": 5},
-    ])
+    def __init__(self, view):
+        # view and model
+        super(AlbumView, self).__init__(view)
+        self.__init_store__(gtk.ListStore(str, int, str, str, str, str))
+        # data
+        self._album_list_ = {}
+        # create cols
+        self.__init_column_list__([
+          {"name": "Name", "type": "text", "id": 0},
+          {"name": "Score", "type": "text", "id": 1},
+          {"name": "Artist", "type": "text", "id": 2},
+          {"name": "Album", "type": "text", "id": 3},
+          {"name": "Genre", "type": "text", "id": 4},
+          {"name": "Year", "type": "text", "id": 5},
+        ])
 
-  def get_album(self, iter):
-    iter_path = self._store_.get_string_from_iter(iter)
-    return self._album_list_[iter_path]
+    def get_album(self, iter):
+        iter_path = self._store_.get_string_from_iter(iter)
+        return self._album_list_[iter_path]
 
-  def append(self, album):
-    iter = self._store_.append([
-            album._investigater_,
-            album._score_,
-            album.artist,
-            album.album,
-            album.genre,
-            album.year
-    ])
+    def append(self, album):
+        iter = self._store_.append([
+                album._investigater_,
+                album._score_,
+                album.artist,
+                album.album,
+                album.genre,
+                album.year
+        ])
 
-    iter_path = self._store_.get_string_from_iter(iter)
-    self._album_list_[iter_path] = album
+        iter_path = self._store_.get_string_from_iter(iter)
+        self._album_list_[iter_path] = album
 
-  def clear(self):
-    self._store_.clear()
-    self._album_list_ = {} 
-
+    def clear(self):
+        self._store_.clear()
+        self._album_list_ = {}

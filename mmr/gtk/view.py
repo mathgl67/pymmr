@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -24,39 +24,38 @@
 import gtk
 
 class View(object):
-  def __init__(self, view):
-    self._view_ = view
-    self.__init_render__()
+    def __init__(self, view):
+        self._view_ = view
+        self.__init_render__()
 
-  def __init_store__(self, store):
-    self._store_ = store
-    self._view_.set_model(self._store_)
+    def __init_store__(self, store):
+        self._store_ = store
+        self._view_.set_model(self._store_)
 
-  def __init_render__(self):
-    self._render_ = {
-      "text": gtk.CellRendererText(),
-    }
+    def __init_render__(self):
+        self._render_ = {
+          "text": gtk.CellRendererText(),
+        }
 
-  def __init_column__(self, name, type, id):
-    col = gtk.TreeViewColumn(name)
-    col.pack_start(self._render_[type], True)
-    col.add_attribute(self._render_[type], type, id)
-    self._view_.append_column(col)
+    def __init_column__(self, name, type, id):
+        col = gtk.TreeViewColumn(name)
+        col.pack_start(self._render_[type], True)
+        col.add_attribute(self._render_[type], type, id)
+        self._view_.append_column(col)
 
-  def __init_column_list__(self, list):
-    for col in list:
-      self.__init_column__(col['name'], col['type'], col['id'])
+    def __init_column_list__(self, list):
+        for col in list:
+            self.__init_column__(col['name'], col['type'], col['id'])
 
-  def get_view(self):
-    return self._view_
+    def get_view(self):
+        return self._view_
 
-  def get_store(self):
-    return self._store_
+    def get_store(self):
+        return self._store_
 
-  def get_selected(self):
-    selection = self._view_.get_selection()
-    if selection:
-      model, iter = selection.get_selected()
-      return iter
-    return None
-
+    def get_selected(self):
+        selection = self._view_.get_selection()
+        if selection:
+            model, iter = selection.get_selected()
+            return iter
+        return None

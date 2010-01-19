@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -24,83 +24,82 @@
 from mmr.curses.widget import Widget, Size
 
 class Text(Widget):
-  def __init__(self):
-    super(Text, self).__init__()
-    self.text = "" 
+    def __init__(self):
+        super(Text, self).__init__()
+        self.text = ""
 
-  def set_text(self, text):
-    self.text = text    
+    def set_text(self, text):
+        self.text = text
 
-  def get_text_line_by_width(self):
-    size = self.get_parent().get_max_size()
-    tmp=""
-    r=[]
-    for ch in self.text:
-      # max line size
-      if len(tmp) == size.width - 2:
+    def get_text_line_by_width(self):
+        size = self.get_parent().get_max_size()
+        tmp=""
+        r=[]
+        for ch in self.text:
+            # max line size
+            if len(tmp) == size.width - 2:
+                r.append(tmp)
+                tmp = ""
+            # linejump
+            if ch == '\n':
+                r.append(tmp)
+                tmp = ""
+                continue
+            tmp = tmp + ch
         r.append(tmp)
+        return r
+
+    def get_line_count(self):
+        return self.text.count('\n')
+
+    def get_text_line_by_height(self):
+        size = self.get_parent().get_max_size()
+        length = len(self.text)
+
+
+        max_line = size.height - self.get_line_count()
+        min_ch_by_line = len(self.text) / max_line
+
+        r = []
         tmp = ""
-      # linejump
-      if ch == '\n':
+        for ch in self.text:
+            # max line size
+            if len(tmp) == min_ch_by_line:
+                r.append(tmp)
+                tmp = ""
+            # linejump
+            if ch == '\n':
+                r.append(tmp)
+                tmp = ""
+                continue
+            tmp = tmp + ch
         r.append(tmp)
-        tmp = ""
-        continue
-      tmp = tmp + ch
-    r.append(tmp)
-    return r 
 
-  def get_line_count(self):
-    return self.text.count('\n')
+        return r
 
-  def get_text_line_by_height(self):
-    size = self.get_parent().get_max_size()
-    length = len(self.text)
+    def probe_height(self):
+        height = len(self.get_text_line_by_width())
+        return height + super(Text, self).probe_height()
 
+    def probe_width(self):
+        min_width = 0
+        for line in self.get_text_line_by_height():
+            if min_width <= len(line):
+                min_width = len(line)
 
-    max_line = size.height - self.get_line_count()
-    min_ch_by_line = len(self.text) / max_line 
+        return min_width + super(Text, self).probe_width()
 
-    r = []
-    tmp = ""
-    for ch in self.text:
-      # max line size
-      if len(tmp) == min_ch_by_line:
-        r.append(tmp)
-        tmp = ""
-      # linejump
-      if ch == '\n':
-        r.append(tmp)
-        tmp = ""
-        continue
-      tmp = tmp + ch
-    r.append(tmp)
+    def display(self):
+        max_size = self.get_parent().get_max_size()
+        if max_size.width is -1:
+            f = self.get_text_line_by_height
+        else:
+            f = self.get_text_line_by_width
 
-    return r 
+        l = 0
+        for line in f():
+            print self._pos, line
+            self.get_parent_window()._handle.addstr(self._pos.line+l, self._pos.col, line)
+            l = l + 1
 
-  def probe_height(self):
-    height = len(self.get_text_line_by_width())
-    return height + super(Text, self).probe_height()
-
-  def probe_width(self):
-    min_width = 0
-    for line in self.get_text_line_by_height():
-      if min_width <= len(line):
-        min_width = len(line)
-
-    return min_width + super(Text, self).probe_width()
-
-  def display(self):
-    max_size = self.get_parent().get_max_size()
-    if max_size.width is -1:
-      f = self.get_text_line_by_height
-    else:
-      f = self.get_text_line_by_width
-
-    l = 0
-    for line in f():
-      print self._pos, line
-      self.get_parent_window()._handle.addstr(self._pos.line+l, self._pos.col, line)
-      l = l + 1
-
-    super(Text, self).display()
-
+        super(Text, self).display()

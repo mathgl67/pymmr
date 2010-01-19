@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -26,34 +26,33 @@ import curses
 from mmr.curses.window import Window
 
 class Screen(Window):
-  def __init__(self):
-    super(Screen, self).__init__()
-    self.exit = False    
+    def __init__(self):
+        super(Screen, self).__init__()
+        self.exit = False
 
-  def init(self):
-    self._handle = curses.initscr()
-    self._init_color()
-    curses.noecho()
-    curses.cbreak()
-    self._handle.keypad(1)
+    def init(self):
+        self._handle = curses.initscr()
+        self._init_color()
+        curses.noecho()
+        curses.cbreak()
+        self._handle.keypad(1)
 
-  def _init_color(self):
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    def _init_color(self):
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
-  def unload(self):
-    if self._handle:
-      curses.nocbreak()
-      self._handle.keypad(0)
-      curses.echo()
-      curses.endwin()
+    def unload(self):
+        if self._handle:
+            curses.nocbreak()
+            self._handle.keypad(0)
+            curses.echo()
+            curses.endwin()
 
-  def set_exit(self):
-    self.exit = True
+    def set_exit(self):
+        self.exit = True
 
-  def get_ch(self):
-    if self._handle:
-      return self._handle.getch()
-    return ''
-
+    def get_ch(self):
+        if self._handle:
+            return self._handle.getch()
+        return ''

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -24,11 +24,11 @@
 # Display a fatal error when yaml is not installed.
 # Yaml is require to parse the config file.
 try:
-  import yaml
+    import yaml
 except ImportError as exception:
-  print "FATAL: Yaml python module is require and must be installed. (python-yaml)" 
-  import sys 
-  sys.exit(1)
+    print "FATAL: Yaml python module is require and must be installed. (python-yaml)"
+    import sys
+    sys.exit(1)
 
 
 class Config:

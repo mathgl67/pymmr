@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -25,28 +25,27 @@ import curses
 from mmr.curses.widget import Widget, Size
 
 class Hr(Widget):
-  def __init__(self):
-    super(Hr, self).__init__()
-    self._max_size = False
+    def __init__(self):
+        super(Hr, self).__init__()
+        self._max_size = False
 
-  def set_max_size(self):
-    self._max_size = True
+    def set_max_size(self):
+        self._max_size = True
 
-  def probe_height(self):
-    return 1 + super(Hr, self).probe_height()
+    def probe_height(self):
+        return 1 + super(Hr, self).probe_height()
 
-  def _display_max_size(self):
-    parent = self.get_parent()
-    if parent:
-      self._size = parent.get_max_size()
+    def _display_max_size(self):
+        parent = self.get_parent()
+        if parent:
+            self._size = parent.get_max_size()
 
-  def display(self):
-    if self._max_size:
-      self._display_max_size()
+    def display(self):
+        if self._max_size:
+            self._display_max_size()
 
-    window = self.get_parent_window()
-    if window:
-      window._handle.hline(self._pos.line, self._pos.col, curses.ACS_HLINE, self._size.width - 2)
+        window = self.get_parent_window()
+        if window:
+            window._handle.hline(self._pos.line, self._pos.col, curses.ACS_HLINE, self._size.width - 2)
 
-    super(Hr, self).display()
-
+        super(Hr, self).display()

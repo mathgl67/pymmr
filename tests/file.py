@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -25,60 +25,59 @@ import unittest
 from mmr.file import File, FileAudio
 
 class TestFile(unittest.TestCase):
-  @staticmethod
-  def suite():
-    return unittest.TestSuite([
-      unittest.TestLoader().loadTestsFromTestCase(TestFileFactory),
-      unittest.TestLoader().loadTestsFromTestCase(TestFileUnknown),
-      unittest.TestLoader().loadTestsFromTestCase(TestFileAudio),
-    ])
+    @staticmethod
+    def suite():
+        return unittest.TestSuite([
+          unittest.TestLoader().loadTestsFromTestCase(TestFileFactory),
+          unittest.TestLoader().loadTestsFromTestCase(TestFileUnknown),
+          unittest.TestLoader().loadTestsFromTestCase(TestFileAudio),
+        ])
 
 class TestFileFactory(TestFile):
-  def setUp(self):
-    self.file = File.factory("tests/data/file/name.ext")
+    def setUp(self):
+        self.file = File.factory("tests/data/file/name.ext")
 
-  def testName(self):
-    self.assertEquals(self.file.name, "name.ext", "Factory must set the name to 'name' and it was '%s' !" % self.file.name)
+    def testName(self):
+        self.assertEquals(self.file.name, "name.ext", "Factory must set the name to 'name' and it was '%s' !" % self.file.name)
 
-  def testExtension(self):
-    self.assertEquals(self.file.extension, ".ext", "Factory must set extension to 'ext' and it was '%s' !" % self.file.extension)
+    def testExtension(self):
+        self.assertEquals(self.file.extension, ".ext", "Factory must set extension to 'ext' and it was '%s' !" % self.file.extension)
 
-  def testPath(self):
-    self.assertEquals(self.file.path, "tests/data/file", "Factory must set path to 'tests/data/file/name.ext' ans it was '%s' !" % self.file.path )
+    def testPath(self):
+        self.assertEquals(self.file.path, "tests/data/file", "Factory must set path to 'tests/data/file/name.ext' ans it was '%s' !" % self.file.path )
 
-  def testFullpath(self):
-    self.assertEquals(self.file.get_fullpath(), "tests/data/file/name.ext")
+    def testFullpath(self):
+        self.assertEquals(self.file.get_fullpath(), "tests/data/file/name.ext")
 
 
 class TestFileUnknown(TestFile):
-  def setUp(self):
-    self.file = File.factory("tests/data/file/unknown")
+    def setUp(self):
+        self.file = File.factory("tests/data/file/unknown")
 
-  def testObjectType(self):
-    self.assertTrue(isinstance(self.file, File), "file should be a File object")
+    def testObjectType(self):
+        self.assertTrue(isinstance(self.file, File), "file should be a File object")
 
-  def testExtention(self):
-    self.assertEquals(self.file.extension, None, "file extension on unknown file should be None != %s" % self.file.extension)
+    def testExtention(self):
+        self.assertEquals(self.file.extension, None, "file extension on unknown file should be None != %s" % self.file.extension)
 
 class TestFileAudio(TestFile):
-  def setUp(self):
-    self.file = {
-      ".mp3": File.factory("tests/data/tags/silence.mp3"),
-      ".ogg": File.factory("tests/data/tags/silence.ogg"),
-      ".flac": File.factory("tests/data/tags/silence.flac"),
-    }
+    def setUp(self):
+        self.file = {
+          ".mp3": File.factory("tests/data/tags/silence.mp3"),
+          ".ogg": File.factory("tests/data/tags/silence.ogg"),
+          ".flac": File.factory("tests/data/tags/silence.flac"),
+        }
 
-  def testMp3FileIsFileAudio(self):
-    self.assertTrue(isinstance(self.file[".mp3"], FileAudio), "File with '.mp3' extension should be 'FileAudio'")
+    def testMp3FileIsFileAudio(self):
+        self.assertTrue(isinstance(self.file[".mp3"], FileAudio), "File with '.mp3' extension should be 'FileAudio'")
 
-  def testOggFileIsFileAudio(self):
-    self.assertTrue(isinstance(self.file[".ogg"], FileAudio), "File with '.ogg' extension should be 'FileAudio'")
+    def testOggFileIsFileAudio(self):
+        self.assertTrue(isinstance(self.file[".ogg"], FileAudio), "File with '.ogg' extension should be 'FileAudio'")
 
-  def testFlacFileIsFileAudio(self):
-    self.assertTrue(isinstance(self.file[".flac"], FileAudio), "File with '.flac' extension should be 'FileAudio'")
+    def testFlacFileIsFileAudio(self):
+        self.assertTrue(isinstance(self.file[".flac"], FileAudio), "File with '.flac' extension should be 'FileAudio'")
 
-  def testHaveTag(self):
-    self.assertNotEquals(self.file[".mp3"].tags, None)
-    self.assertNotEquals(self.file[".ogg"].tags, None)
-    self.assertNotEquals(self.file[".flac"].tags, None)
-
+    def testHaveTag(self):
+        self.assertNotEquals(self.file[".mp3"].tags, None)
+        self.assertNotEquals(self.file[".ogg"].tags, None)
+        self.assertNotEquals(self.file[".flac"].tags, None)

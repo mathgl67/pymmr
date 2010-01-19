@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -30,4 +30,3 @@ all_tests = unittest.TestSuite([
   TestFile.suite(),
   TestTag.suite(),
 ])
-

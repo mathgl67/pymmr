@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
@@ -26,11 +26,11 @@ from mmr.tags.abstract_tag import AbstractTag
 # Display a fatal error when mutagen is not installed.
 # Yaml is require to parse the config file.
 try:
-  import mutagen.flac
+    import mutagen.flac
 except ImportError as exception:
-  print "FATAL: Mutagen python module is require and must be installed. (python-mutagen)" 
-  import sys 
-  sys.exit(1)
+    print "FATAL: Mutagen python module is require and must be installed. (python-mutagen)"
+    import sys
+    sys.exit(1)
 
 
 class Flac(AbstractTag):
