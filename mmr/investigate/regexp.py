@@ -35,7 +35,7 @@ class Investigate(AbstractInvestigate):
     def do_album(self):
         for keys, regex in Config().regexp['album'].iteritems():
             re_compiled = re.compile(regex)
-            match = re_compiled.match(self._folder_.get_name())
+            match = re_compiled.match(self._folder_.name)
             if match:
                 index = 1
                 for attr in keys.split(' '):

@@ -149,8 +149,8 @@ class MainWindow(object):
     def on_folder_view_row_activated(self, treeview, path, view_column):
         iter = self._views_['folder'].get_selected()
         if iter:
-            self._cur_folder_ = folder = self._views_['folder'].get_folder(iter)
-            print "update to %s" % (self._cur_folder_._name_)
+            self._cur_folder_ = self._views_['folder'].get_folder(iter)
+            print "update to %s" % (self._cur_folder_.name)
             # should update...
             self._update_album_()
 
@@ -166,7 +166,7 @@ class MainWindow(object):
         if response == gtk.RESPONSE_ACCEPT:
             folder_path = dialog.get_filename()
             try:
-                folder = Folder(folder_path)
+                folder = Folder.factory(folder_path)
                 if folder:
                     self._views_['folder'].append(folder)
             except:

@@ -92,7 +92,7 @@ class Main:
         if self.options.verbose:
             print "Folder: analyse '%s'..." % (self.args[0])
 
-        self.folder = Folder(self.args[0])
+        self.folder = Folder.factory(self.args[0])
         if self.options.verbose:
             print "Folder: done. result..."
             print self.folder.__repr__().encode('UTF-8')

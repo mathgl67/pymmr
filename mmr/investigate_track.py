@@ -31,7 +31,7 @@ class InvestigateTrack:
         self._init_result_()
 
     def _init_result_(self):
-        for file_obj in self._folder_.get_files():
+        for file_obj in self._folder_.file_list:
             self._results_[file_obj.name] = []
 
 
@@ -51,7 +51,7 @@ class InvestigateTrack:
         for module_name in Config().investigater:
             module = Loader.load_by_name(module_name, self._folder_,
                                          self._results_)
-            for file_obj in self._folder_.get_files():
+            for file_obj in self._folder_.file_list:
                 track = module.do_track(file_obj, self._results_[file_obj.name])
                 if track:
                     track.calculate_score()

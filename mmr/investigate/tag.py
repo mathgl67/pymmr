@@ -32,7 +32,7 @@ class Investigate(AbstractInvestigate):
     def _do_album_by_tag_name_(self, tag):
         possibilities = dict()
 
-        for file_obj in self._folder_.get_files():
+        for file_obj in self._folder_.file_list:
             if (file_obj.extension != ".ogg" and
 
                 file_obj.extension != ".mp3" and

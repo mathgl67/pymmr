@@ -44,7 +44,7 @@ class FolderView(View):
         return self._folder_list_[iter_path]
 
     def append(self, folder):
-        iter = self._store_.append([folder._name_, folder._path_])
+        iter = self._store_.append([folder.name, folder.path])
         iter_path = self._store_.get_string_from_iter(iter)
         self._folder_list_[iter_path] = folder
 

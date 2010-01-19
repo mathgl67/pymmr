@@ -21,18 +21,19 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+"""This file contain the Folder class"""
+
 import os
 from mmr.file import BaseFile
 
-class Folder:
-    def __init__(self, fullpath):
-        self._name_ = None
-        self._path_ = None
-        self._files_ = None
-        self._fullpath_ = fullpath
+class Folder(object):
+    """This is a Folder class"""
 
-        self._retrieve_dir_name_()
-        self._retrieve_file_list_()
+    def __init__(self, name=None, path=None, file_list=None):
+        """Constructor"""
+        self.name = None
+        self.path = None
+        self.file_list = None
 
         # this should be here ?
         self._album_ = None
@@ -42,37 +43,43 @@ class Folder:
         self._investigate_tracks_ = None
         # this should be here ?
 
-    def _retrieve_dir_name_(self):
-        path_array = self._fullpath_.split('/')
-        self._name_ = path_array[len(path_array) - 1]
-        self._path_ = self._fullpath_.replace(self._name_, '')
-
-    def _retrieve_file_list_(self):
-        self._files_ = []
-        for file_path in os.listdir(self._fullpath_):
-            file_obj = BaseFile.factory(os.path.join(self._fullpath_, file_path))
-            self._files_.append(file_obj)
-        self._files_.sort()
-
-    def __repr__(self):
+    def __str__(self):
+        """Return information on the Folder object"""
         lines = []
-        lines.append('<Folder name="%s" path="%s">' % (self._name_,
-                     self._path_))
+        lines.append('<Folder name="%s" path="%s">' % (
+            self.name,
+            self.path
+        ))
 
-        for file_obj in self._files_:
-            lines.append(repr(file_obj))
+        for file_obj in self.file_list:
+            lines.append(str(file_obj))
 
         lines.append('</Folder>')
         return "\n".join(lines)
 
-    def get_name(self):
-        return self._name_
-
-    def get_files(self):
-        return self._files_
-
-    def get_path(self):
-        return self._path_
+    def retrieve_file_list(self):
+        """Retrieve the file list of the folder"""
+        self.file_list = []
+        for file_path in os.listdir(self.get_fullpath()):
+            file_obj = BaseFile.factory(
+                os.path.join(self.get_fullpath(), file_path)
+            )
+            self.file_list.append(file_obj)
+        self.file_list.sort()
 
     def get_fullpath(self):
-        return self._fullpath_
+        """Return the fullpath of the folder"""
+        return os.path.join(self.path, self.name)
+
+    @staticmethod
+    def factory(full_path):
+        """Create and fill a Folder object"""
+        
+        folder = Folder()
+
+        splited_path = os.path.split(full_path)
+        folder.name = splited_path[1] 
+        folder.path = splited_path[0]
+        folder.retrieve_file_list()
+
+        return folder
