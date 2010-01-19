@@ -25,8 +25,11 @@ import unittest
 
 from tag import TestTag
 from file import TestFile
+from folder import TestFolder
 
 all_tests = unittest.TestSuite([
   TestFile.suite(),
   TestTag.suite(),
+  TestFolder.suite(),
 ])
+
