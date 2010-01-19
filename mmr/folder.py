@@ -22,7 +22,7 @@
 #
 
 import os
-from mmr.file import File
+from mmr.file import BaseFile
 
 class Folder:
     def __init__(self, fullpath):
@@ -50,7 +50,7 @@ class Folder:
     def _retrieve_file_list_(self):
         self._files_ = []
         for file_path in os.listdir(self._fullpath_):
-            file_obj = File.factory(os.path.join(self._fullpath_, file_path))
+            file_obj = BaseFile.factory(os.path.join(self._fullpath_, file_path))
             self._files_.append(file_obj)
         self._files_.sort()
 

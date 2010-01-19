@@ -26,7 +26,7 @@
 import os
 from mmr.tags.tag import Tag
 
-class File(object):
+class BaseFile(object):
     """This class reprensent a file stored in a Folder"""
 
     def __init__(self, name=None, path=None, extension=None, parent=None):
@@ -41,7 +41,8 @@ class File(object):
 
     def __str__(self):
         """Return representation of file"""
-        return  "<File name='%{name}s' extension='%{extension}s' path='%{path}s' />" % self.get_dict()
+        return  "<File name='%{name}s' extension='%{extension}s'\
+                  path='%{path}s' />" % self.get_dict()
 
     def get_dict(self):
         """Return a dict who dump all object data"""
@@ -57,7 +58,7 @@ class File(object):
         return os.path.join(self.path, self.name)
 
     # prototype function
-    def _explore_meta_data_(self):
+    def explore_meta_data(self):
         """This functoin could be implemente by child class"""
         pass
 
@@ -75,7 +76,7 @@ class File(object):
           ".ogg": FileAudio,
         }
 
-        file = None
+        file_obj = None
 
         # retrieve base information
         splitpath = os.path.split(fullpath)
@@ -88,28 +89,28 @@ class File(object):
         if splitext[1] is not "":
             extension = splitext[1]
             if extension in ext_class.keys():
-                file = ext_class[extension]()
+                file_obj = ext_class[extension]()
 
         # else create a default object
-        if not file:
-            file = File()
+        if not file_obj:
+            file_obj = BaseFile()
 
-        file.name = name
-        file.path = path
-        file.extension = extension
+        file_obj.name = name
+        file_obj.path = path
+        file_obj.extension = extension
 
-        file._explore_meta_data_()
+        file_obj.explore_meta_data()
 
-        return file
+        return file_obj
 
-"""FileAudio class add a tags field"""
-class FileAudio(File):
+class FileAudio(BaseFile):
+    """FileAudio class add a tags field"""
     def __init__(self):
         """define tags property"""
         super(FileAudio, self).__init__()
         self.tags = None
 
-    def _explore_meta_data_(self):
+    def explore_meta_data(self):
         """This function explore audio file tag by using mmr.tags.
            This function is called by the File.factory static function."""
         self.tags = Tag.get(self)

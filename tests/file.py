@@ -22,7 +22,7 @@
 #
 
 import unittest
-from mmr.file import File, FileAudio
+from mmr.file import BaseFile, FileAudio
 
 class TestFile(unittest.TestCase):
     @staticmethod
@@ -35,7 +35,7 @@ class TestFile(unittest.TestCase):
 
 class TestFileFactory(TestFile):
     def setUp(self):
-        self.file = File.factory("tests/data/file/name.ext")
+        self.file = BaseFile.factory("tests/data/file/name.ext")
 
     def testName(self):
         self.assertEquals(self.file.name, "name.ext", "Factory must set the name to 'name' and it was '%s' !" % self.file.name)
@@ -52,10 +52,10 @@ class TestFileFactory(TestFile):
 
 class TestFileUnknown(TestFile):
     def setUp(self):
-        self.file = File.factory("tests/data/file/unknown")
+        self.file = BaseFile.factory("tests/data/file/unknown")
 
     def testObjectType(self):
-        self.assertTrue(isinstance(self.file, File), "file should be a File object")
+        self.assertTrue(isinstance(self.file, BaseFile), "file should be a BaseFile object")
 
     def testExtention(self):
         self.assertEquals(self.file.extension, None, "file extension on unknown file should be None != %s" % self.file.extension)
@@ -63,9 +63,9 @@ class TestFileUnknown(TestFile):
 class TestFileAudio(TestFile):
     def setUp(self):
         self.file = {
-          ".mp3": File.factory("tests/data/tags/silence.mp3"),
-          ".ogg": File.factory("tests/data/tags/silence.ogg"),
-          ".flac": File.factory("tests/data/tags/silence.flac"),
+          ".mp3": BaseFile.factory("tests/data/tags/silence.mp3"),
+          ".ogg": BaseFile.factory("tests/data/tags/silence.ogg"),
+          ".flac":BaseFile.factory("tests/data/tags/silence.flac"),
         }
 
     def testMp3FileIsFileAudio(self):

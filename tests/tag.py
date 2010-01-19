@@ -23,7 +23,7 @@
 
 import unittest
 
-from mmr.file import File
+from mmr.file import BaseFile
 
 from mmr.tags.mp3 import Mp3
 from mmr.tags.ogg import Ogg
@@ -59,12 +59,12 @@ class TestTag(unittest.TestCase):
 
 class TestTagMp3(TestTag):
     def setUp(self):
-        self.tag = Mp3(File.factory('tests/data/tags/silence.mp3'))
+        self.tag = Mp3(BaseFile.factory('tests/data/tags/silence.mp3'))
 
 class TestTagFlac(TestTag):
     def setUp(self):
-        self.tag = Flac(File.factory('tests/data/tags/silence.flac'))
+        self.tag = Flac(BaseFile.factory('tests/data/tags/silence.flac'))
 
 class TestTagOgg(TestTag):
     def setUp(self):
-        self.tag = Ogg(File.factory('tests/data/tags/silence.ogg'))
+        self.tag = Ogg(BaseFile.factory('tests/data/tags/silence.ogg'))
