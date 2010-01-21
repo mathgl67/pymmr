@@ -23,7 +23,10 @@
 
 import unittest
 import os
+
 from mmr.folder import Folder
+
+from tests.virtual.file import * 
 
 class TestFolder(unittest.TestCase):
     @staticmethod
