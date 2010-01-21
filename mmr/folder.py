@@ -35,14 +35,6 @@ class Folder(object):
         self.path = path
         self.file_list = file_list
 
-        # this should be here ?
-        self._album_ = None
-        self._tracks_ = None
-
-        self._investigate_album_ = None
-        self._investigate_tracks_ = None
-        # this should be here ?
-
     def __str__(self):
         """Return information on the Folder object"""
         lines = []

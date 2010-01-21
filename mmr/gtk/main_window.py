@@ -40,7 +40,7 @@ class MainWindow(object):
         self.__init_widgets__()
         self.__init_views__()
 
-        self._cur_folder_ = None
+        self._cur_folder_iter_ = None
         self._statusbar_ctx_ = self._widgets_['statusbar'].get_context_id("StatusBar")
 
     def __init_builder__(self):
@@ -91,23 +91,39 @@ class MainWindow(object):
 
     # update function
     def _update_album_(self):
-        if self._cur_folder_:
+        if self._cur_folder_iter_:
             # update album entry
-            album = self._cur_folder_._album_
+            album = self._views_['folder'].get_album(self._cur_folder_iter_)
             if album:
                 if album.artist:
-                    self._widgets_['album']['artist'].set_text(album.artist)
+                    self._widgets_["album"]["artist"].set_text(album.artist)
+                else:
+                    self._widgets_["album"]["artist"].set_text("")
+
                 if album.album:
-                    self._widgets_['album']['album'].set_text(album.album)
+                    self._widgets_["album"]["album"].set_text(album.album)
+                else:
+                    self._widgets_["album"]["album"].set_text("")
+
                 if album.genre:
-                    self._widgets_['album']['genre'].set_text(album.genre)
+                    self._widgets_["album"]["genre"].set_text(album.genre)
+                else:
+                    self._widgets_["album"]["genre"].set_text("")
+
                 if album.year:
-                    self._widgets_['album']['year'].set_text(str(album.year))
+                    self._widgets_["album"]["year"].set_text(str(album.year))
+                else:
+                    self._widgets_["album"]["year"].set_text("")
+            else:
+                # blank it
+                for key in ['artist', 'album', 'genre', 'year']:
+                    self._widgets_['album'][key].set_text("")
 
             # update album_view
             self._views_['album'].clear()
-            if self._cur_folder_._investigate_album_:
-                for result in self._cur_folder_._investigate_album_.__results__:
+            investigate_album = self._views_['folder'].get_investigate_album(self._cur_folder_iter_)
+            if investigate_album:
+                for result in investigate_album.__results__:
                     self._views_['album'].append(result)
 
     # signals
@@ -119,40 +135,46 @@ class MainWindow(object):
 
     def on_button_investigate_clicked(self, widget, data=None):
         print "investigate"
-        if self._cur_folder_:
-            self._cur_folder_._investigate_album_ = InvestigateAlbum(self._cur_folder_)
-            self._cur_folder_._investigate_album_.investigate()
-            self._cur_folder_._investigate_album_.sort()
+        if self._cur_folder_iter_:
+            folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
+            investigate_album = InvestigateAlbum(folder)
+            investigate_album.investigate()
+            investigate_album.sort()
+
+            self._views_['folder'].set_investigate_album(
+                self._cur_folder_iter_,
+                investigate_album
+            )
 
             self._update_album_()
 
     def on_button_validate_clicked(self, widget, data=None):
         print "validate!"
-        if self._cur_folder_:
-            self._cur_folder_._album_ = Album('validate')
-            self._cur_folder_._album_.artist = self._widgets_['album']['artist'].get_text()
-            self._cur_folder_._album_.album = self._widgets_['album']['album'].get_text()
-            self._cur_folder_._album_.genre = self._widgets_['album']['genre'].get_text()
+        if self._cur_folder_iter_:
+            album = Album('validate')
+            album.artist = self._widgets_['album']['artist'].get_text()
+            album.album = self._widgets_['album']['album'].get_text()
+            album.genre = self._widgets_['album']['genre'].get_text()
             try:
-                self._cur_folder_._album_.year = int(self._widgets_['album']['year'].get_text())
+                album.year = int(self._widgets_['album']['year'].get_text())
             except:
                 err = ErrorMessage("Cannot convert year to integer!")
                 err.display()
+            self._views_['folder'].set_album(self._cur_folder_iter_, album)
 
     def on_button_set_clicked(self, widget, data=None):
         print "set!"
-        iter = self._views_['album'].get_selected()
-        if iter:
-            self._cur_folder_._album_ = self._views_['album'].get_album(iter)
+        it = self._views_['album'].get_selected()
+        if it and self._cur_folder_iter_:
+            self._views_['folder'].set_album(self._cur_folder_iter_,
+                self._views_['album'].get_album(it)
+            )
             self._update_album_()
 
     def on_folder_view_row_activated(self, treeview, path, view_column):
-        iter = self._views_['folder'].get_selected()
-        if iter:
-            self._cur_folder_ = self._views_['folder'].get_folder(iter)
-            print "update to %s" % (self._cur_folder_.name)
-            # should update...
-            self._update_album_()
+        self._cur_folder_iter_ = self._views_['folder'].get_selected()
+        # should update...
+        self._update_album_()
 
     def on_toolbutton_list_add_clicked(self, widget, data=None):
         dialog = gtk.FileChooserDialog(
@@ -181,11 +203,12 @@ class MainWindow(object):
             self._views_['folder'].remove(iter)
 
     def on_toolbutton_list_investigate_clicked(self, widget, data=None):
-        for key in self._views_["folder"].get_folder_list().keys():
-            folder = self._views_["folder"]._folder_list_[key]
-            folder._investigate_album_ = InvestigateAlbum(folder)
-            folder._investigate_album_.investigate()
-            folder._investigate_album_.sort()
+        for it in self._views_["folder"].get_folder_iter_list():
+            folder = self._views_['folder'].get_folder(it)
+            investigate_album = InvestigateAlbum(folder)
+            investigate_album.investigate()
+            investigate_album.sort()
+            self._views_['folder'].set_investigate_album(it, investigate_album)
 
         self._update_album_()
 

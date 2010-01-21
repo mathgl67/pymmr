@@ -37,19 +37,41 @@ class FolderView(View):
         ])
         # data
         self._folder_list_ = {}
+        self._album_list_ = {}
+        self._investigate_album_list_ = {}
 
-
-    def get_folder(self, iter):
-        iter_path = self._store_.get_string_from_iter(iter)
+    def get_folder(self, it):
+        iter_path = self._store_.get_string_from_iter(it)
         return self._folder_list_[iter_path]
 
-    def get_folder_list(self):
-        return self._folder_list_
+    def get_folder_iter_list(self):
+        r = []
+        for key in self._folder_list_.keys():
+            r.append(self._store_.get_iter_from_string(key))
+        return r
+
+    def get_album(self, it):
+        iter_path = self._store_.get_string_from_iter(it)
+        return self._album_list_[iter_path]
+
+    def get_investigate_album(self, it):
+        iter_path = self._store_.get_string_from_iter(it)
+        return self._investigate_album_list_[iter_path]
+
+    def set_album(self, it, album):
+        iter_path = self._store_.get_string_from_iter(it)
+        self._album_list_[iter_path] = album
+
+    def set_investigate_album(self, it, investigate):
+        iter_path = self._store_.get_string_from_iter(it)
+        self._investigate_album_list_[iter_path] = investigate
 
     def append(self, folder):
         iter = self._store_.append([folder.name, folder.path])
         iter_path = self._store_.get_string_from_iter(iter)
         self._folder_list_[iter_path] = folder
+        self._album_list_[iter_path] = None
+        self._investigate_album_list_[iter_path] = None
 
     def remove(self, iter):
         iter_path = self._store_.get_string_from_iter(iter)
