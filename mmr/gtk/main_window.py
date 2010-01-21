@@ -40,7 +40,7 @@ class MainWindow(object):
         self.__init_widgets__()
         self.__init_views__()
 
-        self._cur_folder = None
+        self._cur_folder_ = None
         self._statusbar_ctx_ = self._widgets_['statusbar'].get_context_id("StatusBar")
 
     def __init_builder__(self):
@@ -179,3 +179,13 @@ class MainWindow(object):
         iter = self._views_['folder'].get_selected()
         if iter:
             self._views_['folder'].remove(iter)
+
+    def on_toolbutton_list_investigate_clicked(self, widget, data=None):
+        for key in self._views_["folder"].get_folder_list().keys():
+            folder = self._views_["folder"]._folder_list_[key]
+            folder._investigate_album_ = InvestigateAlbum(folder)
+            folder._investigate_album_.investigate()
+            folder._investigate_album_.sort()
+
+        self._update_album_()
+
