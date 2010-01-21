@@ -41,8 +41,8 @@ class BaseFile(object):
 
     def __str__(self):
         """Return representation of file"""
-        return  "<File name='%{name}s' extension='%{extension}s'\
-                  path='%{path}s' />" % self.get_dict()
+        return  "<File name='%(name)s' extension='%(extension)s'\
+                  path='%(path)s' />" % self.get_dict()
 
     def get_dict(self):
         """Return a dict who dump all object data"""

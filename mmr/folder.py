@@ -46,10 +46,10 @@ class Folder(object):
     def __str__(self):
         """Return information on the Folder object"""
         lines = []
-        lines.append("<Folder name='%s' path='%s'>" % (
-            self.name,
-            self.path
-        ))
+        lines.append("<Folder name='%(name)s' path='%(path)s'>" % {
+            "name": self.name,
+            "path": self.path,
+        })
 
         if self.file_list:
             for file_obj in self.file_list:
