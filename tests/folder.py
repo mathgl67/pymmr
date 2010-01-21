@@ -22,6 +22,7 @@
 #
 
 import unittest
+import os
 from mmr.folder import Folder
 
 class TestFolder(unittest.TestCase):
@@ -29,6 +30,8 @@ class TestFolder(unittest.TestCase):
     def suite():
         return unittest.TestSuite([
           unittest.TestLoader().loadTestsFromTestCase(TestFolderFactory),
+          unittest.TestLoader().loadTestsFromTestCase(TestFolderConstructor),
+          unittest.TestLoader().loadTestsFromTestCase(TestFolderFunctions),
         ])
 
 class TestFolderFactory(TestFolder):
@@ -48,6 +51,36 @@ class TestFolderFactory(TestFolder):
         self.assertEquals(self.folder.get_fullpath(), "tests/data/folder")
 
     def testFileList(self):
+        self.assertEquals(len(self.folder.file_list), 1)
+        self.assertTrue(isinstance(self.folder.file_list, list))
+
+class TestFolderConstructor(TestFolder):
+    def setUp(self):
+        self.folder = Folder("name", "path", ["file1", "file2"])
+
+    def testFieldName(self):
+        self.assertEquals(self.folder.name, "name", "Constructor should set name to 'name' and it was '%s'" % (self.folder.name))
+
+    def testFieldPath(self):
+        self.assertEquals(self.folder.path, "path", "Constructor should set path to 'path' and it was '%s'" % (self.folder.path))
+
+    def testFiledFileList(self):
+        ## @todo change to a real file list..
+        self.assertEquals(self.folder.file_list, ["file1", "file2"])
+
+class TestFolderFunctions(TestFolder):
+    def setUp(self):
+        self.folder = Folder("name", "path")
+    
+    def testFolderFunctionStr(self):
+        self.assertEquals(self.folder.__str__(), "<Folder name='name' path='path'>\n</Folder>")
+    
+    def testFolderFunctionGetFullpath(self):
+        self.assertEquals(self.folder.get_fullpath(), os.path.join("path", "name"))
+
+    def testFolderFunctionRetrieveFileList(self):
+        self.folder = Folder("folder", "tests/data")
+        self.folder.retrieve_file_list()
         self.assertEquals(len(self.folder.file_list), 1)
         self.assertTrue(isinstance(self.folder.file_list, list))
 

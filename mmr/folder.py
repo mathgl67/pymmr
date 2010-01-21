@@ -31,9 +31,9 @@ class Folder(object):
 
     def __init__(self, name=None, path=None, file_list=None):
         """Constructor"""
-        self.name = None
-        self.path = None
-        self.file_list = None
+        self.name = name 
+        self.path = path
+        self.file_list = file_list
 
         # this should be here ?
         self._album_ = None
@@ -46,13 +46,14 @@ class Folder(object):
     def __str__(self):
         """Return information on the Folder object"""
         lines = []
-        lines.append('<Folder name="%s" path="%s">' % (
+        lines.append("<Folder name='%s' path='%s'>" % (
             self.name,
             self.path
         ))
 
-        for file_obj in self.file_list:
-            lines.append(str(file_obj))
+        if self.file_list:
+            for file_obj in self.file_list:
+                lines.append(str(file_obj))
 
         lines.append('</Folder>')
         return "\n".join(lines)
@@ -74,7 +75,6 @@ class Folder(object):
     @staticmethod
     def factory(full_path):
         """Create and fill a Folder object"""
-        
         folder = Folder()
 
         splited_path = os.path.split(full_path)
