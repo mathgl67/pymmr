@@ -123,7 +123,7 @@ class MainWindow(object):
             self._views_['album'].clear()
             investigate_album = self._views_['folder'].get_investigate_album(self._cur_folder_iter_)
             if investigate_album:
-                for result in investigate_album.__results__:
+                for result in investigate_album.result_list:
                     self._views_['album'].append(result)
 
     # signals
@@ -139,7 +139,7 @@ class MainWindow(object):
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(folder)
             investigate_album.investigate()
-            investigate_album.sort()
+            investigate_album.result_list.sort()
 
             self._views_['folder'].set_investigate_album(
                 self._cur_folder_iter_,

@@ -104,9 +104,9 @@ class Main:
     def test(self):
         investigate_album = InvestigateAlbum(self.folder)
         investigate_album.investigate()
-        investigate_album.sort()
+        investigate_album.result_list.sort()
 
-        print investigate_album.__repr__().encode('UTF-8')
+        print str(investigate_album).encode('UTF-8')
         print
 
         investigate_track = InvestigateTrack(self.folder)

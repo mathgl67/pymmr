@@ -21,37 +21,38 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+"""Contain InvestigateAlbum class"""
+
 from mmr.config import Config
 from mmr.investigate.loader import Loader
 
-class InvestigateAlbum:
-    def __init__(self, folder):
-        self.__folder__ = folder
-        self.__results__ = []
 
-    def __repr__(self):
+class InvestigateAlbum(object):
+    """This class is used to investigate on album field"""
+
+    def __init__(self, folder=None):
+        """Constructor"""
+        self.folder = folder
+        self.result_list = []
+
+    def __str__(self):
+        """Return a string representation of the object"""
         lines = []
         lines.append(u"<InvestigateAlbum>")
-        for res in self.__results__:
-            lines.append(res.__repr__())
+        for res in self.result_list:
+            lines.append(str(res))
         lines.append(u"</InvestigateAlbum>")
         return u"\n".join(lines)
 
-    def _append_(self, album):
+    def append(self, album):
+        """append a result auto scored"""
         album.calculate_score()
-        self.__results__.append(album)
-
-    def count(self):
-        return len(self.__results__)
-
-    def get_album(self, num):
-        return self.__results__[num]
-
-    def sort(self):
-        self.__results__.sort()
+        self.result_list.append(album)
 
     def investigate(self):
+        """Lauch investigation"""
         for module_name in Config().investigater:
-            module = Loader.load_by_name(module_name, self.__folder__,
-                                         self.__results__)
-            self._append_(module.do_album())
+            module = Loader.load_by_name(module_name, self.folder,
+                                         self.result_list)
+            self.append(module.do_album())
+
