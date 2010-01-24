@@ -26,6 +26,7 @@ import sys
 # Display a fatal error when gtk is not installed.
 try:
     import gtk
+    import gobject
 except ImportError as exception:
     print "FATAL: Gtk python module is require and must be installed."
     sys.exit(1)
@@ -52,4 +53,5 @@ class Main:
 
     def run(self):
         self._main_window_.show()
+        gobject.threads_init()
         gtk.main()

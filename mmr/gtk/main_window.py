@@ -22,6 +22,8 @@
 #
 
 import gtk
+import gobject
+import threading
 
 from mmr.folder import Folder
 from mmr.album import Album
@@ -134,8 +136,9 @@ class MainWindow(object):
         gtk.main_quit()
 
     def on_button_investigate_clicked(self, widget, data=None):
-        print "investigate"
-        if self._cur_folder_iter_:
+        def thread(self):
+            print self
+            gobject.idle_add(widget.set_sensitive, False)
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(folder)
             investigate_album.investigate()
@@ -146,8 +149,14 @@ class MainWindow(object):
                 investigate_album
             )
 
-            self._update_album_()
+            gobject.idle_add(self._update_album_)
+            gobject.idle_add(widget.set_sensitive, True)
 
+        print "investigate"
+        if self._cur_folder_iter_:
+            thread = threading.Thread(target=thread, args = [self])
+            thread.start()
+           
     def on_button_validate_clicked(self, widget, data=None):
         print "validate!"
         if self._cur_folder_iter_:
