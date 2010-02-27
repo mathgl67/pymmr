@@ -25,4 +25,16 @@ import mmr
 import tests
 import unittest
 
-unittest.TextTestRunner(verbosity=1).run(tests.all_tests)
+import sys
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option(
+  "-v", "--verbosity", dest="verbosity", default=1,
+  help="Set verbosity for unitest (default=1)",
+  type="int"
+)
+(options, args) = parser.parse_args(sys.argv)
+
+
+unittest.TextTestRunner(verbosity=options.verbosity).run(tests.all_tests)
