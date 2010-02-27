@@ -49,10 +49,14 @@ class InvestigateAlbum(object):
         album.calculate_score()
         self.result_list.append(album)
 
+    def iteration(self, module_name):
+        pass
+
     def investigate(self):
         """Lauch investigation"""
         for module_name in Config().investigater:
             module = Loader.load_by_name(module_name, self.folder,
                                          self.result_list)
+            self.iteration(module_name)
             self.append(module.do_album())
 

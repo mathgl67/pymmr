@@ -137,8 +137,8 @@ class MainWindow(object):
 
     def on_button_investigate_clicked(self, widget, data=None):
         def thread(self):
-            print self
             gobject.idle_add(widget.set_sensitive, False)
+
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(folder)
             investigate_album.investigate()
