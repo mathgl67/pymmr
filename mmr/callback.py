@@ -21,10 +21,12 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 class Callback(object):
-	def __init__(self, function, object):
+	def __init__(self, function=None, object=None):
         self.function = function
         self.object = object
 
     def __call__(self, *arguments):
-        self.function(self.object, *arguments)
+        if self.function:
+            return self.function(self.object, *arguments)
+        return None
         

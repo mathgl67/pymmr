@@ -35,6 +35,7 @@ class InvestigateAlbum(object):
         self.folder = folder
         self.result_list = []
         self.cb_module_start = None
+        self.cb_module_end = None
 
     def __str__(self):
         """Return a string representation of the object"""
@@ -61,6 +62,9 @@ class InvestigateAlbum(object):
             self.result_list
         )
         self.append(module.do_album())
+
+        if self.cb_module_end:
+            self.cb_module_end(module_name)
 
     def investigate(self):
         """Lauch investigation"""

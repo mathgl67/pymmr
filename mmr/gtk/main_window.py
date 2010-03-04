@@ -27,6 +27,7 @@ import threading
 
 from mmr.folder import Folder
 from mmr.album import Album
+from mmr.config import Config
 from mmr.callback import Callback
 from mmr.investigate_album import InvestigateAlbum
 from mmr.investigate_track import InvestigateTrack
@@ -35,6 +36,8 @@ from mmr.gtk.folder_view import FolderView
 from mmr.gtk.album_view import AlbumView
 from mmr.gtk.tracks_investigation_view import TracksInvestigationView
 from mmr.gtk.tracks_view import TracksView
+
+from fractions import Fraction
 
 class MainWindow(object):
     def __init__(self):
@@ -139,15 +142,24 @@ class MainWindow(object):
 
     def on_button_investigate_clicked(self, widget, data=None):
         def on_module_start(self, module_name):
-            print "callback"
-            self._widgets_['progressbar1'].set_text("Start %s" % (module_name))
+            self._widgets_['progressbar1'].set_text(module_name)
+
+        def on_module_end(self, module_name):
+            self._widgets_['progressbar1'].set_fraction(
+                self._widgets_['progressbar1'].get_fraction() + self.step
+            )
+            self._widgets_['progressbar1'].set_text("Done")
 
         def thread(self):
             gobject.idle_add(widget.set_sensitive, False)
 
+            self._widgets_['progressbar1'].set_fraction(0)
+            self.step = Fraction(1, len(Config().investigater))
+
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(folder)
             investigate_album.cb_module_start = Callback(on_module_start, self)
+            investigate_album.cb_module_end = Callback(on_module_end, self)
             investigate_album.investigate()
             investigate_album.result_list.sort()
 
