@@ -19,19 +19,20 @@
 #   You should have received a copy of the GNU General Public License along
 #   with this program; if not, write to the Free Software Foundation, Inc.,
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-#
 
-import unittest
+from mmr.folder import Folder
+from mmr.file import BaseFile, FileAudio
 
-from tag import TestTag
-from file import TestFile
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
-
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-])
+def create_folder1():
+    return Folder(
+        "folder1",
+        "/somewhere", [
+            BaseFile("00-Artist-Album.m3u"),
+            BaseFile("00-Artist-Album.nfo"),
+            BaseFile("01-title1.mp3"),
+            BaseFile("02-title2.mp3"),
+            BaseFile("03-title3.mp3"),
+            BaseFile("04-title4.mp3"),
+        ]
+    )
 

@@ -19,19 +19,30 @@
 #   You should have received a copy of the GNU General Public License along
 #   with this program; if not, write to the Free Software Foundation, Inc.,
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-#
 
 import unittest
+import virtual.folder
 
-from tag import TestTag
-from file import TestFile
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
+from mmr.investigate_album import InvestigateAlbum
 
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-])
+class TestInvestigateAlbum(unittest.TestCase):
+    @staticmethod
+    def suite():
+        return unittest.TestSuite([
+          unittest.TestLoader().loadTestsFromTestCase(TestInvestigateAlbumConstructor),
+        ])
+
+class TestInvestigateAlbumConstructor(TestInvestigateAlbum):
+    def setUp(self):
+        self.folder1 = virtual.folder.create_folder1()
+        self.inst1 = InvestigateAlbum(self.folder1)
+     
+
+    def testConstructorSetUpFolder(self):
+        self.assertEquals(self.inst1.folder, self.folder1)
+
+    def testConstructorSetUpResultList(self):
+        self.assertEquals(len(self.inst1.result_list), 0)
+
+
 
