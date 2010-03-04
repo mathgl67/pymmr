@@ -19,21 +19,12 @@
 #   You should have received a copy of the GNU General Public License along
 #   with this program; if not, write to the Free Software Foundation, Inc.,
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-#
 
-import unittest
+class Callback(object):
+	def __init__(self, function, object):
+        self.function = function
+        self.object = object
 
-from tag import TestTag
-from file import TestFile
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
-from callback import TestCallback
-
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-  TestCallback.suite(),
-])
-
+    def __call__(self, *arguments):
+        self.function(self.object, *arguments)
+        

@@ -34,10 +34,7 @@ class InvestigateAlbum(object):
         """Constructor"""
         self.folder = folder
         self.result_list = []
-        self.callback_start_module = {
-            "function": None,
-            "argument": None,
-        }
+        self.cb_module_start = None
 
     def __str__(self):
         """Return a string representation of the object"""
@@ -55,12 +52,8 @@ class InvestigateAlbum(object):
 
     def do_module(self, module_name):
         """lauch a job for a module"""
-        if self.callback_start_module["function"]:
-            self.callback_start_module["function"](
-                self.callback_start_module["argument"],
-                self,
-                module_name
-            )
+        if self.cb_module_start:
+            self.cb_module_start(module_name)
 
         module = Loader.load_by_name(
             module_name,

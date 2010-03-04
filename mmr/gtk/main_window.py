@@ -27,6 +27,7 @@ import threading
 
 from mmr.folder import Folder
 from mmr.album import Album
+from mmr.callback import Callback
 from mmr.investigate_album import InvestigateAlbum
 from mmr.investigate_track import InvestigateTrack
 from mmr.gtk.error_message import ErrorMessage
@@ -137,7 +138,7 @@ class MainWindow(object):
         gtk.main_quit()
 
     def on_button_investigate_clicked(self, widget, data=None):
-        def on_module_start(self, investigate, module_name):
+        def on_module_start(self, module_name):
             print "callback"
             self._widgets_['progressbar1'].set_text("Start %s" % (module_name))
 
@@ -146,7 +147,7 @@ class MainWindow(object):
 
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(folder)
-            investigate_album.callback_start_module = { "function": on_module_start, "argument": self }
+            investigate_album.cb_module_start = Callback(on_module_start, self)
             investigate_album.investigate()
             investigate_album.result_list.sort()
 
