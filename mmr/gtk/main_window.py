@@ -74,6 +74,7 @@ class MainWindow(object):
           "album_view": self._builder_.get_object("album_view"),
           "tracks_investigation_view": self._builder_.get_object("view_tracks_investigation"),
           "tracks_view": self._builder_.get_object("view_tracks_result"),
+          "progressbar1": self._builder_.get_object("progressbar1"),
         }
 
     def __init_views__(self):
@@ -136,11 +137,16 @@ class MainWindow(object):
         gtk.main_quit()
 
     def on_button_investigate_clicked(self, widget, data=None):
+        def on_module_start(self, investigate, module_name):
+            print "callback"
+            self._widgets_['progressbar1'].set_text("Start %s" % (module_name))
+
         def thread(self):
             gobject.idle_add(widget.set_sensitive, False)
 
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(folder)
+            investigate_album.callback_start_module = { "function": on_module_start, "argument": self }
             investigate_album.investigate()
             investigate_album.result_list.sort()
 

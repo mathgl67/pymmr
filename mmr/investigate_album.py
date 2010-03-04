@@ -34,6 +34,10 @@ class InvestigateAlbum(object):
         """Constructor"""
         self.folder = folder
         self.result_list = []
+        self.callback_start_module = {
+            "function": None,
+            "argument": None,
+        }
 
     def __str__(self):
         """Return a string representation of the object"""
@@ -49,14 +53,25 @@ class InvestigateAlbum(object):
         album.calculate_score()
         self.result_list.append(album)
 
-    def iteration(self, module_name):
-        pass
+    def do_module(self, module_name):
+        """lauch a job for a module"""
+        if self.callback_start_module["function"]:
+            self.callback_start_module["function"](
+                self.callback_start_module["argument"],
+                self,
+                module_name
+            )
+
+        module = Loader.load_by_name(
+            module_name,
+            self.folder,
+            self.result_list
+        )
+        self.append(module.do_album())
 
     def investigate(self):
         """Lauch investigation"""
-        for module_name in Config().investigater:
-            module = Loader.load_by_name(module_name, self.folder,
-                                         self.result_list)
-            self.iteration(module_name)
-            self.append(module.do_album())
+        self.investigater_list = Config().investigater
+        for module_name in self.investigater_list:
+            self.do_module(module_name)
 
