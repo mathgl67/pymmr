@@ -83,7 +83,7 @@ class Main:
         #load config file
         try:
             self.config = Config()
-            self.config.load_file(self.options.config)
+            self.config.load(self.options.config)
         except:
             print 'could not load/parse config file (%s)' % self.options.config
             sys.exit(1)

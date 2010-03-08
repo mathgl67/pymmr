@@ -33,7 +33,7 @@ class Investigate(AbstractInvestigate):
         self._album_ = Album('regexp')
 
     def do_album(self):
-        for keys, regex in Config().regexp['album'].iteritems():
+        for keys, regex in Config().values['regexp']['album'].iteritems():
             re_compiled = re.compile(regex)
             match = re_compiled.match(self._folder_.name)
             if match:
@@ -47,7 +47,7 @@ class Investigate(AbstractInvestigate):
 
     def do_track(self, file_obj, result_array):
         self._track_ = Track('regexp')
-        for keys, regex in Config().regexp['track'].iteritems():
+        for keys, regex in Config().values['regexp']['track'].iteritems():
             re_compiled = re.compile(regex)
             match = re_compiled.match(file_obj.name)
             if match:

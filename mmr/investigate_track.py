@@ -48,7 +48,7 @@ class InvestigateTrack:
         return u"\n".join(lines)
 
     def investigate(self):
-        for module_name in Config().investigater:
+        for module_name in Config().values['investigater']:
             module = Loader.load_by_name(module_name, self._folder_,
                                          self._results_)
             for file_obj in self._folder_.file_list:

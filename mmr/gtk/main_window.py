@@ -154,7 +154,7 @@ class MainWindow(object):
             gobject.idle_add(widget.set_sensitive, False)
 
             self._widgets_['progressbar1'].set_fraction(0)
-            self.step = Fraction(1, len(Config().investigater))
+            self.step = Fraction(1, len(Config().values['investigater']))
 
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(folder)

@@ -30,37 +30,45 @@ except ImportError as exception:
     import sys
     sys.exit(1)
 
+# try to load the libyaml Loader and Dumper
+# describe to be more faster
+try:
+    from yaml import CLoader as Loader
+    from yaml import CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
-class Config:
+
+class Config(object):
     """Config class"""
-    class _impl:
-        """The implementation class"""
-        def __init__(self):
-            """Constructor: initialize data"""
-            self._file_ = None
-            self._data_ = None
-            self._file_name_ = None
-
-        def load_file(self, file_name):
-            """Load a yaml file
-                file_name -- a file name
+    class _impl(object):
+        """The real implementation class"""
+        def __init__(self, values):
+            """Constructor: initialize data
+                data -- a dictionary contains initialisation data
             """
-            self._file_name_ = file_name
-            self._file_ = yaml.load(file(self._file_name_, 'rb').read())
-            self._data_ = self._file_['pymmr']
+            self.values = values
 
-        def __getattr__(self, attr):
-            """Override magic method to access direct to data"""
-            if self._data_.has_key(attr):
-                return self._data_[attr]
-            raise AttributeError, attr
+        def load(self, file_name):
+            """Load configuration from a yaml file
+                file_name -- the file name
+            """
+            self.values = yaml.load(open(file_name, "r").read(), Loader=Loader)
+
+        def save(self, file_name):
+            """Save configuration to a yaml file
+                file_name -- the file name
+            """
+            file = open(file_name, "w+")
+            yaml.dump(self.values, file, Dumper=Dumper, default_flow_style=False)
+            file.close()
 
     __instance__ = None
 
-    def __init__(self):
+    def __init__(self, data = {}):
         """Singleton constructor"""
         if Config.__instance__ is None:
-            Config.__instance__ = Config._impl()
+            Config.__instance__ = Config._impl(data)
         self.__dict__['_Config__instance__'] = Config.__instance__
 
     def __getattr__(self, attr):
@@ -70,3 +78,4 @@ class Config:
     def __setattr__(self, attr, value):
         """Overide magic method to set values to self.__instance__"""
         return setattr(self.__instance__, attr, value)
+

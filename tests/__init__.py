@@ -25,12 +25,14 @@ import unittest
 
 from tag import TestTag
 from file import TestFile
+from config import TestConfig
 from folder import TestFolder
 from investigate_album import TestInvestigateAlbum
 from callback import TestCallback
 
 all_tests = unittest.TestSuite([
   TestFile.suite(),
+  TestConfig.suite(),
   TestTag.suite(),
   TestFolder.suite(),
   TestInvestigateAlbum.suite(),

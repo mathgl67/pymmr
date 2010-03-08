@@ -68,7 +68,7 @@ class InvestigateAlbum(object):
 
     def investigate(self):
         """Lauch investigation"""
-        self.investigater_list = Config().investigater
+        self.investigater_list = Config().values['investigater']
         for module_name in self.investigater_list:
             self.do_module(module_name)
 

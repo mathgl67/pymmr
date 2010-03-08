@@ -39,8 +39,8 @@ class Track:
             if getattr(self, key):
                 found += 1
 
-        score = Config().score['default']
-        for module, base_score in Config().score.items():
+        score = Config().values['score']['default']
+        for module, base_score in Config().values['score'].items():
             if self._investigater_ == module:
                 score = base_score
 

@@ -41,7 +41,7 @@ class Main:
         #load config file
         try:
             self._config_ = Config()
-            self._config_.load_file("pymmr.cfg")
+            self._config_.load("pymmr.cfg")
             self._main_window_.set_statusbar_text("Config file loaded.")
         except:
             err = ErrorMessage("Cannot load config file: pymmr.cfg")
