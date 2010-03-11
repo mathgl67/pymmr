@@ -28,13 +28,6 @@ import os
 from mmr.config import Config
 
 class TestConfig(unittest.TestCase):
-    @staticmethod
-    def suite():
-        return unittest.TestSuite([
-          unittest.TestLoader().loadTestsFromTestCase(TestConfigConstructor),
-        ])
-
-class TestConfigConstructor(TestConfig):
     def testWithoutArgument(self):
         config = Config._impl({})
         self.assertFalse(config.values.has_key('test_key'))

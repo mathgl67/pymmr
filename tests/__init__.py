@@ -33,11 +33,11 @@ from registry import TestRegistry
 
 all_tests = unittest.TestSuite([
   TestFile.suite(),
-  TestConfig.suite(),
   TestTag.suite(),
   TestFolder.suite(),
   TestInvestigateAlbum.suite(),
   TestCallback.suite(),
+  unittest.TestLoader().loadTestsFromTestCase(TestConfig),
   unittest.TestLoader().loadTestsFromTestCase(TestRegistry),
 ])
 
