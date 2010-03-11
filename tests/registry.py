@@ -22,22 +22,28 @@
 #
 
 import unittest
+from mmr.registry import Registry
 
-from tag import TestTag
-from file import TestFile
-from config import TestConfig
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
-from callback import TestCallback
-from registry import TestRegistry
+class TestRegistry(unittest.TestCase):
+    def setUp(self):
+        self.registry = Registry()
+        # in test we must keep in mind that the registry can easily
+        # be corupt by an other class. So clear is the rules.
+        self.registry.clear()
 
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestConfig.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-  TestCallback.suite(),
-  unittest.TestLoader().loadTestsFromTestCase(TestRegistry),
-])
+    def testSingleton(self):
+        self.registry.clear()
+        self.registry.contents['test'] = None 
+        other_registry = Registry()
+        self.assertTrue(other_registry.contents.has_key('test'))
+
+    def testSetValue(self):
+        self.registry.clear()
+        self.registry.contents['test'] = None
+        self.assertTrue(self.registry.contents.has_key('test'))
+
+    def testGetValue(self):
+        self.registry.clear()
+        self.registry.contents['test'] = True
+        self.assertTrue(self.registry.contents['test'])
 

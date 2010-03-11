@@ -21,23 +21,27 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import unittest
+"""This file contain the registry class"""
 
-from tag import TestTag
-from file import TestFile
-from config import TestConfig
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
-from callback import TestCallback
-from registry import TestRegistry
+class Registry(object):
+    """This class create a registry that will be used to avoid more than
+    one class to be a signleton
+    """
 
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestConfig.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-  TestCallback.suite(),
-  unittest.TestLoader().loadTestsFromTestCase(TestRegistry),
-])
+    _instance = None
+    _initialized = False
+    def __new__(cls, *args, **kargs):
+        """Replace the new class function to act as singleton"""
+        if not cls._instance:
+            cls._instance = super(Registry, cls).__new__(
+                cls, *args, **kargs)
+        return cls._instance
+
+    def __init__(self):
+        if not Registry._initialized:
+            self.clear()
+            Registry._initialized = True
+   
+    def clear(self):
+        self.contents = {} 
 
