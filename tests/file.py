@@ -36,10 +36,16 @@ class TestFile(unittest.TestCase):
 
 class TestFileFactory(TestFile):
     def setUp(self):
-        self.path = os.path.join("tests", "data", "file")
+        # create cross os compatible path
         self.file_name = "name.ext"
-        self.file_path = os.path.join(self.path, self.file_name) 
-        self.file = BaseFile.factory(self.file_path)
+        self.file_path = os.path.join("tests", "data", "file")
+        self.file_fullpath = os.path.join(
+            self.file_path,
+            self.file_name
+        ) 
+        # create a base file object with previous data
+        # this will be used for all test in this class.
+        self.file = BaseFile.factory(self.file_fullpath)
 
     def testName(self):
         self.assertEquals(
@@ -51,19 +57,31 @@ class TestFileFactory(TestFile):
         )
 
     def testExtension(self):
-        self.assertEquals(self.file.extension, ".ext", "Factory must set extension to 'ext' and it was '%s' !" % self.file.extension)
+        self.assertEquals(
+            self.file.extension, ".ext",
+            "Factory must set extension to '%s' and it was '%s' !" % (
+                ".ext",
+                self.file.extension
+            )
+        )
 
     def testPath(self):
         self.assertEquals(
-            self.file.path, self.path,
-            "Factory must set path to '%s' ans it was '%s' !" % (
-                self.path,
+            self.file.path, self.file_path,
+            "Factory must set path to '%s' and it was '%s' !" % (
+                self.file_path,
                 self.file.path
               )
         )
 
     def testFullpath(self):
-        self.assertEquals(self.file.get_fullpath(), self.file_path)
+        self.assertEquals(
+            self.file.get_fullpath(), self.file_fullpath,
+            "Factory must retrieve path to '%s' (!= '%s')." % (
+                self.file_fullpath,
+                self.file.get_fullpath()
+            )
+        )
 
 
 class TestFileUnknown(TestFile):

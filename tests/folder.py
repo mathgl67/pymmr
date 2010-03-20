@@ -39,19 +39,45 @@ class TestFolder(unittest.TestCase):
 
 class TestFolderFactory(TestFolder):
     def setUp(self):
-        self.folder = Folder.factory("tests/data/folder")
+        # prepare test data
+        self.folder_name = "folder"
+        self.folder_path = os.path.join("tests", "data")
+        self.folder_fullpath = os.path.join(
+            self.folder_path,
+            self.folder_name
+        )
+        # create the Folder test instance 
+        self.folder = Folder.factory(self.folder_fullpath)
 
     def testInstance(self):
         self.assertTrue(isinstance(self.folder, Folder))
 
     def testName(self):
-        self.assertEquals(self.folder.name, "folder", "Factory must set the name to 'folder' and it was '%s' !" % self.folder.name)
+        self.assertEquals(
+            self.folder.name, self.folder_name,
+            "Factory must set the name to '%s' and it was '%s' !" % (
+                self.folder_name,
+                self.folder.name
+            )
+        )
 
     def testPath(self):
-        self.assertEquals(self.folder.path, "tests/data", "Factory must set path to 'tests/data/file/name.ext' ans it was '%s' !" % self.folder.path )
+        self.assertEquals(
+            self.folder.path, self.folder_path,
+            "Factory must set path to '%s' and it was '%s' !" % (
+                self.folder_path,       
+                self.folder.path
+            )
+        )
 
     def testFullpath(self):
-        self.assertEquals(self.folder.get_fullpath(), "tests/data/folder")
+        self.assertEquals(
+            self.folder.get_fullpath(), self.folder_fullpath,
+            "Factory must set path to '%s' and it was '%s' !" % (
+                self.folder_fullpath,
+                self.folder.get_fullpath()
+            )
+        )
 
     def testFileList(self):
         self.assertEquals(len(self.folder.file_list), 1)
