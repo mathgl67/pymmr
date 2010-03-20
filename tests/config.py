@@ -50,6 +50,7 @@ class TestConfig(unittest.TestCase):
         config_writer = Config._impl({ "test_key1": True, "test_key2": False })
         # open a tempory file
         fd, file_path = tempfile.mkstemp()
+        os.close(fd) # not needed
         # save to file
         config_writer.save(file_path)
         # load from file
