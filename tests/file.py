@@ -22,6 +22,7 @@
 #
 
 import unittest
+import os
 from mmr.file import BaseFile, FileAudio
 
 class TestFile(unittest.TestCase):
@@ -35,19 +36,34 @@ class TestFile(unittest.TestCase):
 
 class TestFileFactory(TestFile):
     def setUp(self):
-        self.file = BaseFile.factory("tests/data/file/name.ext")
+        self.path = os.path.join("tests", "data", "file")
+        self.file_name = "name.ext"
+        self.file_path = os.path.join(self.path, self.file_name) 
+        self.file = BaseFile.factory(self.file_path)
 
     def testName(self):
-        self.assertEquals(self.file.name, "name.ext", "Factory must set the name to 'name' and it was '%s' !" % self.file.name)
+        self.assertEquals(
+            self.file.name, self.file_name,
+            "Factory must set the name to '%s' and it was '%s' !" % (
+                self.file_name,
+                self.file.name
+            )
+        )
 
     def testExtension(self):
         self.assertEquals(self.file.extension, ".ext", "Factory must set extension to 'ext' and it was '%s' !" % self.file.extension)
 
     def testPath(self):
-        self.assertEquals(self.file.path, "tests/data/file", "Factory must set path to 'tests/data/file/name.ext' ans it was '%s' !" % self.file.path )
+        self.assertEquals(
+            self.file.path, self.path,
+            "Factory must set path to '%s' ans it was '%s' !" % (
+                self.path,
+                self.file.path
+              )
+        )
 
     def testFullpath(self):
-        self.assertEquals(self.file.get_fullpath(), "tests/data/file/name.ext")
+        self.assertEquals(self.file.get_fullpath(), self.file_path)
 
 
 class TestFileUnknown(TestFile):
