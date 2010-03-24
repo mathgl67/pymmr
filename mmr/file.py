@@ -65,8 +65,18 @@ class BaseFile(object):
     @staticmethod
     def factory(fullpath):
         """This is the factory function of the file class.
-           This look at the extension to determine a class to
-           use (eg: AudioFile for mp3 file) and fill data"""
+
+           This function try to determine file type by using
+           extension and instancy the good class.
+           
+           eg: use of AudioFile class for a mp3 file) 
+           fill data
+
+            fullpath -- an unicode string representing to
+                        full path to access a file.
+
+           Return a BaseFile instance object.
+        """
 
         # define extension and class
         ext_class = {
@@ -85,7 +95,7 @@ class BaseFile(object):
 
         # create a specific object if extension is found in dict
         splitext = os.path.splitext(fullpath)
-        if splitext[1] is not u"":
+        if not len(splitext[1]) == 0:
             extension = splitext[1]
             if extension in ext_class.keys():
                 file_obj = ext_class[extension]()
