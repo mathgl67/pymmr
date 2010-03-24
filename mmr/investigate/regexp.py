@@ -54,6 +54,6 @@ class Investigate(AbstractInvestigate):
                 index = 1
                 for attr in keys.split(' '):
                     value = match.group(index).replace('_', ' ')
-                    setattr(self._track_, attr, unicode(value, 'ISO-8859-15'))
+                    setattr(self._track_, attr, value)
                     index += 1
         return self._track_

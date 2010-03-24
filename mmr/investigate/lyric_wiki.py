@@ -68,7 +68,12 @@ class Investigate(AbstractInvestigate):
 
         for result in result_array:
             if result.tracknumber:
-                number = int(result.tracknumber)
+                if result.tracknumber.find(u"/") is -1:
+                    number = int(result.tracknumber)
+                else:
+                    num_array = result.tracknumber.split(u"/")
+                    number = int(num_array[0])
+
             if result.title:
                 title = result.title
 

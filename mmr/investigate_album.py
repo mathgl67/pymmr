@@ -38,12 +38,12 @@ class InvestigateAlbum(object):
         self.cb_module_start = None
         self.cb_module_end = None
 
-    def __str__(self):
+    def __repr__(self):
         """Return a string representation of the object"""
         lines = []
         lines.append(u"<InvestigateAlbum>")
         for res in self.result_list:
-            lines.append(str(res))
+            lines.append(res.__repr__())
         lines.append(u"</InvestigateAlbum>")
         return u"\n".join(lines)
 

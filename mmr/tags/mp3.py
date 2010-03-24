@@ -35,5 +35,8 @@ except ImportError as exception:
 
 class Mp3(AbstractTag):
     def _set_up_(self):
-        self._mutagen_ = mutagen.easyid3.EasyID3(self._file_.get_fullpath())
+        try:
+            self._mutagen_ = mutagen.easyid3.EasyID3(self._file_.get_fullpath())
+        except:
+            self._mutagen_ = None
         self._tag_list_['year'] = 'date'

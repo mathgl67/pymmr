@@ -43,21 +43,24 @@ class Investigate(AbstractInvestigate):
             passwd=self._config_['password'],
             db=self._config_['db']
         )
+        self.db.set_character_set("utf8")
         self._album_ = Album('freedb', self._base_score_)
 
     def do_album(self):
         for res in self._album_list_:
             if res.artist and res.album:
+                artist = res.artist.encode("UTF-8")
+                album = res.album.encode("UTF-8")
                 self.db.query("""
                     SELECT genre, year FROM album WHERE artist LIKE "%s" AND title LIKE "%s"
-                """ % ( res.artist, res.album ))
-
+                """ % ( artist, album ))
+                
                 r = self.db.store_result()
                 for (genre, year) in r.fetch_row(0):
                     self._album_.artist = res.artist
                     self._album_.album = res.album
-                    self._album_.genre = genre
-                    self._album_.year = year
+                    self._album_.genre = unicode(genre, "UTF-8")
+                    self._album_.year = unicode(str(year), "UTF-8")
 
         return self._album_
 

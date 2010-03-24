@@ -42,13 +42,13 @@ class AbstractTag:
 
     def __repr__(self):
         lines = []
-        lines.append('artist=' + self.artist)
-        lines.append('album=' + self.album)
-        lines.append('title=' + self.title)
-        lines.append('year=' + self.year)
-        lines.append('genre=' + self.genre)
-        lines.append('tracknumber=' + self.tracknumber)
-        return "\n".join(lines)
+        lines.append(u"artist=%s" % self.artist)
+        lines.append(u"album=%s" % self.album)
+        lines.append(u"title=%s" % self.title)
+        lines.append(u"year=%s" % self.year)
+        lines.append(u"genre=%s" % self.genre)
+        lines.append(u"tracknumber=%s" % self.tracknumber)
+        return u"\n".join(lines)
 
     def __getattr__(self, name):
         if self._data_.has_key(name):
@@ -61,6 +61,6 @@ class AbstractTag:
     def _parse_(self):
         for key, value in self._tag_list_.items():
             self._data_[key] = None
-            if self._mutagen_.has_key(value):
-                bytes = self._mutagen_.get(value)[0]
-                self._data_[key] = unicode(bytes)
+            if self._mutagen_ and self._mutagen_.has_key(value):
+                value = self._mutagen_.get(value)[0]
+                self._data_[key] = value

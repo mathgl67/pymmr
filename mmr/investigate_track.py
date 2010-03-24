@@ -40,8 +40,7 @@ class InvestigateTrack:
         lines = []
         lines.append(u"<InvestigateTrack>")
         for file_name, result in self._results_.items():
-            lines.append(u"<File name=\"%s\">" % unicode(file_name,
-                'ISO8859-15')) # should not be here.. !
+            lines.append(u"<File name=\"%s\">" % (file_name))
             for track in result:
                 lines.append(track.__repr__())
             lines.append(u"</File>")

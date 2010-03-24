@@ -30,12 +30,14 @@ from mmr.config import Config
 from mmr.folder import Folder
 from mmr.investigate_album import InvestigateAlbum
 from mmr.investigate_track import InvestigateTrack
+from mmr.unicode import initUnicode
 
 class Main:
     def __init__(self):
         pass
 
     def run(self):
+        initUnicode()
         self.welcome()
         self.parse_args()
         self.load_config()
@@ -48,7 +50,6 @@ class Main:
         print "My Music Renamer comes with ABSOLUTELY NO WARRANTY;"
         print "This is free software; Release under GPL;"
         print
-
 
     def parse_args(self):
         """Parse commande line arguments"""
@@ -89,13 +90,15 @@ class Main:
             sys.exit(1)
 
     def folder(self):
-        if self.options.verbose:
-            print "Folder: analyse '%s'..." % (self.args[0])
+        folder_path = unicode(self.args[0], sys.getfilesystemencoding())
 
-        self.folder = Folder.factory(self.args[0])
         if self.options.verbose:
-            print "Folder: done. result..."
-            print self.folder.__repr__().encode('UTF-8')
+            print u"Folder: analyse '%s'..." % (folder_path)
+
+        self.folder = Folder.factory(folder_path)
+        if self.options.verbose:
+            print u"Folder: done. result..."
+            print self.folder.__repr__()
 
 
     def album(self):
@@ -109,7 +112,7 @@ class Main:
         investigate_album.investigate()
         investigate_album.result_list.sort()
 
-        print str(investigate_album).encode('UTF-8')
+        print investigate_album.__repr__()
         print
 
         investigate_track = InvestigateTrack(
@@ -118,4 +121,5 @@ class Main:
         )
         investigate_track.investigate()
 
-        print investigate_track.__repr__().encode('UTF-8')
+        print investigate_track.__repr__()
+        print

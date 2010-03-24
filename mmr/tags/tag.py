@@ -28,10 +28,10 @@ from mmr.tags.flac import Flac
 class Tag:
     @staticmethod
     def get(file):
-        if file.extension == '.mp3':
+        if file.extension == u".mp3":
             return Mp3(file)
-        if file.extension == '.ogg':
+        if file.extension == u".ogg":
             return Ogg(file)
-        elif file.extension == '.flac':
+        elif file.extension == u".flac":
             return Flac(file)
         return None

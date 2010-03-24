@@ -39,10 +39,9 @@ class BaseFile(object):
         self.extension = extension
         self.parent = parent
 
-    def __str__(self):
+    def __repr__(self):
         """Return representation of file"""
-        return  "<File name='%(name)s' extension='%(extension)s'\
-                  path='%(path)s' />" % self.get_dict()
+        return  u"<File name='%(name)s' extension='%(extension)s' path='%(path)s' />" % self.get_dict()
 
     def get_dict(self):
         """Return a dict who dump all object data"""
@@ -86,7 +85,7 @@ class BaseFile(object):
 
         # create a specific object if extension is found in dict
         splitext = os.path.splitext(fullpath)
-        if splitext[1] is not "":
+        if splitext[1] is not u"":
             extension = splitext[1]
             if extension in ext_class.keys():
                 file_obj = ext_class[extension]()

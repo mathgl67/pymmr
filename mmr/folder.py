@@ -23,6 +23,7 @@
 
 """This file contain the Folder class"""
 
+import sys
 import os
 from mmr.file import BaseFile
 
@@ -35,20 +36,20 @@ class Folder(object):
         self.path = path
         self.file_list = file_list
 
-    def __str__(self):
+    def __repr__(self):
         """Return information on the Folder object"""
         lines = []
-        lines.append("<Folder name='%(name)s' path='%(path)s'>" % {
+        lines.append(u"<Folder name='%(name)s' path='%(path)s'>" % {
             "name": self.name,
             "path": self.path,
         })
 
         if self.file_list:
             for file_obj in self.file_list:
-                lines.append(str(file_obj))
+                lines.append(file_obj.__repr__())
 
-        lines.append('</Folder>')
-        return "\n".join(lines)
+        lines.append(u"</Folder>")
+        return u"\n".join(lines)
 
     def retrieve_file_list(self):
         """Retrieve the file list of the folder"""
