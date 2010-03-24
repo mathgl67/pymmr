@@ -22,9 +22,11 @@
 #
 
 class AbstractInvestigate:
-    def __init__(self, folder, album_list):
+    def __init__(self, folder, album_list, config, base_score):
+        self._config_ = config
         self._folder_ = folder
         self._album_list_ = album_list
+        self._base_score_ = base_score
         self._album_ = None
         self._tracks_ = {}
         self._set_up_()

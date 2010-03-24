@@ -24,9 +24,10 @@
 from mmr.config import Config
 
 class Track:
-    def __init__(self, investigater):
+    def __init__(self, investigater, base_score):
         self._investigater_ = investigater
-        self._score_ = None
+        self._score_ = 0
+        self._base_score_ = base_score
         self._keys_ = [ 'tracknumber', 'title' ]
         self.tracknumber = None
         self.title = None
@@ -39,12 +40,7 @@ class Track:
             if getattr(self, key):
                 found += 1
 
-        score = Config().values['score']['default']
-        for module, base_score in Config().values['score'].items():
-            if self._investigater_ == module:
-                score = base_score
-
-        self._score_ = score + (found * 100)
+        self._score_ = self._base_score_ + (found * 100)
 
     def __repr__(self):
         string  = u'<track investigater="%s" score="%s"'

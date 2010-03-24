@@ -30,8 +30,9 @@ from mmr.investigate.loader import Loader
 class InvestigateAlbum(object):
     """This class is used to investigate on album field"""
 
-    def __init__(self, folder=None):
+    def __init__(self, config=None, folder=None):
         """Constructor"""
+        self.config = config
         self.folder = folder
         self.result_list = []
         self.cb_module_start = None
@@ -56,10 +57,22 @@ class InvestigateAlbum(object):
         if self.cb_module_start:
             self.cb_module_start(module_name)
 
+        # prepare module configuration
+        module_config = {}
+        if self.config.has_key(module_name):
+            module_config = self.config[module_name]
+
+        #base score
+        base_score = self.config["score"]["default"]
+        if self.config["score"].has_key(module_name):
+            base_score = self.config["score"][module_name]
+
         module = Loader.load_by_name(
             module_name,
             self.folder,
-            self.result_list
+            self.result_list,
+            module_config,
+            base_score
         )
         self.append(module.do_album())
 
@@ -68,7 +81,7 @@ class InvestigateAlbum(object):
 
     def investigate(self):
         """Lauch investigation"""
-        self.investigater_list = Config().values['investigater']
+        self.investigater_list = self.config['investigater']
         for module_name in self.investigater_list:
             self.do_module(module_name)
 

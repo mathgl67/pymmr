@@ -42,14 +42,13 @@ class Main:
         try:
             self._config_ = Config()
             self._config_.load("pymmr.cfg")
-            self._main_window_.set_statusbar_text("Config file loaded.")
         except:
             err = ErrorMessage("Cannot load config file: pymmr.cfg")
             err.display_and_exit()
 
     def __init__(self):
-        self._main_window_ = MainWindow()
         self._config_load_()
+        self._main_window_ = MainWindow(self._config_)
 
     def run(self):
         self._main_window_.show()

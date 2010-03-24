@@ -38,7 +38,7 @@ class Investigate(AbstractInvestigate):
     def _set_up_(self):
         self._url_ = 'http://lyrics.wikia.com/server.php?wsdl'
         self._wsdl_ = WSDL.Proxy(self._url_)
-        self._album_ = Album('lyric_wiki')
+        self._album_ = Album('lyric_wiki', self._base_score_)
 
     def do_album(self):
         for res in self._album_list_:
@@ -54,7 +54,7 @@ class Investigate(AbstractInvestigate):
                         self._album_.year = album['year']
                         index = 1
                         for song in album['songs']:
-                            track = Track('lyric_wiki')
+                            track = Track('lyric_wiki', self._base_score_)
                             track.tracknumber = index
                             track.title = song
                             self._tracks_[index] = track

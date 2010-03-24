@@ -28,13 +28,14 @@ from mmr.config import Config
 class Album:
     """This represent an Album"""
 
-    def __init__(self, investigater):
+    def __init__(self, investigater, base_score):
         """Constructor: initialize data
 
           investigater -- the module who provide data
         """
         self._investigater_ = investigater
         self._score_ = 0
+        self._base_score_ = base_score 
         self._keys_ = ('artist', 'album', 'genre', 'year')
 
         # set all keys to None
@@ -69,12 +70,7 @@ class Album:
             if getattr(self, key):
                 found += 1
 
-        score = Config().values['score']['default']
-        for module, base_score in Config().values['score'].items():
-            if self._investigater_ == module:
-                score = base_score
-
-        self._score_ = score + (found * 100)
+        self._score_ = self._base_score_ + (found * 100)
 
     def get_score(self):
         """Return the score"""

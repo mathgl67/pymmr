@@ -41,41 +41,43 @@ except ImportError:
 
 class Config(object):
     """Config class"""
-    class _impl(object):
-        """The real implementation class"""
-        def __init__(self, values):
-            """Constructor: initialize data
-                data -- a dictionary contains initialisation data
-            """
-            self.values = values
+    def __init__(self, values={}):
+        """Constructor: initialize data
+            data -- a dictionary contains initialisation data
+        """
+        self.values = values
 
-        def load(self, file_name):
-            """Load configuration from a yaml file
-                file_name -- the file name
-            """
-            self.values = yaml.load(open(file_name, "r").read(), Loader=Loader)
+    def load(self, file_name):
+        """Load configuration from a yaml file
+            file_name -- the file name
+        """
+        self.values = yaml.load(open(file_name, "r").read(), Loader=Loader)
 
-        def save(self, file_name):
-            """Save configuration to a yaml file
-                file_name -- the file name
-            """
-            file = open(file_name, "w+")
-            yaml.dump(self.values, file, Dumper=Dumper, default_flow_style=False)
-            file.close()
+    def save(self, file_name):
+        """Save configuration to a yaml file
+            file_name -- the file name
+        """
+        file = open(file_name, "w+")
+        yaml.dump(self.values, file, Dumper=Dumper, default_flow_style=False)
+        file.close()
 
-    __instance__ = None
+    def __getitem__(self, item):
+        """Access values by using the dictionary operator.
+           eg: config["item_name"]
+            item -- item name
+           Return the value for item.
+        """
+        return self.values[item]
 
-    def __init__(self, data = {}):
-        """Singleton constructor"""
-        if Config.__instance__ is None:
-            Config.__instance__ = Config._impl(data)
-        self.__dict__['_Config__instance__'] = Config.__instance__
+    def __setitem__(self, item, value):
+        """Write values by using the dictionary operator.
+           eg: config["item_name"] = "value"
+            item -- item name
+            value -- value..
+        """ 
+        self.values[item] = value
 
-    def __getattr__(self, attr):
-        """Overide magic method to get values from self.__instance__"""
-        return getattr(self.__instance__, attr)
-
-    def __setattr__(self, attr, value):
-        """Overide magic method to set values to self.__instance__"""
-        return setattr(self.__instance__, attr, value)
+    def has_key(self, item):
+        """Proxy to the dictionary function"""
+        return self.values.has_key(item)
 

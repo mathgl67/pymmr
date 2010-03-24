@@ -29,25 +29,25 @@ from mmr.config import Config
 
 class TestConfig(unittest.TestCase):
     def testWithoutArgument(self):
-        config = Config._impl({})
+        config = Config({})
         self.assertFalse(config.values.has_key('test_key'))
 
     def testWithArguments(self):
-        config = Config._impl({ 'test_key1': True, 'test_key2': False })
-        self.assertTrue(config.values.has_key('test_key1'))
-        self.assertTrue(config.values.has_key('test_key2'))
-        self.assertTrue(config.values['test_key1'])
-        self.assertFalse(config.values['test_key2'])
+        config = Config({ 'test_key1': True, 'test_key2': False })
+        self.assertTrue(config.has_key('test_key1'))
+        self.assertTrue(config.has_key('test_key2'))
+        self.assertTrue(config['test_key1'])
+        self.assertFalse(config['test_key2'])
 
     def testSetValue(self):
-        config = Config._impl({ 'test_key1': True })
-        config.values["test_key1"] = False
-        self.assertFalse(config.values["test_key1"])
+        config = Config({ 'test_key1': True })
+        config["test_key1"] = False
+        self.assertFalse(config["test_key1"])
 
     def testSaveAndLoad(self):
         # setup a base config file
-        config_reader = Config._impl({})
-        config_writer = Config._impl({ "test_key1": True, "test_key2": False })
+        config_reader = Config({})
+        config_writer = Config({ "test_key1": True, "test_key2": False })
         # open a tempory file
         fd, file_path = tempfile.mkstemp()
         os.close(fd) # not needed
@@ -56,8 +56,8 @@ class TestConfig(unittest.TestCase):
         # load from file
         config_reader.load(file_path)
         # compare
-        self.assertTrue(config_reader.values["test_key1"])
-        self.assertFalse(config_reader.values["test_key2"])
+        self.assertTrue(config_reader["test_key1"])
+        self.assertFalse(config_reader["test_key2"])
         # delete it
         os.unlink(file_path)
         

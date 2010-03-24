@@ -24,10 +24,11 @@
 from mmr.album import Album
 from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
+from mmr.file import FileAudio 
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
-        self._album_ = Album('tag')
+        self._album_ = Album('tag', self._base_score_)
 
     def _do_album_by_tag_name_(self, tag):
         possibilities = dict()
@@ -63,12 +64,10 @@ class Investigate(AbstractInvestigate):
         return self._album_
 
     def do_track(self, file_obj, result_array):
-        if (file_obj.extension != ".ogg" and
-            file_obj.extension != ".mp3" and
-            file_obj.extension != ".flac"):
+        if not isinstance(file_obj, FileAudio): 
             return None
 
-        track = Track('tag')
+        track = Track('tag', self._base_score_)
         tags = file_obj.tags
 
         if tags.tracknumber:

@@ -24,12 +24,12 @@
 class Loader:
     _modules_ = {}
     @staticmethod
-    def load_by_name(name, folder, album_list):
+    def load_by_name(name, folder, album_list, config, base_score):
 #        if Loader._modules_.has_key(name):
 #            return Loader._modules_[name]
 
         module = __import__("mmr.investigate.%s" % (name),
                             globals(), locals(), ["mmr", "investigate"])
 
-        Loader._modules_[name] = module.Investigate(folder, album_list)
+        Loader._modules_[name] = module.Investigate(folder, album_list, config, base_score)
         return Loader._modules_[name]

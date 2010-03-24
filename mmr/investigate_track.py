@@ -25,7 +25,8 @@ from mmr.config import Config
 from mmr.investigate.loader import Loader
 
 class InvestigateTrack:
-    def __init__(self, folder):
+    def __init__(self, folder, config):
+        self.config = config
         self._folder_ = folder
         self._results_ = {}
         self._init_result_()
@@ -48,9 +49,22 @@ class InvestigateTrack:
         return u"\n".join(lines)
 
     def investigate(self):
-        for module_name in Config().values['investigater']:
+        for module_name in self.config['investigater']:
+            #retrieve config ...
+            module_config = {}
+            if self.config.has_key(module_name):
+                module_config = self.config[module_name]
+
+            #base score
+            base_score = self.config["score"]["default"]
+            if self.config["score"].has_key(module_name):
+                base_score = self.config["score"][module_name]
+
+            # load module
             module = Loader.load_by_name(module_name, self._folder_,
-                                         self._results_)
+                                         self._results_, module_config,
+                                         base_score)
+
             for file_obj in self._folder_.file_list:
                 track = module.do_track(file_obj, self._results_[file_obj.name])
                 if track:

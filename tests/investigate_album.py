@@ -23,6 +23,7 @@
 import unittest
 import virtual.folder
 
+from mmr.config import Config
 from mmr.investigate_album import InvestigateAlbum
 
 class TestInvestigateAlbum(unittest.TestCase):
@@ -35,14 +36,16 @@ class TestInvestigateAlbum(unittest.TestCase):
 class TestInvestigateAlbumConstructor(TestInvestigateAlbum):
     def setUp(self):
         self.folder1 = virtual.folder.create_folder1()
-        self.inst1 = InvestigateAlbum(self.folder1)
+        self.config1 = Config()
+        self.inst1 = InvestigateAlbum(self.config1, self.folder1)
      
 
     def testConstructorSetUpFolder(self):
         self.assertEquals(self.inst1.folder, self.folder1)
 
+    def testConstructorSetUpConfig(self):
+        self.assertEquals(self.inst1.config, self.config1)
+
     def testConstructorSetUpResultList(self):
         self.assertEquals(len(self.inst1.result_list), 0)
-
-
 

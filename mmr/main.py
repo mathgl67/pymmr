@@ -102,14 +102,20 @@ class Main:
         pass
 
     def test(self):
-        investigate_album = InvestigateAlbum(self.folder)
+        investigate_album = InvestigateAlbum(
+            config=self.config,
+            folder=self.folder
+        )
         investigate_album.investigate()
         investigate_album.result_list.sort()
 
         print str(investigate_album).encode('UTF-8')
         print
 
-        investigate_track = InvestigateTrack(self.folder)
+        investigate_track = InvestigateTrack(
+            folder=self.folder,
+            config=self.config
+        )
         investigate_track.investigate()
 
         print investigate_track.__repr__().encode('UTF-8')

@@ -27,7 +27,7 @@ from mmr.investigate.abstract_investigate import AbstractInvestigate
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
-        self._album_ = Album('mix')
+        self._album_ = Album('mix', self._base_score_)
 
     def do_album(self):
         for res in self._album_list_:
@@ -37,7 +37,7 @@ class Investigate(AbstractInvestigate):
         return self._album_
 
     def do_track(self, file_obj, result_array):
-        track = Track('mix')
+        track = Track('mix', self._base_score_)
         for result in result_array:
             for key in track.get_keys():
                 if not getattr(track, key):

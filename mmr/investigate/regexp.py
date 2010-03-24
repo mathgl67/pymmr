@@ -30,10 +30,10 @@ import re
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
-        self._album_ = Album('regexp')
+        self._album_ = Album('regexp', self._base_score_)
 
     def do_album(self):
-        for keys, regex in Config().values['regexp']['album'].iteritems():
+        for keys, regex in self._config_['album'].iteritems():
             re_compiled = re.compile(regex)
             match = re_compiled.match(self._folder_.name)
             if match:
@@ -46,8 +46,8 @@ class Investigate(AbstractInvestigate):
         return self._album_
 
     def do_track(self, file_obj, result_array):
-        self._track_ = Track('regexp')
-        for keys, regex in Config().values['regexp']['track'].iteritems():
+        self._track_ = Track('regexp', self._base_score_)
+        for keys, regex in self._config_['track'].iteritems():
             re_compiled = re.compile(regex)
             match = re_compiled.match(file_obj.name)
             if match:

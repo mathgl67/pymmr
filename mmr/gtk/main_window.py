@@ -40,12 +40,13 @@ from mmr.gtk.tracks_view import TracksView
 from fractions import Fraction
 
 class MainWindow(object):
-    def __init__(self):
+    def __init__(self, config):
         self.__init_builder__()
         self.__init_window__()
         self.__init_widgets__()
         self.__init_views__()
 
+        self.config = config
         self._cur_folder_iter_ = None
         self._statusbar_ctx_ = self._widgets_['statusbar'].get_context_id("StatusBar")
 
@@ -154,10 +155,13 @@ class MainWindow(object):
             gobject.idle_add(widget.set_sensitive, False)
 
             self._widgets_['progressbar1'].set_fraction(0)
-            self.step = Fraction(1, len(Config().values['investigater']))
+            self.step = Fraction(1, len(self.config['investigater']))
 
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
-            investigate_album = InvestigateAlbum(folder)
+            investigate_album = InvestigateAlbum(
+                config=self.config,
+                folder=folder
+            )
             investigate_album.cb_module_start = Callback(on_module_start, self)
             investigate_album.cb_module_end = Callback(on_module_end, self)
             investigate_album.investigate()
@@ -233,7 +237,10 @@ class MainWindow(object):
     def on_toolbutton_list_investigate_clicked(self, widget, data=None):
         for it in self._views_["folder"].get_folder_iter_list():
             folder = self._views_['folder'].get_folder(it)
-            investigate_album = InvestigateAlbum(folder)
+            investigate_album = InvestigateAlbum(
+                config=self.config,
+                folder=folder
+            )
             investigate_album.investigate()
             investigate_album.sort()
             self._views_['folder'].set_investigate_album(it, investigate_album)

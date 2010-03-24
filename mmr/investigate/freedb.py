@@ -37,20 +37,17 @@ except ImportError as exception:
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
-        self.config = Config()
         self.db = MySQLdb.connect(
-            host=self.config.values['freedb']['host'],
-            user=self.config.values['freedb']['user'],
-            passwd=self.config.values['freedb']['password'],
-            db=self.config.values['freedb']['db']
+            host=self._config_['host'],
+            user=self._config_['user'],
+            passwd=self._config_['password'],
+            db=self._config_['db']
         )
-        self._album_ = Album('freedb')
+        self._album_ = Album('freedb', self._base_score_)
 
     def do_album(self):
         for res in self._album_list_:
             if res.artist and res.album:
-                print "i have two!"
-
                 self.db.query("""
                     SELECT genre, year FROM album WHERE artist LIKE "%s" AND title LIKE "%s"
                 """ % ( res.artist, res.album ))
