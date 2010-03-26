@@ -1,7 +1,21 @@
-:class:`mmr.folder.Folder` -- Folder class
+:mod:`mmr.folder` -- Folder operation module
 ============================================
 
-.. currentmodule:: mmr.folder
+Introduction
+------------
+
+.. automodule:: mmr.folder
+
+Use exemples
+------------
+
+ >>> print "Hello"
+
+Module contents
+---------------
+
+Class :class:`Folder`
+^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: Folder
       :show-inheritance:

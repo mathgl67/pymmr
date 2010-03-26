@@ -24,7 +24,7 @@
 from mmr.album import Album
 from mmr.track import Track
 from mmr.investigate.abstract_investigate import AbstractInvestigate
-from mmr.file import FileAudio 
+from mmr.file import AudioFile 
 
 class Investigate(AbstractInvestigate):
     def _set_up_(self):
@@ -64,7 +64,7 @@ class Investigate(AbstractInvestigate):
         return self._album_
 
     def do_track(self, file_obj, result_array):
-        if not isinstance(file_obj, FileAudio): 
+        if not isinstance(file_obj, AudioFile): 
             return None
 
         track = Track('tag', self._base_score_)

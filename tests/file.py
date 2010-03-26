@@ -23,7 +23,7 @@
 
 import unittest
 import os
-from mmr.file import BaseFile, FileAudio
+from mmr.file import BaseFile, AudioFile
 
 class TestFile(unittest.TestCase):
     @staticmethod
@@ -103,13 +103,13 @@ class TestFileAudio(TestFile):
         }
 
     def testMp3FileIsFileAudio(self):
-        self.assertTrue(isinstance(self.file[".mp3"], FileAudio), "File with '.mp3' extension should be 'FileAudio'")
+        self.assertTrue(isinstance(self.file[".mp3"], AudioFile), "File with '.mp3' extension should be 'AudioFile'")
 
     def testOggFileIsFileAudio(self):
-        self.assertTrue(isinstance(self.file[".ogg"], FileAudio), "File with '.ogg' extension should be 'FileAudio'")
+        self.assertTrue(isinstance(self.file[".ogg"], AudioFile), "File with '.ogg' extension should be 'AudioFile'")
 
     def testFlacFileIsFileAudio(self):
-        self.assertTrue(isinstance(self.file[".flac"], FileAudio), "File with '.flac' extension should be 'FileAudio'")
+        self.assertTrue(isinstance(self.file[".flac"], AudioFile), "File with '.flac' extension should be 'AudioFile'")
 
     def testHaveTag(self):
         self.assertNotEquals(self.file[".mp3"].tags, None)

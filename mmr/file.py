@@ -21,20 +21,34 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""This file contain the File class"""
+"""
+This file contains all files related classes.
+"""
 
 import os
 from mmr.tags.tag import Tag
 
 class BaseFile(object):
-    """This class reprensent a file stored in a Folder"""
+    """
+    This is the base file class.
+    Used to represente file stocked in a :class:`mmr.folder.Folder`
+    object.
+
+    :param name: the file name (eg: file.ext)
+    :type name: :class:`unicode`
+
+    :param path: the file path (eg: /home/user)
+    :type path: :class:`unicode`
+
+    :param extension: the file extension (eg: .ext)
+    :type extension: :class:`unicode`
+
+    :param parent: the parent object (used?)
+    :type parent: :class:`mmr.folder.Folder`
+    """
 
     def __init__(self, name=None, path=None, extension=None, parent=None):
-        """Constructor function.
-             name: set the file name (eg: file.ext)
-             path: set the file path (eg: /home/user)
-             extension: set the file extension (eg: .ext)"""
-        self.name = name
+        """See class documentation"""
         self.path = path
         self.extension = extension
         self.parent = parent
@@ -58,7 +72,11 @@ class BaseFile(object):
 
     # prototype function
     def explore_meta_data(self):
-        """This functoin could be implemente by child class"""
+        """
+        This function do nothing.
+        But it could be implemented by child class.
+        This permit to call it in factory.
+        """
         pass
 
     # factory
@@ -67,22 +85,20 @@ class BaseFile(object):
         """This is the factory function of the file class.
 
            This function try to determine file type by using
-           extension and instancy the good class.
+           extension and instancy the most appropriate class.
            
-           eg: use of AudioFile class for a mp3 file) 
-           fill data
+           :param fullpath: the full path of the file.
+           :type fullpath: :class:`unicode`
 
-            fullpath -- an unicode string representing to
-                        full path to access a file.
-
-           Return a BaseFile instance object.
+           :return: :class:`BaseFile` instance object
+                    (:class:`BaseFile` or :class:`AudioFile`)
         """
 
         # define extension and class
         ext_class = {
-          ".mp3": FileAudio,
-          ".flac": FileAudio,
-          ".ogg": FileAudio,
+          ".mp3": AudioFile,
+          ".flac": AudioFile,
+          ".ogg": AudioFile,
         }
 
         file_obj = None
@@ -112,14 +128,37 @@ class BaseFile(object):
 
         return file_obj
 
-class FileAudio(BaseFile):
-    """FileAudio class add a tags field"""
-    def __init__(self):
-        """define tags property"""
-        super(FileAudio, self).__init__()
+class AudioFile(BaseFile):
+    """
+    This class is used to represent an audio file in a
+    :class:`mmr.folder.Folder`. This simply add a
+
+    The difference with the :class:`BaseFile` is the
+    presence of the AudioFile.tags property.
+
+    :param name: name of the file name
+    :type name: :class:`unicode` 
+
+    :param path: path of the file
+    :type path: :class:`unicode`
+
+    :param extension: the file extension
+    :type extension: :class:`unicode`
+
+    :param parent: the parent object (used?)
+    :type parent: :class:`mmr.folder.Folder`
+    """
+    def __init__(self, name=None, path=None, extension=None, parent=None):
+        """See class documentation"""
+        super(AudioFile, self).__init__(name, path, extension, parent)
         self.tags = None
 
     def explore_meta_data(self):
-        """This function explore audio file tag by using mmr.tags.
-           This function is called by the File.factory static function."""
+        """
+        This function explore audio file tag by using 
+        :mod:`mmr.tags`.
+        This function is called by the :func:`BaseFile.factory`
+        function.
+        """
         self.tags = Tag.get(self)
+

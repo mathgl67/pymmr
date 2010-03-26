@@ -21,17 +21,32 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""This file contain the Folder class"""
+"""This file contains all related Folder stuff"""
 
 import sys
 import os
 from mmr.file import BaseFile
 
 class Folder(object):
-    """This is a Folder class"""
+    """
+    This class is used to represente a folder to process.
+
+    The :class:`Folder` can contains :class:`mmr.file.BaseFile`
+    instance.
+
+    :param name: the name of the folder
+    :type name: :class:`unicode`
+
+    :param path: the path on the filesystem
+    :type path: :class:`unicode`
+
+    :param file_list: the file list
+    :type file_list: an :class:`list` of instance of 
+                     :class:`mmr.file.BaseFile`
+    """
 
     def __init__(self, name=None, path=None, file_list=None):
-        """Constructor"""
+        """See class documentation"""
         self.name = name 
         self.path = path
         self.file_list = file_list
