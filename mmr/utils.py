@@ -33,6 +33,7 @@ class DictProxy(object):
     :type values: :class:`dict`
     """
     def __init__(self, values={}):
+        """See class documentation"""
         self.dict = values
 
     def __getitem__(self, key):

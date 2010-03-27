@@ -26,13 +26,21 @@
 from mmr.config import Config
 
 class Album:
-    """This represent an Album"""
+    """
+    This represente an album. Contains informations like
+    artist name, album title, release year, and the album
+    genre.
+
+    :param investigater: the name of the plugin who provide
+                         the result
+    :type investigater: :class:unicode
+
+    :param base_score: the base score of the plugin.
+    :type base_score: :class:`int`
+    """
 
     def __init__(self, investigater, base_score):
-        """Constructor: initialize data
-
-          investigater -- the module who provide data
-        """
+        """See class documentation"""
         self._investigater_ = investigater
         self._score_ = 0
         self._base_score_ = base_score 
