@@ -39,18 +39,13 @@ except ImportError:
     from yaml import Loader, Dumper
 
 
-class Config(object):
+from mmr.utils import DictProxy
+
+class Config(DictProxy):
     """
     This class is used for configutation operation
     ( Loading, saving, accessing configuration values ).
-
-    :param values: initialisation values.
-    :type values: :class:`dict`
     """
-
-    def __init__(self, values={}):
-        """See class documentation"""
-        self.values = values
 
     def load(self, file_name):
         """
@@ -59,7 +54,7 @@ class Config(object):
         :param file_name: the yaml file
         :type file_name: :class:`unicode`
         """
-        self.values = yaml.load(
+        self.dict = yaml.load(
             open(file_name, "r").read(),
             Loader=Loader
         )
@@ -73,30 +68,10 @@ class Config(object):
         """
         file = open(file_name, "w+")
         yaml.dump(
-            self.values,
+            self.dict,
             file,
             Dumper=Dumper,
             default_flow_style=False
         )
         file.close()
-
-    def __getitem__(self, item):
-        """Access values by using the dictionary operator.
-           eg: config["item_name"]
-            item -- item name
-           Return the value for item.
-        """
-        return self.values[item]
-
-    def __setitem__(self, item, value):
-        """Write values by using the dictionary operator.
-           eg: config["item_name"] = "value"
-            item -- item name
-            value -- value..
-        """ 
-        self.values[item] = value
-
-    def has_key(self, item):
-        """Proxy to the dictionary function"""
-        return self.values.has_key(item)
 

@@ -7,4 +7,5 @@ API
    file
    folder
    config
+   utils
 

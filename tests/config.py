@@ -30,7 +30,7 @@ from mmr.config import Config
 class TestConfig(unittest.TestCase):
     def testWithoutArgument(self):
         config = Config({})
-        self.assertFalse(config.values.has_key('test_key'))
+        self.assertFalse(config.has_key('test_key'))
 
     def testWithArguments(self):
         config = Config({ 'test_key1': True, 'test_key2': False })
