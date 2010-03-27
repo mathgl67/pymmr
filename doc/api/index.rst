@@ -6,4 +6,5 @@ API
 
    file
    folder
+   config
 

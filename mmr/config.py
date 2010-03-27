@@ -40,25 +40,44 @@ except ImportError:
 
 
 class Config(object):
-    """Config class"""
+    """
+    This class is used for configutation operation
+    ( Loading, saving, accessing configuration values ).
+
+    :param values: initialisation values.
+    :type values: :class:`dict`
+    """
+
     def __init__(self, values={}):
-        """Constructor: initialize data
-            data -- a dictionary contains initialisation data
-        """
+        """See class documentation"""
         self.values = values
 
     def load(self, file_name):
-        """Load configuration from a yaml file
-            file_name -- the file name
         """
-        self.values = yaml.load(open(file_name, "r").read(), Loader=Loader)
+        Load configuration from a yaml file
+
+        :param file_name: the yaml file
+        :type file_name: :class:`unicode`
+        """
+        self.values = yaml.load(
+            open(file_name, "r").read(),
+            Loader=Loader
+        )
 
     def save(self, file_name):
-        """Save configuration to a yaml file
-            file_name -- the file name
+        """
+        Save configuration to a yaml file
+
+        :param file_name: the yaml file
+        :type file_name: :class:`unicode`
         """
         file = open(file_name, "w+")
-        yaml.dump(self.values, file, Dumper=Dumper, default_flow_style=False)
+        yaml.dump(
+            self.values,
+            file,
+            Dumper=Dumper,
+            default_flow_style=False
+        )
         file.close()
 
     def __getitem__(self, item):
