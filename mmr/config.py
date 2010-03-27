@@ -38,7 +38,8 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-
+import sys
+import codecs
 from mmr.utils import DictProxy
 
 class Config(DictProxy):
@@ -54,10 +55,17 @@ class Config(DictProxy):
         :param file_name: the yaml file
         :type file_name: :class:`unicode`
         """
-        self.dict = yaml.load(
-            open(file_name, "r").read(),
-            Loader=Loader
+        file = codecs.open(
+            file_name,
+            "r",
+            sys.getfilesystemencoding()
         )
+        if file:
+            self.dict = yaml.load(
+                file.read(),
+                Loader=Loader
+            )
+            file.close()
 
     def save(self, file_name):
         """
@@ -66,7 +74,11 @@ class Config(DictProxy):
         :param file_name: the yaml file
         :type file_name: :class:`unicode`
         """
-        file = open(file_name, "w+")
+        file = codecs.open(
+            file_name,
+            "w+",
+            sys.getfilesystemencoding()
+        )
         yaml.dump(
             self.dict,
             file,
