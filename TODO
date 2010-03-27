@@ -16,5 +16,47 @@ ________________________________________________________________________________
                               |(_)(_|(_)  |__|_)|_
 ________________________________________________________________________________
 
-I]  Write a TODO list.
-II] To be continued
+
+==== L E G E N D E ====
+ [X] Completed
+ [W] Work in progress
+ [ ] Todo 
+========================
+
+
+----> BASE <--------------------------------------------------------------------
+
+ [ ] Switch to GPL v3
+ [ ] Remove curses draft (it's not a priority)
+ [ ] Rewrite investigation
+     [ ] Write testcase
+ [ ] Delete registry ?
+ [ ] Missing metadata
+     [ ] Album
+         [ ] Type: CD, CDS, Promo ...
+         [ ] Number of tracks
+         [ ] Number of cd 
+     [ ] Track
+         [ ] Cd number
+ 
+----> DOC <--------------------------------------------------------------------
+
+ [X] file
+ [W] folder
+ [X] config
+ [ ] album
+ [ ] track
+
+----> GTK <---------------------------------------------------------------------
+
+ [ ] Improve usability of the gtk interface
+     [ ] Make use of the registry ?
+     [ ] Use a combobox for genre entry
+ [ ] Correct global investigation button
+
+----> PLUGINS <-----------------------------------------------------------------
+
+ [ ] Improve musicbrainz plugin
+ [ ] Mix
+     [ ] Use of the most setted information
+
