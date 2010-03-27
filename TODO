@@ -28,8 +28,7 @@ ________________________________________________________________________________
 
  [ ] Switch to GPL v3
  [ ] Remove curses draft (it's not a priority)
- [ ] Rewrite investigation
-     [ ] Write testcase
+ [ ] Rewrite investigation as research
  [ ] Delete registry ?
  [ ] Missing metadata
      [ ] Album
@@ -38,6 +37,9 @@ ________________________________________________________________________________
          [ ] Number of cd 
      [ ] Track
          [ ] Cd number
+ [X] Create utils module
+     [X] Create DictProxy class
+     [X] Inherite Config from DictProxy
  
 ----> DOC <--------------------------------------------------------------------
 
@@ -46,6 +48,10 @@ ________________________________________________________________________________
  [X] config
  [ ] album
  [ ] track
+
+----> TESTS <------------------------------------------------------------------
+
+ [ ] mmr.utils
 
 ----> GTK <---------------------------------------------------------------------
 
