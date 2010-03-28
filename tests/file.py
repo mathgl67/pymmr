@@ -23,6 +23,7 @@
 
 import unittest
 import os
+import mmr.file
 from mmr.file import BaseFile, AudioFile
 
 class TestFile(unittest.TestCase):
@@ -45,7 +46,7 @@ class TestFileFactory(TestFile):
         ) 
         # create a base file object with previous data
         # this will be used for all test in this class.
-        self.file = BaseFile.factory(self.file_fullpath)
+        self.file = mmr.file.factory(self.file_fullpath)
 
     def testName(self):
         self.assertEquals(
@@ -86,7 +87,7 @@ class TestFileFactory(TestFile):
 
 class TestFileUnknown(TestFile):
     def setUp(self):
-        self.file = BaseFile.factory("tests/data/file/unknown")
+        self.file = mmr.file.factory("tests/data/file/unknown")
 
     def testObjectType(self):
         self.assertTrue(isinstance(self.file, BaseFile), "file should be a BaseFile object")
@@ -97,9 +98,9 @@ class TestFileUnknown(TestFile):
 class TestFileAudio(TestFile):
     def setUp(self):
         self.file = {
-          ".mp3": BaseFile.factory("tests/data/tags/silence.mp3"),
-          ".ogg": BaseFile.factory("tests/data/tags/silence.ogg"),
-          ".flac":BaseFile.factory("tests/data/tags/silence.flac"),
+          ".mp3": mmr.file.factory("tests/data/tags/silence.mp3"),
+          ".ogg": mmr.file.factory("tests/data/tags/silence.ogg"),
+          ".flac":mmr.file.factory("tests/data/tags/silence.flac"),
         }
 
     def testMp3FileIsFileAudio(self):

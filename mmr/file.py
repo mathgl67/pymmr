@@ -75,58 +75,9 @@ class BaseFile(object):
         """
         This function do nothing.
         But it could be implemented by child class.
-        This permit to call it in factory.
+        This permit to call it in :func:`mmr.file.factory`.
         """
         pass
-
-    # factory
-    @staticmethod
-    def factory(fullpath):
-        """This is the factory function of the file class.
-
-           This function try to determine file type by using
-           extension and instancy the most appropriate class.
-           
-           :param fullpath: the full path of the file.
-           :type fullpath: :class:`unicode`
-
-           :return: :class:`BaseFile` instance object
-                    (:class:`BaseFile` or :class:`AudioFile`)
-        """
-
-        # define extension and class
-        ext_class = {
-          ".mp3": AudioFile,
-          ".flac": AudioFile,
-          ".ogg": AudioFile,
-        }
-
-        file_obj = None
-
-        # retrieve base information
-        splitpath = os.path.split(fullpath)
-        name = splitpath[1]
-        path = splitpath[0]
-        extension = None
-
-        # create a specific object if extension is found in dict
-        splitext = os.path.splitext(fullpath)
-        if not len(splitext[1]) == 0:
-            extension = splitext[1]
-            if extension in ext_class.keys():
-                file_obj = ext_class[extension]()
-
-        # else create a default object
-        if not file_obj:
-            file_obj = BaseFile()
-
-        file_obj.name = name
-        file_obj.path = path
-        file_obj.extension = extension
-
-        file_obj.explore_meta_data()
-
-        return file_obj
 
 class AudioFile(BaseFile):
     """
@@ -155,10 +106,56 @@ class AudioFile(BaseFile):
 
     def explore_meta_data(self):
         """
-        This function explore audio file tag by using 
-        :mod:`mmr.tags`.
-        This function is called by the :func:`BaseFile.factory`
-        function.
+        This function explore audio file tag by using :mod:`mmr.tags`.
+        This function is called by the :func:`mmr.file.factory` function.
         """
         self.tags = Tag.get(self)
+
+# factory
+def factory(fullpath):
+    """
+       This function try to determine file type by using
+       extension and instancy the most appropriate class.
+           
+       :param fullpath: the full path of the file.
+       :type fullpath: :class:`unicode`
+
+       :return: :class:`BaseFile` instance object
+                (:class:`BaseFile` or :class:`AudioFile`)
+    """
+
+    # define extension and class
+    ext_class = {
+      ".mp3": AudioFile,
+      ".flac": AudioFile,
+      ".ogg": AudioFile,
+    }
+
+    file_obj = None
+
+    # retrieve base information
+    splitpath = os.path.split(fullpath)
+    name = splitpath[1]
+    path = splitpath[0]
+    extension = None
+
+    # create a specific object if extension is found in 
+    # dict
+    splitext = os.path.splitext(fullpath)
+    if not len(splitext[1]) == 0:
+        extension = splitext[1]
+        if extension in ext_class.keys():
+            file_obj = ext_class[extension]()
+
+    # else create a default object
+    if not file_obj:
+        file_obj = BaseFile()
+
+    file_obj.name = name
+    file_obj.path = path
+    file_obj.extension = extension
+
+    file_obj.explore_meta_data()
+
+    return file_obj
 

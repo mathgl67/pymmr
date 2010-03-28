@@ -23,8 +23,7 @@
 
 import random
 import os
-
-from mmr.file import BaseFile 
+import mmr.file
 
 def generate_name():
     name = ""
@@ -41,7 +40,7 @@ def create_file(name=None, path=None):
     if not path:
         path = generate_name()
 
-    return BaseFile.factory(os.path.join(path, name))
+    return mmr.file.factory(os.path.join(path, name))
 
 def create_file_list(name=None, path=None, number=None):
     list = []

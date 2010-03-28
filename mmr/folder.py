@@ -25,7 +25,7 @@
 
 import sys
 import os
-from mmr.file import BaseFile
+import mmr.file
 
 class Folder(object):
     """
@@ -70,7 +70,7 @@ class Folder(object):
         """Retrieve the file list of the folder"""
         self.file_list = []
         for file_path in os.listdir(self.get_fullpath()):
-            file_obj = BaseFile.factory(
+            file_obj = mmr.file.factory(
                 os.path.join(self.get_fullpath(), file_path)
             )
             self.file_list.append(file_obj)
