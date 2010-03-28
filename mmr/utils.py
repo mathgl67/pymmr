@@ -36,6 +36,7 @@ class DictProxy(object):
         """See class documentation"""
         self.dict = values
 
+    # getter, setter
     def __getitem__(self, key):
         """
         Access values by using the dictionary operator.
@@ -60,6 +61,17 @@ class DictProxy(object):
         """ 
         self.dict[key] = value
 
+    # iteration
+    def iteritems(self):
+        return self.dict.iteritems()
+        
+    def iterkeys(self):
+        return self.dict.iterkeys()
+        
+    def itervalues(self):
+        return self.dict.itervalues()
+
+    # dictionary fonction
     def has_key(self, key):
         """
         Check in the :class:`dict` if key exist. This is
