@@ -21,25 +21,17 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-import unittest
+from mmr.plugin import AbstractPlugin
 
-from tag import TestTag
-from file import TestFile
-from config import TestConfig
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
-from callback import TestCallback
-from registry import TestRegistry
-from plugin import TestPlugin
+class Test3(AbstractPlugin):
+    def setup(self):
+        self.about = {
+            "name": u"Test3",
+            "type": u"type",
+            "short_description": u"short description",
+            "long_description": u"long description",
+        }
 
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-  TestCallback.suite(),
-  unittest.TestLoader().loadTestsFromTestCase(TestConfig),
-  unittest.TestLoader().loadTestsFromTestCase(TestRegistry),
-  TestPlugin.suite(),
-])
+    def available(self):
+        return True
 

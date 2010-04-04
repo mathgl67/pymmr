@@ -20,26 +20,3 @@
 #   with this program; if not, write to the Free Software Foundation, Inc.,
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
-import unittest
-
-from tag import TestTag
-from file import TestFile
-from config import TestConfig
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
-from callback import TestCallback
-from registry import TestRegistry
-from plugin import TestPlugin
-
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-  TestCallback.suite(),
-  unittest.TestLoader().loadTestsFromTestCase(TestConfig),
-  unittest.TestLoader().loadTestsFromTestCase(TestRegistry),
-  TestPlugin.suite(),
-])
-
