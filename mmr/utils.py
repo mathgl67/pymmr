@@ -61,6 +61,9 @@ class DictProxy(object):
         """ 
         self.dict[key] = value
 
+    def __len__(self):
+        return len(self.dict)
+
     # iteration
     def iteritems(self):
         return self.dict.iteritems()
