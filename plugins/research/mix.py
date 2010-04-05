@@ -21,11 +21,22 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.plugin import AbstractResearchPlugin
 from mmr.album import Album
 from mmr.track import Track
-from mmr.investigate.abstract_investigate import AbstractInvestigate
+from mmr.abstract_investigate import AbstractInvestigate
 
-class Investigate(AbstractInvestigate):
+class Mix(AbstractResearchPlugin):
+    def setup(self):
+        self.investigate_class = MixInvestigate
+        self.about = {
+            "name": u"Mix",
+            "short_description": u"",
+            "long_description": u"",
+        }
+        self.priority = 20
+
+class MixInvestigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('mix', self._base_score_)
 

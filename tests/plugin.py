@@ -24,15 +24,24 @@
 import unittest
 import os
 from mmr.utils import DictProxy
-from mmr.plugin import AbstractPlugin, PluginManager
+from mmr.plugin import AbstractPlugin, AbstractResearchPlugin, PluginManager
 
 class TestPlugin(unittest.TestCase):
+    def assertNone(self, var):
+        self.assertEquals(var, None)
+
+    def assertIsInstance(self, var, cls):
+        self.assertTrue(isinstance(var, cls))
+
     @staticmethod
     def suite():
         return unittest.TestSuite([
             # abstract plugin
             unittest.TestLoader().loadTestsFromTestCase(
                 TestAbstractPluginConstructor
+            ),
+            unittest.TestLoader().loadTestsFromTestCase(
+                TestAbstractResearchPluginConstructor
             ),
             # plugin manager
             unittest.TestLoader().loadTestsFromTestCase(
@@ -54,25 +63,41 @@ class TestAbstractPluginConstructor(TestPlugin):
     def setUp(self):
         self.p = AbstractPlugin()
 
-    def assertNone(self, var):
-        self.assertEquals(var, None)
-
     def testDefaultType(self):
-        self.assertTrue(isinstance(self.p.about, dict))
+        self.assertIsInstance(self.p.about, dict)
 
     def testAboutDefault(self):
         self.assertNone(self.p.about["name"])
-        self.assertNone(self.p.about["type"])
         self.assertNone(self.p.about["short_description"])
         self.assertNone(self.p.about["long_description"])
+
+    def testTypeDefault(self):
+        self.assertNone(self.p.type)
+
+    def testAvailableDefault(self):
+        self.assertTrue(self.p.available())
+
+class TestAbstractResearchPluginConstructor(TestPlugin):
+    def setUp(self):
+        self.p = AbstractResearchPlugin()
+
+    def testType(self):
+        self.assertIsInstance(self.p.type, unicode)
+        self.assertIsInstance(self.p.priority, int)
+
+    def testDefault(self):
+        self.assertEquals(self.p.type, u"research")
+        self.assertEquals(self.p.priority, 0)
+        self.assertNone(self.p.investigate_class)
+
 
 # plugin manager
 class TestPluginManagerConstructor(TestPlugin):
     def testDefaultType(self):
         pm = PluginManager()
-        self.assertTrue(isinstance(pm, DictProxy)) 
-        self.assertTrue(isinstance(pm.config, dict))
-        self.assertTrue(isinstance(pm.dict, dict))
+        self.assertIsInstance(pm, DictProxy)
+        self.assertIsInstance(pm.config, dict)
+        self.assertIsInstance(pm.dict, dict)
 
     def testDefaultValue(self):
         pm = PluginManager()
@@ -82,9 +107,14 @@ class TestPluginManagerConstructor(TestPlugin):
     def testSetConfig(self):
         config = { "test": True }
         pm = PluginManager(config=config)
-        self.assertTrue(isinstance(pm.config, dict))
+        self.assertIsInstance(pm.config, dict)
         self.assertEquals(pm.config, config)
         self.assertEquals(pm.config['test'], True)
+
+    def testNotSingleton(self):
+        pm1 = PluginManager()
+        pm2 = PluginManager()
+        self.assertNotEquals(pm1, pm2)
 
 class TestPluginManagerValidateConfig(TestPlugin):
     def testConfigInstance(self):
@@ -129,25 +159,25 @@ class TestPluginManagerPrePluginList(TestPlugin):
         return pm.pre_plugin_list()
 
     def testDirectoryNotExists(self):
-        path = u"tests/data/plugins/none"
+        path = os.path.join(u"tests", u"data", u"plugins", u"none")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 0)
 
     def testDirectoryContainsOneFile(self):
-        path = u"tests/data/plugins/one"
+        path = os.path.join(u"tests", u"data", u"plugins", u"one")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 1)
         self.assertEquals(pl[path][0], [u"", u"test1"])
     
     def testDirectoryContainsTwoFile(self):
-        path = u"tests/data/plugins/two"
+        path = os.path.join(u"tests", u"data", u"plugins", u"two")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 2)
         self.assertEquals(pl[path][0], [u"", u"test1"])
         self.assertEquals(pl[path][1], [u"", u"test2"])
 
     def testDirectoryContainsThreeFileRecurse(self):
-        path = u"tests/data/plugins/three"
+        path = os.path.join(u"tests", u"data", u"plugins", u"three")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 3)
         self.assertEquals(pl[path][0], [u"two", u"test2"])
@@ -156,15 +186,15 @@ class TestPluginManagerPrePluginList(TestPlugin):
 
 class TestPluginManagerLoad(TestPluginManagerPrePluginList):
     def testOne(self):
-        path = u"tests/data/plugins/one"
+        path = os.path.join(u"tests", u"data", u"plugins", u"one")
         pm = self.gen_pluginmanager([path])
         pm.ensure_path_list_in_sys_path()
         pm.load_all()
         self.assertTrue(pm.has_key('test1'))
-        self.assertTrue(isinstance(pm['test1'], AbstractPlugin))
+        self.assertIsInstance(pm['test1'], AbstractPlugin)
 
     def testThree(self):
-        path = u"tests/data/plugins/three"
+        path = os.path.join(u"tests", u"data", u"plugins", u"three")
         pm = self.gen_pluginmanager([path])
         pm.ensure_path_list_in_sys_path()
         pm.load_all()
@@ -173,4 +203,19 @@ class TestPluginManagerLoad(TestPluginManagerPrePluginList):
         self.assertTrue(pm.has_key('test2'))
         self.assertTrue(pm.has_key('test3'))
 
+    def testUnique(self):
+        path = os.path.join(u"tests", u"data", u"plugins", u"three")
+        pm1 = self.gen_pluginmanager([path], [u"test2"])
+        pm2 = self.gen_pluginmanager([path], [u"test2"])
+        self.assertNotEquals(pm1, pm2)
+
+    def testWithBlackList(self):
+        path = os.path.join(u"tests", u"data", u"plugins", u"three")
+        pm = self.gen_pluginmanager([path], [u"test2"])
+        pm.ensure_path_list_in_sys_path()
+        pm.load_all()
+        self.assertEquals(len(pm), 2)
+        self.assertTrue(pm.has_key(u"test1"))
+        self.assertFalse(pm.has_key(u"test2"))
+        self.assertTrue(pm.has_key(u"test3"))
 

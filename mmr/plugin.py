@@ -29,17 +29,31 @@ from mmr.utils import DictProxy
 
 class AbstractPlugin(object):
     def __init__(self):
+        self.type = None
         self.about = {
             "name": None,
-            "type": None,
             "short_description": None,
             "long_description": None,
         }
         self.setup()
 
+    def available(self):
+        return True
 
     def setup(self):
         pass
+
+
+class AbstractResearchPlugin(AbstractPlugin):
+    def __init__(self):
+        self.priority = 0
+        self.investigate_class = None
+        super(AbstractResearchPlugin, self).__init__()
+        self.type = u"research"
+
+    def investigate(self, folder, album_list, config, base_score):
+        return self.investigate_class(folder, album_list, config, base_score)
+
 
 class PluginManager(DictProxy):
     def __init__(self, config={}, values={}):
@@ -68,9 +82,11 @@ class PluginManager(DictProxy):
     
     def load_all(self):
         plugin_list = self.pre_plugin_list()
+        self.dict = {} # really needed??
         for path in self.config['path_list']:
             for (module_path, module_name) in plugin_list[path]:
-                self.dict[module_name] = self.load(module_path, module_name)
+                if not module_name in self.config["black_list"]:
+                    self.dict[module_name] = self.load(module_path, module_name)
 
     def load(self, module_path, module_name):
         if module_path == u"":
@@ -100,6 +116,16 @@ class PluginManager(DictProxy):
         for path in self.config["path_list"]:
             if not path in sys.path:
                 sys.path.append(path.encode(sys.getfilesystemencoding()))
+
+    def available_research(self):
+        result = []
+        # retrieve list
+        for value in self.itervalues():
+            if value.available() and value.type == "research":
+                result.append(value)
+        # sort list by priority
+        result.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
+        return result
 
     def pre_plugin_list(self):
         result_dict = {}

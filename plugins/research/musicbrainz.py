@@ -21,25 +21,36 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.plugin import AbstractResearchPlugin 
 from mmr.album import Album
 from mmr.track import Track
-from mmr.investigate.abstract_investigate import AbstractInvestigate
+from mmr.abstract_investigate import AbstractInvestigate
 
-# Display a fatal error when SOAPpy is not installed.
-try:
-	from musicbrainz2.webservice import Query, ArtistFilter, ReleaseFilter, WebServiceError
-    from musicbrainz2.utils import extractUuid
-except ImportError as exception:
-    print "FATAL: Musicbrainz2 python module is require and must be installed. (python-musicbrainz2)"
-    import sys
-    sys.exit(1)
+class Musicbrainz(AbstractResearchPlugin):
+    def setup(self):
+        self.investigate_class = MusicbrainzInvestigate
+        self.about = {
+            "name": u"Musicbrainz",
+            "short_description": u"",
+            "long_description": u"",
+        }
+        self.priority = 5 
 
+    def available(self):
+        try:
+            import musicbrainz2
+        except ImportError as exception:
+            return False
+        return True
 
-class Investigate(AbstractInvestigate):
+class MusicbrainzInvestigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('musicbrainz', self._base_score_)
 
     def do_album(self):
+    	from musicbrainz2.webservice import Query, ArtistFilter, ReleaseFilter, WebServiceError
+        from musicbrainz2.utils import extractUuid
+
         for res in self._album_list_:
             artist_id = None
             if res.artist:

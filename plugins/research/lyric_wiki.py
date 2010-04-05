@@ -21,21 +21,31 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.plugin import AbstractResearchPlugin
 from mmr.album import Album
 from mmr.track import Track
-from mmr.investigate.abstract_investigate import AbstractInvestigate
+from mmr.abstract_investigate import AbstractInvestigate
 
-# Display a fatal error when SOAPpy is not installed.
-try:
-    from SOAPpy import WSDL
-except ImportError as exception:
-    print "FATAL: SOAPpy python module is require and must be installed. (python-soappy)"
-    import sys
-    sys.exit(1)
+class Lyric_wiki(AbstractResearchPlugin):
+    def setup(self):
+        self.investigate_class = LyricWikiInvestigate
+        self.about = {
+            "name": u"Lyric wiki",
+            "short_description": u"",
+            "long_description": u"",
+        }
+        self.priority = 5
 
+    def available(self):
+        try:
+            import SOAPpy
+        except ImportError as exception:
+            return False
+        return True
 
-class Investigate(AbstractInvestigate):
+class LyricWikiInvestigate(AbstractInvestigate):
     def _set_up_(self):
+        from SOAPpy import WSDL
         self._url_ = 'http://lyrics.wikia.com/server.php?wsdl'
         self._wsdl_ = WSDL.Proxy(self._url_)
         self._album_ = Album('lyric_wiki', self._base_score_)

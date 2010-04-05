@@ -21,8 +21,8 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.plugin import PluginManager
 from mmr.config import Config
-from mmr.investigate.loader import Loader
 
 class InvestigateTrack:
     def __init__(self, folder, config):
@@ -48,7 +48,13 @@ class InvestigateTrack:
         return u"\n".join(lines)
 
     def investigate(self):
-        for module_name in self.config['investigater']:
+        pluginmanager = PluginManager(self.config["pluginmanager"])
+        pluginmanager.ensure_path_list_in_sys_path()
+        pluginmanager.load_all()
+
+        for module in pluginmanager.available_research():
+            module_name = module.about["name"]
+
             #retrieve config ...
             module_config = {}
             if self.config.has_key(module_name):
@@ -60,12 +66,15 @@ class InvestigateTrack:
                 base_score = self.config["score"][module_name]
 
             # load module
-            module = Loader.load_by_name(module_name, self._folder_,
-                                         self._results_, module_config,
-                                         base_score)
+            investigate = module.investigate(
+                self._folder_,
+                self._results_,
+                module_config,
+                base_score
+            )
 
             for file_obj in self._folder_.file_list:
-                track = module.do_track(file_obj, self._results_[file_obj.name])
+                track = investigate.do_track(file_obj, self._results_[file_obj.name])
                 if track:
                     track.calculate_score()
                     self._results_[file_obj.name].append(track)

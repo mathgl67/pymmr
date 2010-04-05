@@ -21,22 +21,31 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mmr.config import Config
+from mmr.plugin import AbstractResearchPlugin
 from mmr.album import Album
 from mmr.track import Track
-from mmr.investigate.abstract_investigate import AbstractInvestigate
+from mmr.abstract_investigate import AbstractInvestigate
 
-# Display a fatal error when MySQLdb is not installed.
-try:
-    import MySQLdb
-except ImportError as exception:
-    print "FATAL: MySQLdb python module is require and must be installed. (python-mysql)"
-    import sys
-    sys.exit(1)
+class Freedb(AbstractResearchPlugin):
+    def setup(self):
+        self.investigate_class = FreedbInvestigate
+        self.about = {
+            "name": u"Freedb",
+            "short_description": u"",
+            "long_description": u"",
+        }
+        self.priority = 5
 
+    def available(self):
+        try:
+            import MySQLdb
+        except ImportError as exception:
+            return False
+        return True
 
-class Investigate(AbstractInvestigate):
+class FreedbInvestigate(AbstractInvestigate):
     def _set_up_(self):
+        import MySQLdb
         self.db = MySQLdb.connect(
             host=self._config_['host'],
             user=self._config_['user'],

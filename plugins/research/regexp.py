@@ -21,14 +21,24 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+from mmr.plugin import AbstractResearchPlugin
 from mmr.config import Config
 from mmr.album import Album
 from mmr.track import Track
-from mmr.investigate.abstract_investigate import AbstractInvestigate
+from mmr.abstract_investigate import AbstractInvestigate
 
 import re
 
-class Investigate(AbstractInvestigate):
+class Regexp(AbstractResearchPlugin):
+    def setup(self):
+        self.investigate_class = RegexpInvestigate
+        self.about = {
+            "name": u"Regexp",
+            "short_description": u"",
+            "long_description": u"",
+        }
+
+class RegexpInvestigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('regexp', self._base_score_)
 

@@ -24,8 +24,7 @@
 """Contain InvestigateAlbum class"""
 
 from mmr.config import Config
-from mmr.investigate.loader import Loader
-
+from mmr.plugin import PluginManager
 
 class InvestigateAlbum(object):
     """This class is used to investigate on album field"""
@@ -52,10 +51,12 @@ class InvestigateAlbum(object):
         album.calculate_score()
         self.result_list.append(album)
 
-    def do_module(self, module_name):
+    def do_module(self, module):
         """lauch a job for a module"""
         if self.cb_module_start:
-            self.cb_module_start(module_name)
+            self.cb_module_start(module.about["name"])
+
+        module_name = module.about["name"]
 
         # prepare module configuration
         module_config = {}
@@ -67,21 +68,23 @@ class InvestigateAlbum(object):
         if self.config["score"].has_key(module_name):
             base_score = self.config["score"][module_name]
 
-        module = Loader.load_by_name(
-            module_name,
+        investigate = module.investigate(
             self.folder,
             self.result_list,
             module_config,
             base_score
         )
-        self.append(module.do_album())
+        self.append(investigate.do_album())
 
         if self.cb_module_end:
             self.cb_module_end(module_name)
 
     def investigate(self):
         """Lauch investigation"""
-        self.investigater_list = self.config['investigater']
-        for module_name in self.investigater_list:
-            self.do_module(module_name)
+        self.pluginmanager = PluginManager(self.config[u"pluginmanager"])
+        self.pluginmanager.ensure_path_list_in_sys_path()
+        self.pluginmanager.load_all()
+
+        for module in self.pluginmanager.available_research():
+            self.do_module(module)
 
