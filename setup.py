@@ -23,6 +23,24 @@
 
 import os
 from distutils.core import setup
+from distutils.cmd import Command
+
+import tests
+import unittest
+
+class TestCommand(Command):
+    description = "Run tests"
+    user_options = [("verbosity=", None, "set the verbosity of the tests")]
+
+    def initialize_options(self):
+        self.verbosity = 1
+
+    def finalize_options(self):
+        self.verbosity = int(self.verbosity)
+        
+    def run(self):
+        print self.verbosity
+        unittest.TextTestRunner(verbosity=self.verbosity).run(tests.all_tests)
 
 setup(
     name="mmr",
@@ -31,12 +49,14 @@ setup(
     author="MathGl",
     author_email="mathgl67@gmail.com",
     url="http://gitorious.com/pymmr",
+    cmdclass={"tests": TestCommand},
     packages=[
         "mmr",
-        os.path.join("mmr", "investigate"),
         os.path.join("mmr", "curses"),
         os.path.join("mmr", "gtk"),
-        os.path.join("mmr", "tags")
+        os.path.join("mmr", "tags"),
+        os.path.join("mmr", "plugins"),
+        os.path.join("mmr", "plugins", "research"),
     ],
     scripts=["gmmr", "pymmr", "cmmr"]
 )

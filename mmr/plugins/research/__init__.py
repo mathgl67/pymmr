@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# vi:ai:et:ts=2 sw=2
+# vi:ai:et:ts=4 sw=4
 #
 # -*- coding: utf8 -*-
 #
 # PyMmr My Music Renamer
-# Copyright (C) 2007  mathgl67@gmail.com
+# Copyright (C) 2007-2010  mathgl67@gmail.com
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,21 +20,3 @@
 #   with this program; if not, write to the Free Software Foundation, Inc.,
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
-import mmr
-import tests
-import unittest
-
-import sys
-from optparse import OptionParser
-
-parser = OptionParser()
-parser.add_option(
-  "-v", "--verbosity", dest="verbosity", default=1,
-  help="Set verbosity for unitest (default=1)",
-  type="int"
-)
-(options, args) = parser.parse_args(sys.argv)
-
-
-unittest.TextTestRunner(verbosity=options.verbosity).run(tests.all_tests)
