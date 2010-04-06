@@ -28,7 +28,7 @@ import functools
 
 def threaded(func):
     @functools.wraps(func)
-    def wrapper(*args, **args):
+    def wrapper(*args, **kargs):
         thread = threading.Thread(target=func, args=args, kwargs=kwargs)
         thread.start()
         return thread
