@@ -39,7 +39,6 @@ class TestCommand(Command):
         self.verbosity = int(self.verbosity)
         
     def run(self):
-        print self.verbosity
         unittest.TextTestRunner(verbosity=self.verbosity).run(tests.all_tests)
 
 setup(
