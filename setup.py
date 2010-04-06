@@ -28,6 +28,10 @@ from distutils.cmd import Command
 import tests
 import unittest
 
+# create cmdclass dict
+cmdclass = {}
+
+# add tests command
 class TestCommand(Command):
     description = "Run tests"
     user_options = [("verbosity=", None, "set the verbosity of the tests")]
@@ -41,6 +45,16 @@ class TestCommand(Command):
     def run(self):
         unittest.TextTestRunner(verbosity=self.verbosity).run(tests.all_tests)
 
+cmdclass["tests"] = TestCommand
+
+# add build_sphinx command if sphinx installed
+try:
+    from sphinx.setup_command import BuildDoc
+    cmdclass["build_sphinx"] = BuildDoc
+except ImportError as exception:
+    pass
+
+
 setup(
     name="mmr",
     version="0.1-alpha0",
@@ -48,7 +62,7 @@ setup(
     author="MathGl",
     author_email="mathgl67@gmail.com",
     url="http://gitorious.com/pymmr",
-    cmdclass={"tests": TestCommand},
+    cmdclass=cmdclass,
     packages=[
         "mmr",
         os.path.join("mmr", "curses"),
