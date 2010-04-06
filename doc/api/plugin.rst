@@ -1,0 +1,32 @@
+:mod:`mmr.plugin` -- Utilities 
+==============================
+
+Introduction
+------------
+
+.. automodule:: mmr.plugin
+
+Module Contents
+---------------
+
+Class :class:`AbstractPlugin`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: AbstractPlugin
+      :show-inheritance:
+      :members:
+
+Class :class:`AbstractResearchPlugin`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: AbstractResearchPlugin
+      :show-inheritance:
+      :members:
+
+Class :class:`PluginManager`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: PluginManager 
+      :show-inheritance:
+      :members:
+

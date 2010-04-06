@@ -21,41 +21,67 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""This module contains all related module stuff."""
+"""This module contains all plugin related stuff."""
 
 import os, sys
 
 from mmr.utils import DictProxy
 
 class AbstractPlugin(object):
+    """
+    This is the base class for plugin implementation.
+    """
+
+    type = None
+    about = {
+        "name": None,
+        "short_description": None,
+        "long_description": None,
+    }
+
     def __init__(self):
-        self.type = None
-        self.about = {
-            "name": None,
-            "short_description": None,
-            "long_description": None,
-        }
         self.setup()
 
     def available(self):
+        """
+        Check if the plugin is available on the host system. (alias check dependency)
+        @return True by default
+        """
         return True
 
     def setup(self):
-        pass
+        """
+        This fonction is called after the constructor. This is used to initialize the plugin.
+        """
 
 
 class AbstractResearchPlugin(AbstractPlugin):
-    def __init__(self):
-        self.priority = 0
-        self.investigate_class = None
-        super(AbstractResearchPlugin, self).__init__()
-        self.type = u"research"
+    """
+    This is the base class for research plugins.
+    """
+    priority = 0
+    investigate_class = None
+    type = u"research"
 
     def investigate(self, folder, album_list, config, base_score):
+        """
+        Create an investigate class for the plugin
+
+        :return: an instance of AbstractInvestigate.
+        """
         return self.investigate_class(folder, album_list, config, base_score)
 
 
 class PluginManager(DictProxy):
+    """
+    This class contains plugin loading system.
+
+    :param config: configuration values
+    :type config: :class:`dict`
+
+    :param values: the object can be pre-intialized
+    :type values: :class:`dict`
+    """
     def __init__(self, config={}, values={}):
         # call parent constructor
         super(PluginManager, self).__init__(values)
@@ -81,6 +107,9 @@ class PluginManager(DictProxy):
         return [True, u""]
     
     def load_all(self):
+        """
+        Load all plugin and store it in the dict
+        """
         plugin_list = self.pre_plugin_list()
         self.dict = {} # really needed??
         for path in self.config['path_list']:
@@ -89,6 +118,17 @@ class PluginManager(DictProxy):
                     self.dict[module_name] = self.load(module_path, module_name)
 
     def load(self, module_path, module_name):
+        """
+        Load a giving module an return it instance.
+
+        :param module_path: the module path (eg: my.research)
+        :type module_path: :class:`unicode`
+
+        :param module_name: the module name (eg: test)
+        :type module_name: :class:`unicode`
+
+        :return: None on errors, or an instance of :class:`AbstractPlugin`
+        """
         if module_path == u"":
             module_fullpath = module_name
         else:
@@ -113,11 +153,19 @@ class PluginManager(DictProxy):
         return module.__dict__[module_name.capitalize()]()
 
     def ensure_path_list_in_sys_path(self):
+        """
+        Make sure all plugins path are in the sys.path.
+        """
         for path in self.config["path_list"]:
             if not path in sys.path:
                 sys.path.append(path.encode(sys.getfilesystemencoding()))
 
     def available_research(self):
+        """
+        Retrieve all research plugins stored in dict and sort it by priority.
+
+        :return: A list of plugin.
+        """
         result = []
         # retrieve list
         for value in self.itervalues():
@@ -128,6 +176,12 @@ class PluginManager(DictProxy):
         return result
 
     def pre_plugin_list(self):
+        """
+        Create a list of plugin file by search for .py file in path_list.
+
+        :return: a list of module for a path.
+                eg : {path1: [[module_path1, module_name1], ... ]}
+        """
         result_dict = {}
         for path in self.config["path_list"]:
             result_dict[path] = [] 

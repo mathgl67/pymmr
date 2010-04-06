@@ -8,5 +8,6 @@ API
    file
    folder
    config
+   plugin
    utils
 

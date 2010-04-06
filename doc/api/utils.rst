@@ -4,7 +4,7 @@
 Introduction
 ------------
 
-.. automodule:: mmr.config
+.. automodule:: mmr.utils
 
 Module Contents
 ---------------
