@@ -180,9 +180,9 @@ class TestPluginManagerPrePluginList(TestPlugin):
         path = os.path.join(u"tests", u"data", u"plugins", u"three")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 3)
-        self.assertEquals(pl[path][0], [u"two", u"test2"])
-        self.assertEquals(pl[path][1], [u"three", u"test3"])
-        self.assertEquals(pl[path][2], [u"one", u"test1"])
+        self.assertTrue([u"two", u"test2"] in pl[path])
+        self.assertTrue([u"three", u"test3"] in pl[path])
+        self.assertTrue([u"one", u"test1"] in pl[path])
 
 class TestPluginManagerLoad(TestPluginManagerPrePluginList):
     def testOne(self):
