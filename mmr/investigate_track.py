@@ -25,8 +25,9 @@ from mmr.plugin import PluginManager
 from mmr.config import Config
 
 class InvestigateTrack:
-    def __init__(self, folder, config):
+    def __init__(self, folder, config, plugin_manager):
         self.config = config
+        self.plugin_manager = plugin_manager
         self._folder_ = folder
         self._results_ = {}
         self._init_result_()
@@ -48,11 +49,7 @@ class InvestigateTrack:
         return u"\n".join(lines)
 
     def investigate(self):
-        pluginmanager = PluginManager(self.config["pluginmanager"])
-        pluginmanager.ensure_path_list_in_sys_path()
-        pluginmanager.load_all()
-
-        for module in pluginmanager.available_research():
+        for module in self.plugin_manager.available_research():
             module_name = module.about["name"]
 
             #retrieve config ...

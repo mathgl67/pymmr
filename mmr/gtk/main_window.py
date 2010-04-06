@@ -28,6 +28,7 @@ import threading
 from mmr.folder import Folder
 from mmr.album import Album
 from mmr.config import Config
+from mmr.plugin import PluginManager
 from mmr.callback import Callback
 from mmr.investigate_album import InvestigateAlbum
 from mmr.investigate_track import InvestigateTrack
@@ -36,6 +37,7 @@ from mmr.gtk.folder_view import FolderView
 from mmr.gtk.album_view import AlbumView
 from mmr.gtk.tracks_investigation_view import TracksInvestigationView
 from mmr.gtk.tracks_view import TracksView
+from mmr.gtk.plugin_manager import PluginManagerDialog
 
 from fractions import Fraction
 
@@ -47,6 +49,11 @@ class MainWindow(object):
         self.__init_views__()
 
         self.config = config
+
+        self.plugin_manager = PluginManager(self.config["pluginmanager"])
+        self.plugin_manager.ensure_path_list_in_sys_path()
+        self.plugin_manager.load_all()
+
         self._cur_folder_iter_ = None
         self._statusbar_ctx_ = self._widgets_['statusbar'].get_context_id("StatusBar")
 
@@ -160,7 +167,8 @@ class MainWindow(object):
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(
                 config=self.config,
-                folder=folder
+                folder=folder,
+                plugin_manager=self.plugin_manager
             )
             investigate_album.cb_module_start = Callback(on_module_start, self)
             investigate_album.cb_module_end = Callback(on_module_end, self)
@@ -239,7 +247,8 @@ class MainWindow(object):
             folder = self._views_['folder'].get_folder(it)
             investigate_album = InvestigateAlbum(
                 config=self.config,
-                folder=folder
+                folder=folder,
+                plugin_manager=self.plugin_manager
             )
             investigate_album.investigate()
             investigate_album.sort()
@@ -247,3 +256,6 @@ class MainWindow(object):
 
         self._update_album_()
 
+    def on_menuitem_plugins_activate(self, widget, data=None):
+        plugin_manager_dialog = PluginManagerDialog(self.plugin_manager)
+        plugin_manager_dialog.show()

@@ -27,6 +27,7 @@ from optparse import OptionParser
 import mmr
 
 from mmr.config import Config
+from mmr.plugin import PluginManager
 from mmr.folder import Folder
 from mmr.investigate_album import InvestigateAlbum
 from mmr.investigate_track import InvestigateTrack
@@ -41,6 +42,7 @@ class Main:
         self.welcome()
         self.parse_args()
         self.load_config()
+        self.load_plugins()
         self.folder()
         self.test()
 
@@ -88,6 +90,11 @@ class Main:
         except:
             print 'could not load/parse config file (%s)' % self.options.config
             sys.exit(1)
+    
+    def load_plugins(self):
+        self.plugin_manager = PluginManager(self.config["pluginmanager"])
+        self.plugin_manager.ensure_path_list_in_sys_path()
+        self.plugin_manager.load_all()
 
     def folder(self):
         folder_path = unicode(self.args[0], sys.getfilesystemencoding())
@@ -107,7 +114,8 @@ class Main:
     def test(self):
         investigate_album = InvestigateAlbum(
             config=self.config,
-            folder=self.folder
+            folder=self.folder,
+            plugin_manager=self.plugin_manager
         )
         investigate_album.investigate()
         investigate_album.result_list.sort()
@@ -117,7 +125,8 @@ class Main:
 
         investigate_track = InvestigateTrack(
             folder=self.folder,
-            config=self.config
+            config=self.config,
+            plugin_manager=self.plugin_manager
         )
         investigate_track.investigate()
 

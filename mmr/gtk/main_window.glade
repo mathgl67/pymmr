@@ -38,8 +38,28 @@
             <child>
               <object class="GtkMenuItem" id="menuitem_display">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Affichage</property>
+                <property name="label" translatable="yes">_Display</property>
                 <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="menuitem_tools">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Tools</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="menu1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="menuitem_plugins">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Plugins</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_menuitem_plugins_activate"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>

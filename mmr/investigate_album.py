@@ -29,10 +29,11 @@ from mmr.plugin import PluginManager
 class InvestigateAlbum(object):
     """This class is used to investigate on album field"""
 
-    def __init__(self, config=None, folder=None):
+    def __init__(self, config=None, folder=None, plugin_manager=None):
         """Constructor"""
         self.config = config
         self.folder = folder
+        self.plugin_manager = plugin_manager
         self.result_list = []
         self.cb_module_start = None
         self.cb_module_end = None
@@ -81,10 +82,6 @@ class InvestigateAlbum(object):
 
     def investigate(self):
         """Lauch investigation"""
-        self.pluginmanager = PluginManager(self.config[u"pluginmanager"])
-        self.pluginmanager.ensure_path_list_in_sys_path()
-        self.pluginmanager.load_all()
-
-        for module in self.pluginmanager.available_research():
+        for module in self.plugin_manager.available_research():
             self.do_module(module)
 
