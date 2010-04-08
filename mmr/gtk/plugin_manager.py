@@ -27,43 +27,59 @@ import gobject
 class PluginManagerDialog(object):
     def __init__(self, plugin_manager):
         self.plugin_manager = plugin_manager
-        self.__init_builder__()
-        self.__init_window__()
-        self.__init_widgets__()
-        self.__init_views__()
+        self._init_builder()
+        self._init_widget()
+        self._init_view()
 
-    def __init_builder__(self):
+    def _init_builder(self):
         # init builder
-        self._interface_file_ = "mmr/gtk/plugin_manager.glade"
+        self._interface_file = "mmr/gtk/plugin_manager.glade"
         try:
-            self._builder_ = gtk.Builder()
-            self._builder_.add_from_file(self._interface_file_)
+            self._builder = gtk.Builder()
+            self._builder.add_from_file(self._interface_file)
+            self._builder.connect_signals(self)
         except:
             err = ErrorMessage("Cannot load interface file: %s" % (
-              self._interface_file_
+              self._interface_file
             ))
             err.display_and_exit()
 
-    def __init_window__(self):
-        self._window_ = self._builder_.get_object("plugin_manager")
-        self._builder_.connect_signals(self)
+    def _init_widget(self):
+        self.dialog = self._builder.get_object("dlg_plugin_manager")
+        self.view_plugin = self._builder.get_object("view_plugin")
+        self.model_plugin = self.view_plugin.get_model()
 
-    def __init_widgets__(self):
-        self._widgets_ = {
-            "plugin_list": self._builder_.get_object("plugin_list"),
-        }
+    def _init_view(self):
+        self.update_plugin()
 
-    def __init_views__(self):
-        self._views_ = {
-    		"plugin_manager": self._widgets_["plugin_list"].get_model(),
-        }
-        self._views_["plugin_manager"].clear()
+    def _gobj_from_plugin(self, plugin):
+        gobj = gobject.GObject()
+        gobj.set_data("plugin", plugin)
+        return gobj
+
+    def _gobj_to_plugin(self, gobj):
+        return gobj.get_data("plugin")
+
+    def _get_plugin_by_row(self, row):
+        return self._gobj_to_plugin(self.model_plugin.get_value(row.iter, 0))
+
+    def update_plugin(self):
+        self.model_plugin.clear()
         for (plugin_name, plugin) in self.plugin_manager.dict.iteritems():
-            row = [plugin.available(), plugin.about["name"], plugin.about["short_description"]]
-            self._views_["plugin_manager"].append(row)
+            row = [self._gobj_from_plugin(plugin), plugin.available(), plugin.about["name"], plugin.about["short_description"]]
+            self.model_plugin.append(row)
 
     # util
     def show(self):
-        self._window_.show()
+        self.dialog.show()
+   
+    def on_btn_cancel_clicked(self, widget, data=None):
+        self.dialog.destroy()
 
-    
+    def on_btn_okay_clicked(self, widget, data=None):
+        print "save..."
+        for row in self.model_plugin:
+            plugin = self._get_plugin_by_row(row)
+            print plugin
+
+        self.dialog.destroy()
