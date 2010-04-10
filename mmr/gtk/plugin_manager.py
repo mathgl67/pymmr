@@ -25,7 +25,8 @@ import gtk
 import gobject
 
 class PluginManagerDialog(object):
-    def __init__(self, plugin_manager):
+    def __init__(self, config, plugin_manager):
+        self.config = config
         self.plugin_manager = plugin_manager
         self._init_builder()
         self._init_widget()
@@ -65,21 +66,29 @@ class PluginManagerDialog(object):
 
     def update_plugin(self):
         self.model_plugin.clear()
-        for (plugin_name, plugin) in self.plugin_manager.dict.iteritems():
-            row = [self._gobj_from_plugin(plugin), plugin.available(), plugin.about["name"], plugin.about["short_description"]]
+        for (plugin_fullpath, plugin) in self.plugin_manager.dict.iteritems():
+            row = [self._gobj_from_plugin(plugin), self.plugin_manager.is_activate(plugin_fullpath), plugin.available(), plugin.about["name"], plugin.about["short_description"]]
             self.model_plugin.append(row)
 
     # util
     def show(self):
         self.dialog.show()
    
+    def on_cellrenderertoggle2_toggled(self, widget, row):
+        row = self.model_plugin[row]
+        plugin = self._get_plugin_by_row(row)
+
+        if self.plugin_manager.is_activate(plugin.fullpath):
+            self.plugin_manager.config["activate_list"].remove(plugin.fullpath)
+        else:
+            self.plugin_manager.config["activate_list"].append(plugin.fullpath)
+        self.update_plugin()
+        
+
     def on_btn_cancel_clicked(self, widget, data=None):
         self.dialog.destroy()
 
     def on_btn_okay_clicked(self, widget, data=None):
         print "save..."
-        for row in self.model_plugin:
-            plugin = self._get_plugin_by_row(row)
-            print plugin
-
+        self.config.save()
         self.dialog.destroy()

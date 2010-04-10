@@ -21,11 +21,73 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-"""This module contains all plugin related stuff."""
+"""
+This module contains all plugin related stuff.
+"""
 
 import os, sys
 
 from mmr.utils import DictProxy
+
+
+def get_plugin_fullpath(module_path, module_name):
+    """
+    Concatenate module_path with module_name
+
+    :param module_path: a module path (can be empty) (eg: research.my_own )
+    :type module_path: :class:`unicode`
+    
+    :param module_name: a module name (eg: plugin )
+    :type module_name: :class:`unicode`
+    
+    :return: a the fullpath. (eg: research.my_own.plugin)
+    :type: :class:`unicode`
+    """
+    if len(module_path) == 0:
+        module_fullpath = module_name
+    else:
+        module_fullpath = "%s.%s" % (
+            module_path,
+            module_name
+        )
+    return module_fullpath
+
+
+def get_plugin_path(fullpath):
+    """
+    Get plugin path for a given fullpath (eg: research.own.plugin => research.own)
+
+    :param fullpath: a plugin fullpath (eg: research.own.plugin)
+    :type fullpath: :class:`unicode`
+
+    :return: the plugin path (eg: research.own)
+    :type: :class:`unicode`
+    """
+    path_list = fullpath.split(".")
+    if len(path_list) == 1:
+        return u""
+
+    path_list = path_list[:-1]
+    path = ".".join(path_list)
+    
+    return path
+
+def get_plugin_name(fullpath):
+    """
+    Get plugin name for a given fullpath (eg: research.own.plugin => research.own)
+
+    :param fullpath: a plugin fullpath (eg: research.own.plugin)
+    :type fullpath: :class:`unicode`
+
+    :return: the plugin name (eg: plugin)
+    :type: :class:`unicode`
+    """
+    path_list = fullpath.split(".")
+    if len(path_list) == 1:
+        return fullpath
+
+    return path_list[-1:][0]
+
 
 class AbstractPlugin(object):
     """
@@ -110,47 +172,88 @@ class PluginManager(DictProxy):
         """
         Load all plugin and store it in the dict
         """
-        plugin_list = self.pre_plugin_list()
+        plugin_list = self._walk_for_plugin()
         self.dict = {} # really needed??
         for path in self.config['path_list']:
-            for (module_path, module_name) in plugin_list[path]:
-                if not module_name in self.config["black_list"]:
-                    self.dict[module_name] = self.load(module_path, module_name)
+            for fullpath in plugin_list[path]:
+                self.load(fullpath)
 
-    def load(self, module_path, module_name):
+    def is_in_black_list(self, fullpath):
         """
-        Load a giving module an return it instance.
+        Check if plugin is in black list
 
-        :param module_path: the module path (eg: my.research)
-        :type module_path: :class:`unicode`
+        :param fullpath: the fullpath (eg: research.a_plugin)
+        :type fullpath: :class:`unicode`
 
-        :param module_name: the module name (eg: test)
-        :type module_name: :class:`unicode`
-
-        :return: None on errors, or an instance of :class:`AbstractPlugin`
+        :return: False or True
         """
-        if module_path == u"":
-            module_fullpath = module_name
-        else:
-            module_fullpath = "%s.%s" % (
-                module_path,
-                module_name
-            )
+        # no black list set
+        if not self.config.has_key("black_list"):
+            return False
 
+        if not self.config["black_list"]:
+            return False
+
+        # search in black list
+        if fullpath in self.config["black_list"]:
+            return True
+
+        return False
+    
+    def is_activate(self, fullpath):
+        """
+        Check if plugin is activate
+
+        :param fullpath: the plugin full path (eg: research.own.plugin)
+        :type fullpath: :class:`unicode`
+
+        :return: True or False
+        """
+        if not self.config.has_key("activate_list"):
+            return False
+
+        if not self.config["activate_list"]:
+            return False
+
+        if fullpath in self.config["activate_list"]:
+            return True
+
+        return False
+
+    def load(self, fullpath):
+        """
+        Load a given plugin and store it in dict.
+
+        :param fullpath: the module path (eg: research.own.plugin)
+        :type fullpath: :class:`unicode`
+
+        :return: True or False
+        """
+        path = get_plugin_path(fullpath)
+        name = get_plugin_name(fullpath)
+
+        #check blacklist
+        if self.is_in_black_list(fullpath):
+            return False
+
+        # load
         module = __import__(
-            module_fullpath,
+            fullpath,
             globals(),
             locals(),
-            module_path.split('.')
+            path.split('.')
         )
 
         if not module:
-            return None
+            return False 
 
-        if not module.__dict__.has_key(module_name.capitalize()):
-            return None
+        if not module.__dict__.has_key(name.capitalize()):
+            return False
 
-        return module.__dict__[module_name.capitalize()]()
+        self.dict[fullpath] = module.__dict__[name.capitalize()]()
+        self.dict[fullpath].fullpath = fullpath
+
+        return True
 
     def ensure_path_list_in_sys_path(self):
         """
@@ -160,27 +263,46 @@ class PluginManager(DictProxy):
             if not path in sys.path:
                 sys.path.append(path.encode(sys.getfilesystemencoding()))
 
-    def available_research(self):
+    def find(self, plugin_type=None, activate=True, available=True):
         """
-        Retrieve all research plugins stored in dict and sort it by priority.
+        Retrieve a plugin list who meets some criteria.
+
+        :param plugin_type: if not set as None, the plugin must have same type as specified.
+        :type plugin_type: :class:`unicode`
+
+        :param activate: if set as True then the plugin must be activate
+        :type activate: :class:`boolean`
+
+        :param available: if set as True then the plugin must be available
+        :type available: :class:`boolean`
 
         :return: A list of plugin.
         """
         result = []
         # retrieve list
-        for value in self.itervalues():
-            if value.available() and value.type == "research":
-                result.append(value)
+        for(fullpath, plugin) in self.iteritems():
+            if available and not plugin.available():
+                continue
+
+            if activate and not self.is_activate(fullpath):
+                continue
+
+            if plugin_type and not plugin.type == plugin_type:
+                continue
+
+            result.append(plugin)
+
         # sort list by priority
-        result.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
+        result.sort(cmp=lambda x, y: cmp(x.priority, y.priority))
+
         return result
 
-    def pre_plugin_list(self):
+    def _walk_for_plugin(self):
         """
         Create a list of plugin file by search for .py file in path_list.
 
         :return: a list of module for a path.
-                eg : {path1: [[module_path1, module_name1], ... ]}
+                eg : {path1: [fullpath1, ... ]}
         """
         result_dict = {}
         for path in self.config["path_list"]:
@@ -206,7 +328,9 @@ class PluginManager(DictProxy):
                     # - import compatible
                     module_path = module_path.replace(os.path.sep, u".")
                     # store result in dict
-                    result_dict[path].append([module_path, module_name])
+                    result_dict[path].append(
+                        get_plugin_fullpath(module_path, module_name)
+                    )
 
         return result_dict
 

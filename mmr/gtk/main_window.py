@@ -162,7 +162,7 @@ class MainWindow(object):
             gobject.idle_add(widget.set_sensitive, False)
 
             self._widgets_['progressbar1'].set_fraction(0)
-            self.step = Fraction(1, len(self.config['investigater']))
+            self.step = Fraction(1, len(self.plugin_manager.find(u"research")))
 
             folder = self._views_['folder'].get_folder(self._cur_folder_iter_)
             investigate_album = InvestigateAlbum(
@@ -257,5 +257,5 @@ class MainWindow(object):
         self._update_album_()
 
     def on_menuitem_plugins_activate(self, widget, data=None):
-        plugin_manager_dialog = PluginManagerDialog(self.plugin_manager)
+        plugin_manager_dialog = PluginManagerDialog(self.config, self.plugin_manager)
         plugin_manager_dialog.show()

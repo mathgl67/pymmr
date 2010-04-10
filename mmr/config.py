@@ -66,14 +66,20 @@ class Config(DictProxy):
                 Loader=Loader
             )
             file.close()
+            self.previous_file = file_name
 
-    def save(self, file_name):
+    def save(self, file_name=None):
         """
-        Save configuration to a yaml file
+        Save configuration to a yaml file.
+        In case no file is given, the fonction take
+        the previous loaded file.
 
-        :param file_name: the yaml file
+        :param file_name: the yaml file (optional)
         :type file_name: :class:`unicode`
         """
+        if not file_name:
+            file_name = self.previous_file
+
         file = codecs.open(
             file_name,
             "w+",

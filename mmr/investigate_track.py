@@ -49,7 +49,7 @@ class InvestigateTrack:
         return u"\n".join(lines)
 
     def investigate(self):
-        for module in self.plugin_manager.available_research():
+        for module in self.plugin_manager.find(u"research"):
             module_name = module.about["name"]
 
             #retrieve config ...

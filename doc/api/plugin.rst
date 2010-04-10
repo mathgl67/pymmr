@@ -9,6 +9,13 @@ Introduction
 Module Contents
 ---------------
 
+Utils
+^^^^^
+
+.. autofunction:: get_plugin_fullpath
+.. autofunction:: get_plugin_path
+.. autofunction:: get_plugin_name
+
 Class :class:`AbstractPlugin`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

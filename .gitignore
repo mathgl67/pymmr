@@ -1,4 +1,4 @@
-doc/_build
+build/*
 pymmr.cfg
 .*.swp
 *.pyc

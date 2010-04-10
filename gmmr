@@ -25,4 +25,3 @@ from mmr.gtk.main import Main
 
 m = Main()
 m.run()
-

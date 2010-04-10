@@ -143,20 +143,21 @@ class TestPluginManagerValidateConfig(TestPlugin):
 
 
 class TestPluginManagerPrePluginList(TestPlugin):
-    def gen_config(self, path_list=[], black_list=[]):
+    def gen_config(self, path_list=[], black_list=[], activate_list=[]):
         return {
             "path_list": path_list,
             "black_list": black_list,
+            "activate_list": activate_list,
         }
 
-    def gen_pluginmanager(self, path_list=[], black_list=[]):
+    def gen_pluginmanager(self, path_list=[], black_list=[], activate_list=[]):
         return PluginManager(
-            config=self.gen_config(path_list, black_list)
+            config=self.gen_config(path_list, black_list, activate_list)
         )
 
     def gen_pre_pluginlist(self, path_list=[]):
         pm = self.gen_pluginmanager(path_list)
-        return pm.pre_plugin_list()
+        return pm._walk_for_plugin()
 
     def testDirectoryNotExists(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"none")
@@ -167,22 +168,22 @@ class TestPluginManagerPrePluginList(TestPlugin):
         path = os.path.join(u"tests", u"data", u"plugins", u"one")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 1)
-        self.assertEquals(pl[path][0], [u"", u"test1"])
+        self.assertTrue(u"test1" in pl[path])
     
     def testDirectoryContainsTwoFile(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"two")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 2)
-        self.assertEquals(pl[path][0], [u"", u"test1"])
-        self.assertEquals(pl[path][1], [u"", u"test2"])
+        self.assertTrue(u"test1" in pl[path])
+        self.assertTrue(u"test2" in pl[path])
 
     def testDirectoryContainsThreeFileRecurse(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"three")
         pl = self.gen_pre_pluginlist([path])
         self.assertEquals(len(pl[path]), 3)
-        self.assertTrue([u"two", u"test2"] in pl[path])
-        self.assertTrue([u"three", u"test3"] in pl[path])
-        self.assertTrue([u"one", u"test1"] in pl[path])
+        self.assertTrue(u"two.test2" in pl[path])
+        self.assertTrue(u"three.test3" in pl[path])
+        self.assertTrue(u"one.test1" in pl[path])
 
 class TestPluginManagerLoad(TestPluginManagerPrePluginList):
     def testOne(self):
@@ -199,9 +200,9 @@ class TestPluginManagerLoad(TestPluginManagerPrePluginList):
         pm.ensure_path_list_in_sys_path()
         pm.load_all()
         self.assertEquals(len(pm), 3)
-        self.assertTrue(pm.has_key('test1'))
-        self.assertTrue(pm.has_key('test2'))
-        self.assertTrue(pm.has_key('test3'))
+        self.assertTrue(pm.has_key('one.test1'))
+        self.assertTrue(pm.has_key('two.test2'))
+        self.assertTrue(pm.has_key('three.test3'))
 
     def testUnique(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"three")
@@ -211,11 +212,17 @@ class TestPluginManagerLoad(TestPluginManagerPrePluginList):
 
     def testWithBlackList(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"three")
-        pm = self.gen_pluginmanager([path], [u"test2"])
+        pm = self.gen_pluginmanager([path], [u"two.test2"])
         pm.ensure_path_list_in_sys_path()
         pm.load_all()
         self.assertEquals(len(pm), 2)
-        self.assertTrue(pm.has_key(u"test1"))
-        self.assertFalse(pm.has_key(u"test2"))
-        self.assertTrue(pm.has_key(u"test3"))
+        self.assertTrue(pm.has_key(u"one.test1"))
+        self.assertFalse(pm.has_key(u"two.test2"))
+        self.assertTrue(pm.has_key(u"three.test3"))
 
+    def testWithActivateList(self):
+        path = os.path.join(u"tests", u"data", u"plugins", u"three")
+        pm = self.gen_pluginmanager([path], [], [u"two.test2"])
+        self.assertFalse(pm.is_activate(u"one.test1"))
+        self.assertTrue(pm.is_activate(u"two.test2"))
+        self.assertFalse(pm.is_activate(u"three.test3"))

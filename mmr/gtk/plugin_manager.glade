@@ -6,6 +6,8 @@
     <columns>
       <!-- column-name plugin -->
       <column type="GObject"/>
+      <!-- column-name activate -->
+      <column type="gboolean"/>
       <!-- column-name available -->
       <column type="gboolean"/>
       <!-- column-name name -->
@@ -57,13 +59,25 @@
                 <property name="headers_clickable">False</property>
                 <property name="search_column">1</property>
                 <child>
+                  <object class="GtkTreeViewColumn" id="activate">
+                    <property name="title">Activate</property>
+                    <child>
+                      <object class="GtkCellRendererToggle" id="cellrenderertoggle2">
+                        <signal name="toggled" handler="on_cellrenderertoggle2_toggled"/>
+                      </object>
+                      <attributes>
+                        <attribute name="active">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkTreeViewColumn" id="cln_available">
                     <property name="title">Available</property>
                     <child>
                       <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
                       <attributes>
-                        <attribute name="activatable">1</attribute>
-                        <attribute name="active">1</attribute>
+                        <attribute name="active">2</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -74,7 +88,7 @@
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext1"/>
                       <attributes>
-                        <attribute name="text">2</attribute>
+                        <attribute name="text">3</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -85,7 +99,7 @@
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                       <attributes>
-                        <attribute name="text">3</attribute>
+                        <attribute name="text">4</attribute>
                       </attributes>
                     </child>
                   </object>

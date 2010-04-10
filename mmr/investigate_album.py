@@ -82,6 +82,6 @@ class InvestigateAlbum(object):
 
     def investigate(self):
         """Lauch investigation"""
-        for module in self.plugin_manager.available_research():
+        for module in self.plugin_manager.find(u"research"):
             self.do_module(module)
 
