@@ -65,12 +65,11 @@ setup(
     cmdclass=cmdclass,
     packages=[
         "mmr",
-        os.path.join("mmr", "curses"),
         os.path.join("mmr", "gtk"),
         os.path.join("mmr", "tags"),
         os.path.join("mmr", "plugins"),
         os.path.join("mmr", "plugins", "research"),
     ],
-    scripts=["gmmr", "pymmr", "cmmr"]
+    scripts=["gmmr", "pymmr"]
 )
 
