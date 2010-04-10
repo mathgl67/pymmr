@@ -54,6 +54,9 @@ class TestPlugin(unittest.TestCase):
                 TestPluginManagerPrePluginList
             ),
             unittest.TestLoader().loadTestsFromTestCase(
+                TestPluginManagerLoadAll
+            ),
+            unittest.TestLoader().loadTestsFromTestCase(
                 TestPluginManagerLoad
             ),
         ])
@@ -91,13 +94,27 @@ class TestAbstractResearchPluginConstructor(TestPlugin):
         self.assertNone(self.p.investigate_class)
 
 
-# plugin manager
-class TestPluginManagerConstructor(TestPlugin):
+# plugin manage
+class TestPluginManagerBase(TestPlugin):
+    def gen_config(self, path_list=[], black_list=[], activate_list=[]):
+        return {
+            "path_list": path_list,
+            "black_list": black_list,
+            "activate_list": activate_list,
+        }
+
+    def gen_pluginmanager(self, path_list=[], black_list=[], activate_list=[]):
+        return PluginManager(
+            config=self.gen_config(path_list, black_list, activate_list)
+        )
+
+    def gen_pre_pluginlist(self, path_list=[]):
+        pm = self.gen_pluginmanager(path_list)
+        return pm._walk_for_plugin()
+
+class TestPluginManagerConstructor(TestPluginManagerBase):
     def testDefaultType(self):
         pm = PluginManager()
-        self.assertIsInstance(pm, DictProxy)
-        self.assertIsInstance(pm.config, dict)
-        self.assertIsInstance(pm.dict, dict)
 
     def testDefaultValue(self):
         pm = PluginManager()
@@ -116,7 +133,7 @@ class TestPluginManagerConstructor(TestPlugin):
         pm2 = PluginManager()
         self.assertNotEquals(pm1, pm2)
 
-class TestPluginManagerValidateConfig(TestPlugin):
+class TestPluginManagerValidateConfig(TestPluginManagerBase):
     def testConfigInstance(self):
         pm = PluginManager(config=None)
         (status, message) = pm.validate_config()
@@ -142,23 +159,7 @@ class TestPluginManagerValidateConfig(TestPlugin):
         self.assertEquals(message, u"")
 
 
-class TestPluginManagerPrePluginList(TestPlugin):
-    def gen_config(self, path_list=[], black_list=[], activate_list=[]):
-        return {
-            "path_list": path_list,
-            "black_list": black_list,
-            "activate_list": activate_list,
-        }
-
-    def gen_pluginmanager(self, path_list=[], black_list=[], activate_list=[]):
-        return PluginManager(
-            config=self.gen_config(path_list, black_list, activate_list)
-        )
-
-    def gen_pre_pluginlist(self, path_list=[]):
-        pm = self.gen_pluginmanager(path_list)
-        return pm._walk_for_plugin()
-
+class TestPluginManagerPrePluginList(TestPluginManagerBase):
     def testDirectoryNotExists(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"none")
         pl = self.gen_pre_pluginlist([path])
@@ -185,7 +186,22 @@ class TestPluginManagerPrePluginList(TestPlugin):
         self.assertTrue(u"three.test3" in pl[path])
         self.assertTrue(u"one.test1" in pl[path])
 
-class TestPluginManagerLoad(TestPluginManagerPrePluginList):
+class TestPluginManagerLoad(TestPluginManagerBase):
+    def testOne(self):
+        path = os.path.join(u"tests", u"data", u"plugins", u"one")
+        pm = self.gen_pluginmanager([path])
+        pm.ensure_path_list_in_sys_path()
+        pm.load("test1")
+        self.assertTrue(pm.has_key("test1"))
+
+    def testThree(self):
+        path = os.path.join(u"tests", u"data", u"plugins", u"three")
+        pm = self.gen_pluginmanager([path])
+        pm.ensure_path_list_in_sys_path()
+        pm.load("one.test1")
+        self.assertTrue(pm.has_key("one.test1"))
+
+class TestPluginManagerLoadAll(TestPluginManagerBase):
     def testOne(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"one")
         pm = self.gen_pluginmanager([path])
