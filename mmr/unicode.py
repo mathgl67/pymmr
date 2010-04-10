@@ -22,9 +22,7 @@
 #
 
 import locale
-from os import path
 import sys
-from codecs import BOM_UTF8, BOM_UTF16_LE, BOM_UTF16_BE
 
 def _getTerminalCharset():
     """

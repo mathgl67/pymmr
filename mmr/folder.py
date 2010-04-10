@@ -23,7 +23,6 @@
 
 """This file contains all related Folder stuff"""
 
-import sys
 import os
 import mmr.file
 

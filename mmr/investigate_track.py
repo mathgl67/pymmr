@@ -21,9 +21,6 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mmr.plugin import PluginManager
-from mmr.config import Config
-
 class InvestigateTrack:
     def __init__(self, folder, config, plugin_manager):
         self.config = config

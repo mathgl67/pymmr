@@ -21,8 +21,6 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from mmr.config import Config
-
 class Track:
     def __init__(self, investigater, base_score):
         self._investigater_ = investigater

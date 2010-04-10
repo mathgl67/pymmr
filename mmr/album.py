@@ -23,8 +23,6 @@
 
 """This file contain the Album class"""
 
-from mmr.config import Config
-
 class Album:
     """
     This represente an album. Contains informations like

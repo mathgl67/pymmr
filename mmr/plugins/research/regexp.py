@@ -22,7 +22,6 @@
 #
 
 from mmr.plugin import AbstractResearchPlugin
-from mmr.config import Config
 from mmr.album import Album
 from mmr.track import Track
 from mmr.abstract_investigate import AbstractInvestigate

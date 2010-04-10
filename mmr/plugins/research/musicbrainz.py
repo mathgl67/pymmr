@@ -23,7 +23,6 @@
 
 from mmr.plugin import AbstractResearchPlugin 
 from mmr.album import Album
-from mmr.track import Track
 from mmr.abstract_investigate import AbstractInvestigate
 
 class Musicbrainz(AbstractResearchPlugin):

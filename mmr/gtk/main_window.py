@@ -27,11 +27,9 @@ import threading
 
 from mmr.folder import Folder
 from mmr.album import Album
-from mmr.config import Config
 from mmr.plugin import PluginManager
 from mmr.callback import Callback
 from mmr.investigate_album import InvestigateAlbum
-from mmr.investigate_track import InvestigateTrack
 from mmr.gtk.error_message import ErrorMessage
 from mmr.gtk.folder_view import FolderView
 from mmr.gtk.album_view import AlbumView

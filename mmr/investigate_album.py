@@ -23,9 +23,6 @@
 
 """Contain InvestigateAlbum class"""
 
-from mmr.config import Config
-from mmr.plugin import PluginManager
-
 class InvestigateAlbum(object):
     """This class is used to investigate on album field"""
 
