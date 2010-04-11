@@ -22,7 +22,7 @@
 #
 
 import unittest
-import os
+import os, sys
 from mmr.utils import DictProxy
 from mmr.plugin import AbstractPlugin, AbstractResearchPlugin, PluginManager, get_plugin_fullpath, get_plugin_path
 
@@ -149,6 +149,13 @@ class TestPluginManagerConstructor(TestPluginManagerBase):
         pm2 = PluginManager()
         self.assertNotEquals(pm1, pm2)
 
+    # this function is not in the good place
+    def testEnsurePath(self):
+        path = os.path.join("plugins", "path")
+        pm1 = self.gen_pluginmanager([path])
+        pm1.ensure_path_list_in_sys_path()
+        self.assertTrue(path in sys.path)
+    
 class TestPluginManagerValidateConfig(TestPluginManagerBase):
     def testConfigInstance(self):
         pm = PluginManager(config=None)
