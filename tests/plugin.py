@@ -35,31 +35,20 @@ class TestPlugin(unittest.TestCase):
 
     @staticmethod
     def suite():
-        return unittest.TestSuite([
-            # abstract plugin
-            unittest.TestLoader().loadTestsFromTestCase(
-                TestAbstractPluginConstructor
-            ),
-            unittest.TestLoader().loadTestsFromTestCase(
-                TestAbstractResearchPluginConstructor
-            ),
-            # plugin manager
-            unittest.TestLoader().loadTestsFromTestCase(
-                TestPluginManagerConstructor
-            ),
-            unittest.TestLoader().loadTestsFromTestCase(
-                TestPluginManagerValidateConfig
-            ),
-            unittest.TestLoader().loadTestsFromTestCase(
-                TestPluginManagerPrePluginList
-            ),
-            unittest.TestLoader().loadTestsFromTestCase(
-                TestPluginManagerLoadAll
-            ),
-            unittest.TestLoader().loadTestsFromTestCase(
-                TestPluginManagerLoad
-            ),
-        ])
+        classes = [
+            TestAbstractPluginConstructor,
+            TestAbstractResearchPluginConstructor,
+            TestPluginManagerConstructor,
+            TestPluginManagerValidateConfig,
+            TestPluginManagerWalkForPlugin,
+            TestPluginManagerLoad,
+            TestPluginManagerLoadAll,
+        ]
+        tests = []
+        for cls in classes:
+            tests.append(unittest.TestLoader().loadTestsFromTestCase(cls))
+
+        return unittest.TestSuite(tests)
 
 # abstract plugin
 class TestAbstractPluginConstructor(TestPlugin):
@@ -159,7 +148,7 @@ class TestPluginManagerValidateConfig(TestPluginManagerBase):
         self.assertEquals(message, u"")
 
 
-class TestPluginManagerPrePluginList(TestPluginManagerBase):
+class TestPluginManagerWalkForPlugin(TestPluginManagerBase):
     def testDirectoryNotExists(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"none")
         pl = self.gen_pre_pluginlist([path])
