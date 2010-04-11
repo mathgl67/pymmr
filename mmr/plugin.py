@@ -87,13 +87,16 @@ class AbstractPlugin(object):
     def available(self):
         """
         Check if the plugin is available on the host system. (alias check dependency)
-        @return True by default
+                
+        :return: True or False
+        :type: :class:`boolean`
         """
         return True
 
     def setup(self):
         """
-        This fonction is called after the constructor. This is used to initialize the plugin.
+        This fonction is called after the constructor.
+        This is used to initialize the plugin.
         """
 
 
@@ -108,7 +111,8 @@ class AbstractResearchPlugin(AbstractPlugin):
         """
         Create an investigate class for the plugin
 
-        :return: an instance of AbstractInvestigate.
+        :return: an instance of the plugin investigate class.
+        :type: :class:`AbstractInvestigate`
         """
         return self.investigate_class(folder, album_list, config, base_score)
 
@@ -165,6 +169,7 @@ class PluginManager(DictProxy):
         :type fullpath: :class:`unicode`
 
         :return: False or True
+        :type: :class:`boolean`
         """
         # no black list set
         if not self.config.has_key("black_list"):
@@ -187,6 +192,7 @@ class PluginManager(DictProxy):
         :type fullpath: :class:`unicode`
 
         :return: True or False
+        :type: :class:`boolean`
         """
         if not self.config.has_key("activate_list"):
             return False
@@ -207,6 +213,7 @@ class PluginManager(DictProxy):
         :type fullpath: :class:`unicode`
 
         :return: True or False
+        :type: :class:`boolean`
         """
         path = get_plugin_path(fullpath)
 
@@ -258,7 +265,8 @@ class PluginManager(DictProxy):
         :param available: if set as True then the plugin must be available
         :type available: :class:`boolean`
 
-        :return: A list of plugin.
+        :return: A list of plugins who meets criteria.
+        :type: :class:`list` of :class:`AbstractPlugin`
         """
         result = []
         # retrieve list

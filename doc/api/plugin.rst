@@ -1,5 +1,5 @@
-:mod:`mmr.plugin` -- Utilities 
-==============================
+:mod:`mmr.plugin` -- Plugin related stuff 
+=========================================
 
 Introduction
 ------------
