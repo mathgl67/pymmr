@@ -78,6 +78,9 @@ class PluginManagerDialog(object):
         row = self.model_plugin[row]
         plugin = self._get_plugin_by_row(row)
 
+        if not plugin.available():
+            return
+
         if self.plugin_manager.is_activate(plugin.fullpath):
             self.plugin_manager.config["activate_list"].remove(plugin.fullpath)
         else:
