@@ -30,27 +30,23 @@ import os, sys
 from mmr.utils import DictProxy
 
 
-def get_plugin_fullpath(module_path, module_name):
+def get_plugin_fullpath(path, name):
     """
-    Concatenate module_path with module_name
+    Concatenate path and name (import style).
 
-    :param module_path: a module path (can be empty) (eg: research.my_own )
-    :type module_path: :class:`unicode`
+    :param path: a module path (can be empty) (eg: research.my_own )
+    :type path: :class:`unicode`
     
-    :param module_name: a module name (eg: plugin )
-    :type module_name: :class:`unicode`
+    :param name: a module name (eg: plugin )
+    :type name: :class:`unicode`
     
     :return: a the fullpath. (eg: research.my_own.plugin)
     :type: :class:`unicode`
     """
-    if len(module_path) == 0:
-        module_fullpath = module_name
-    else:
-        module_fullpath = "%s.%s" % (
-            module_path,
-            module_name
-        )
-    return module_fullpath
+    if len(path) == 0:
+        return name
+
+    return "%s.%s" % (path, name)
 
 
 def get_plugin_path(fullpath):
@@ -224,7 +220,7 @@ class PluginManager(DictProxy):
         """
         Load a given plugin and store it in dict.
 
-        :param fullpath: the module path (eg: research.own.plugin)
+        :param fullpath: the fullpath (eg: research.own.plugin)
         :type fullpath: :class:`unicode`
 
         :return: True or False
