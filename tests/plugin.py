@@ -24,7 +24,7 @@
 import unittest
 import os
 from mmr.utils import DictProxy
-from mmr.plugin import AbstractPlugin, AbstractResearchPlugin, PluginManager
+from mmr.plugin import AbstractPlugin, AbstractResearchPlugin, PluginManager, get_plugin_fullpath, get_plugin_path
 
 class TestPlugin(unittest.TestCase):
     def assertNone(self, var):
@@ -38,6 +38,7 @@ class TestPlugin(unittest.TestCase):
         classes = [
             TestAbstractPluginConstructor,
             TestAbstractResearchPluginConstructor,
+            TestPluginBaseFunction,
             TestPluginManagerConstructor,
             TestPluginManagerValidateConfig,
             TestPluginManagerWalkForPlugin,
@@ -82,8 +83,33 @@ class TestAbstractResearchPluginConstructor(TestPlugin):
         self.assertEquals(self.p.priority, 0)
         self.assertNone(self.p.investigate_class)
 
+# base function
+class TestPluginBaseFunction(TestPlugin):
+    def testGetPluginFullpath(self):
+        data = [
+            {"path": u"", "name": u"test", "fullpath": u"test"},
+            {"path": u"test", "name": u"test", "fullpath": u"test.test"},
+            {"path": u"test.test2", "name": u"test3", "fullpath": u"test.test2.test3"},
+        ]
+        for test in data:
+            self.assertEquals(
+                test["fullpath"],
+                get_plugin_fullpath(test["path"], test["name"])
+            )
 
-# plugin manage
+    def testGetPluginPath(self):
+        data = [
+            {"fullpath": u"research.my.plugin", "path": u"research.my"},
+            {"fullpath": u"plugin", "path": u""},
+            {"fullpath": u"my.plugin", "path": u"my"},
+        ]
+        for test in data:
+            self.assertEquals(
+                test["path"],
+                get_plugin_path(test["fullpath"])
+            )
+
+# Plugin manager
 class TestPluginManagerBase(TestPlugin):
     def gen_config(self, path_list=[], black_list=[], activate_list=[]):
         return {
