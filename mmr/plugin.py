@@ -74,6 +74,7 @@ class AbstractPlugin(object):
     """
 
     type = None
+    priority = 0
     about = {
         "name": None,
         "short_description": None,
@@ -100,7 +101,6 @@ class AbstractResearchPlugin(AbstractPlugin):
     """
     This is the base class for research plugins.
     """
-    priority = 0
     investigate_class = None
     type = u"research"
 
@@ -241,8 +241,9 @@ class PluginManager(DictProxy):
         Make sure all plugins path are in the sys.path.
         """
         for path in self.config["path_list"]:
+            path = path.encode(sys.getfilesystemencoding())
             if not path in sys.path:
-                sys.path.append(path.encode(sys.getfilesystemencoding()))
+                sys.path.append(path)
 
     def find(self, plugin_type=None, activate=True, available=True):
         """
@@ -262,13 +263,13 @@ class PluginManager(DictProxy):
         result = []
         # retrieve list
         for(fullpath, plugin) in self.iteritems():
+            if plugin_type and not plugin.type == plugin_type:
+                continue
+
             if available and not plugin.available():
                 continue
 
             if activate and not self.is_activate(fullpath):
-                continue
-
-            if plugin_type and not plugin.type == plugin_type:
                 continue
 
             result.append(plugin)

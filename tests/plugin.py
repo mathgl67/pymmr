@@ -44,6 +44,7 @@ class TestPlugin(unittest.TestCase):
             TestPluginManagerWalkForPlugin,
             TestPluginManagerLoad,
             TestPluginManagerLoadAll,
+            TestPluginManagerFind,
         ]
         tests = []
         for cls in classes:
@@ -224,7 +225,7 @@ class TestPluginManagerLoadAll(TestPluginManagerBase):
         pm.load_all()
         self.assertTrue(pm.has_key('test1'))
         self.assertIsInstance(pm['test1'], AbstractPlugin)
-
+ 
     def testThree(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"three")
         pm = self.gen_pluginmanager([path])
@@ -246,6 +247,7 @@ class TestPluginManagerLoadAll(TestPluginManagerBase):
         pm = self.gen_pluginmanager([path], [u"two.test2"])
         pm.ensure_path_list_in_sys_path()
         pm.load_all()
+ 
         self.assertEquals(len(pm), 2)
         self.assertTrue(pm.has_key(u"one.test1"))
         self.assertFalse(pm.has_key(u"two.test2"))
@@ -257,3 +259,79 @@ class TestPluginManagerLoadAll(TestPluginManagerBase):
         self.assertFalse(pm.is_activate(u"one.test1"))
         self.assertTrue(pm.is_activate(u"two.test2"))
         self.assertFalse(pm.is_activate(u"three.test3"))
+
+class TestPluginManagerFind(TestPluginManagerBase):
+    def setUp(self):
+        path = os.path.join(u"tests", u"data", u"plugins", u"find")
+        activate = [ "t1p2", "t2p1" ]
+        self.pm = self.gen_pluginmanager([path], [], activate)
+        self.pm.ensure_path_list_in_sys_path()
+        self.pm.load_all()
+
+    def testTypeNotExist(self):
+        pl = self.pm.find(
+            plugin_type=u"type_not_exists",
+            activate=False,
+            available=False
+        )
+        self.assertEquals(len(pl), 0)
+
+    def testType1All(self):
+        pl = self.pm.find(
+            plugin_type=u"type1",
+            activate=False,
+            available=False
+        )
+        self.assertEquals(len(pl), 2)
+        self.assertTrue(self.pm["t1p1a"] in pl)
+        self.assertTrue(self.pm["t1p2"] in pl)
+
+    def testType2All(self):
+        pl = self.pm.find(
+            plugin_type=u"type2",
+            activate=False,
+            available=False
+        )
+        self.assertEquals(len(pl), 2)
+        self.assertTrue(self.pm["t2p1"] in pl)
+        self.assertTrue(self.pm["t2p2a"] in pl)
+
+    def testType1Available(self):
+        pl = self.pm.find(
+            plugin_type=u"type1",
+            activate=False,
+            available=True
+        )
+        self.assertEquals(len(pl), 1)
+        self.assertTrue(self.pm["t1p1a"] in pl)
+        self.assertFalse(self.pm["t1p2"] in pl)
+
+    def testType2Available(self):
+        pl = self.pm.find(
+            plugin_type=u"type2",
+            activate=False,
+            available=True
+        )
+        self.assertEquals(len(pl), 1)
+        self.assertTrue(self.pm["t2p2a"] in pl)
+        self.assertFalse(self.pm["t2p1"] in pl)
+
+    def testType1Activate(self):
+        pl = self.pm.find(
+            plugin_type=u"type1",
+            activate=True,
+            available=False
+        )
+        self.assertEquals(len(pl), 1)
+        self.assertTrue(self.pm["t1p2"] in pl)
+        self.assertFalse(self.pm["t1p1a"] in pl)
+
+    def testType2Activate(self):
+        pl = self.pm.find(
+            plugin_type=u"type2",
+            activate=True,
+            available=False
+        )
+        self.assertEquals(len(pl), 1)
+        self.assertTrue(self.pm["t2p1"] in pl)
+        self.assertFalse(self.pm["t2p2a"] in pl)
