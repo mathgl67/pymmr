@@ -35,7 +35,7 @@ Plugins source code
              }
           def available(self):
               return True
-          
+ >>> plugin_class=Plugin1
 
 *plugin2.py*
 
@@ -50,6 +50,7 @@ Plugins source code
              }
          def available(self):
              return False
+ >>> plugin_class=Plugin2
 
 Load and use a plugin
 ^^^^^^^^^^^^^^^^^^^^^
