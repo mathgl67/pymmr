@@ -27,8 +27,9 @@ ________________________________________________________________________________
 ----> BASE <--------------------------------------------------------------------
 
  [ ] Switch to GPL v3
- [ ] Remove curses draft (it's not a priority)
+ [X] Remove curses draft (it's not a priority)
  [ ] Rewrite investigation as research
+ [X] Rewrite plugin manager
  [ ] Delete registry ?
  [ ] Missing metadata
      [ ] Album
@@ -59,6 +60,7 @@ ________________________________________________________________________________
      [ ] Make use of the registry ?
      [ ] Use a combobox for genre entry
  [ ] Correct global investigation button
+ [W] pluginmanager
 
 ----> PLUGINS <-----------------------------------------------------------------
 
