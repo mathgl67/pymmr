@@ -35,3 +35,6 @@ class Test3(AbstractPlugin):
     def available(self):
         return True
 
+
+plugin_class=Test3
+

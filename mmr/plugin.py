@@ -68,23 +68,6 @@ def get_plugin_path(fullpath):
     
     return path
 
-def get_plugin_name(fullpath):
-    """
-    Get plugin name for a given fullpath (eg: research.own.plugin => research.own)
-
-    :param fullpath: a plugin fullpath (eg: research.own.plugin)
-    :type fullpath: :class:`unicode`
-
-    :return: the plugin name (eg: plugin)
-    :type: :class:`unicode`
-    """
-    path_list = fullpath.split(".")
-    if len(path_list) == 1:
-        return fullpath
-
-    return path_list[-1:][0]
-
-
 class AbstractPlugin(object):
     """
     This is the base class for plugin implementation.
@@ -226,7 +209,6 @@ class PluginManager(DictProxy):
         :return: True or False
         """
         path = get_plugin_path(fullpath)
-        name = get_plugin_name(fullpath)
 
         #check blacklist
         if self.is_in_black_list(fullpath):
@@ -243,10 +225,13 @@ class PluginManager(DictProxy):
         if not module:
             return False 
 
-        if not module.__dict__.has_key(name.capitalize()):
+        if not module.__dict__.has_key("plugin_class"):
             return False
 
-        self.dict[fullpath] = module.__dict__[name.capitalize()]()
+        if not module.plugin_class:
+            return False
+
+        self.dict[fullpath] = module.plugin_class()
         self.dict[fullpath].fullpath = fullpath
 
         return True

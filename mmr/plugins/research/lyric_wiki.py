@@ -26,7 +26,7 @@ from mmr.album import Album
 from mmr.track import Track
 from mmr.abstract_investigate import AbstractInvestigate
 
-class Lyric_wiki(AbstractResearchPlugin):
+class LyricWiki(AbstractResearchPlugin):
     def setup(self):
         self.investigate_class = LyricWikiInvestigate
         self.about = {
@@ -42,6 +42,8 @@ class Lyric_wiki(AbstractResearchPlugin):
         except ImportError as exception:
             return False
         return True
+
+plugin_class=LyricWiki
 
 class LyricWikiInvestigate(AbstractInvestigate):
     def _set_up_(self):

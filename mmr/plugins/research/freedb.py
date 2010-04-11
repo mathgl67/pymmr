@@ -42,6 +42,8 @@ class Freedb(AbstractResearchPlugin):
             return False
         return True
 
+plugin_class=Freedb
+
 class FreedbInvestigate(AbstractInvestigate):
     def _set_up_(self):
         import MySQLdb

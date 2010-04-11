@@ -37,6 +37,8 @@ class Regexp(AbstractResearchPlugin):
             "long_description": u"",
         }
 
+plugin_class=Regexp
+
 class RegexpInvestigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('regexp', self._base_score_)

@@ -36,6 +36,8 @@ class Tag(AbstractResearchPlugin):
             "long_description": u"",
         }
 
+plugin_class=Tag
+
 class TagInvestigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('tag', self._base_score_)

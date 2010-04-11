@@ -36,6 +36,8 @@ class Mix(AbstractResearchPlugin):
         }
         self.priority = 20
 
+plugin_class=Mix
+
 class MixInvestigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('mix', self._base_score_)

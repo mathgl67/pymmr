@@ -42,6 +42,8 @@ class Musicbrainz(AbstractResearchPlugin):
             return False
         return True
 
+plugin_class=Musicbrainz
+
 class MusicbrainzInvestigate(AbstractInvestigate):
     def _set_up_(self):
         self._album_ = Album('musicbrainz', self._base_score_)
