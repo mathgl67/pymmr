@@ -24,6 +24,7 @@
 import gtk
 import gobject
 import threading
+import copy
 
 from mmr.folder import Folder
 from mmr.album import Album
@@ -48,7 +49,7 @@ class MainWindow(object):
 
         self.config = config
 
-        self.plugin_manager = PluginManager(self.config["pluginmanager"])
+        self.plugin_manager = PluginManager(copy.deepcopy(self.config["pluginmanager"]))
         self.plugin_manager.ensure_path_list_in_sys_path()
         self.plugin_manager.load_all()
 

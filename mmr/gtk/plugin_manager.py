@@ -21,6 +21,7 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+import copy
 import gtk
 import gobject
 
@@ -89,9 +90,13 @@ class PluginManagerDialog(object):
         
 
     def on_btn_cancel_clicked(self, widget, data=None):
+        print "restore..."
+        # restore config from config file
+        self.plugin_manager.config = copy.deepcopy(self.config["pluginmanager"])
         self.dialog.destroy()
 
     def on_btn_okay_clicked(self, widget, data=None):
         print "save..."
+        self.config["pluginmanager"] = copy.deepcopy(self.plugin_manager.config)
         self.config.save()
         self.dialog.destroy()
