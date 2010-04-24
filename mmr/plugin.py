@@ -27,9 +27,6 @@ This module contains all plugin related stuff.
 
 import os, sys
 
-from mmr.utils import DictProxy
-
-
 def get_plugin_fullpath(path, name):
     """
     Concatenate path and name (import style).
@@ -117,7 +114,7 @@ class AbstractResearchPlugin(AbstractPlugin):
         return self.investigate_class(folder, album_list, config, base_score)
 
 
-class PluginManager(DictProxy):
+class PluginManager(dict):
     """
     This class contains plugin loading system.
 
@@ -156,7 +153,7 @@ class PluginManager(DictProxy):
         Load all plugin and store it in the dict
         """
         plugin_list = self._walk_for_plugin()
-        self.dict = {} # really needed??
+        self.clear()
         for path in self.config['path_list']:
             for fullpath in plugin_list[path]:
                 self.load(fullpath)
@@ -238,8 +235,8 @@ class PluginManager(DictProxy):
         if not module.plugin_class:
             return False
 
-        self.dict[fullpath] = module.plugin_class()
-        self.dict[fullpath].fullpath = fullpath
+        self[fullpath] = module.plugin_class()
+        self[fullpath].fullpath = fullpath
 
         return True
 

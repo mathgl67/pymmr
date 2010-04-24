@@ -135,7 +135,7 @@ class TestPluginManagerConstructor(TestPluginManagerBase):
     def testDefaultValue(self):
         pm = PluginManager()
         self.assertEquals(pm.config, {})
-        self.assertEquals(pm.dict, {})
+        self.assertEquals(pm, {})
 
     def testSetConfig(self):
         config = { "test": True }
@@ -143,11 +143,6 @@ class TestPluginManagerConstructor(TestPluginManagerBase):
         self.assertIsInstance(pm.config, dict)
         self.assertEquals(pm.config, config)
         self.assertEquals(pm.config['test'], True)
-
-    def testNotSingleton(self):
-        pm1 = PluginManager()
-        pm2 = PluginManager()
-        self.assertNotEquals(pm1, pm2)
 
     # this function is not in the good place
     def testEnsurePath(self):
@@ -242,12 +237,6 @@ class TestPluginManagerLoadAll(TestPluginManagerBase):
         self.assertTrue(pm.has_key('one.test1'))
         self.assertTrue(pm.has_key('two.test2'))
         self.assertTrue(pm.has_key('three.test3'))
-
-    def testUnique(self):
-        path = os.path.join(u"tests", u"data", u"plugins", u"three")
-        pm1 = self.gen_pluginmanager([path], [u"test2"])
-        pm2 = self.gen_pluginmanager([path], [u"test2"])
-        self.assertNotEquals(pm1, pm2)
 
     def testWithBlackList(self):
         path = os.path.join(u"tests", u"data", u"plugins", u"three")

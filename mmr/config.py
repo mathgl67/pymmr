@@ -40,9 +40,8 @@ except ImportError:
 
 import sys
 import codecs
-from mmr.utils import DictProxy
 
-class Config(DictProxy):
+class Config(dict):
     """
     This class is used for configutation operation
     ( Loading, saving, accessing configuration values ).
@@ -61,9 +60,12 @@ class Config(DictProxy):
             sys.getfilesystemencoding()
         )
         if file:
-            self.dict = yaml.load(
-                file.read(),
-                Loader=Loader
+            self.clear()
+            self.update(
+                yaml.load(
+                    file.read(),
+                    Loader=Loader
+                )
             )
             file.close()
             self.previous_file = file_name
@@ -86,7 +88,7 @@ class Config(DictProxy):
             sys.getfilesystemencoding()
         )
         yaml.dump(
-            self.dict,
+            self,
             file,
             Dumper=Dumper,
             default_flow_style=False
