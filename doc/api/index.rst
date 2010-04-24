@@ -9,5 +9,4 @@ API
    folder
    config
    plugin
-   utils
 
