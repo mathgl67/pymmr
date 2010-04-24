@@ -49,13 +49,17 @@ class BaseFile(object):
 
     def __init__(self, name=None, path=None, extension=None, parent=None):
         """See class documentation"""
+        self.name = name
         self.path = path
         self.extension = extension
         self.parent = parent
 
     def __repr__(self):
         """Return representation of file"""
-        return  u"<File name='%(name)s' extension='%(extension)s' path='%(path)s' />" % self.get_dict()
+        return  "".join(
+            [u"<File name='%(name)s' extension='%(extension)s' ",
+             u"path='%(path)s' />"]
+        ) % self.get_dict()
 
     def get_dict(self):
         """Return a dict who dump all object data"""
@@ -145,15 +149,11 @@ def factory(fullpath):
     if not len(splitext[1]) == 0:
         extension = splitext[1]
         if extension in ext_class.keys():
-            file_obj = ext_class[extension]()
+            file_obj = ext_class[extension](name, path, extension)
 
     # else create a default object
     if not file_obj:
-        file_obj = BaseFile()
-
-    file_obj.name = name
-    file_obj.path = path
-    file_obj.extension = extension
+        file_obj = BaseFile(name, path, extension)
 
     file_obj.explore_meta_data()
 

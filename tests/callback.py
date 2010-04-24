@@ -49,7 +49,7 @@ class TestCallbackConstructor(TestCallback):
         self.assertEquals(self.callback1.function, callback1)
 
     def testConstructorSetArgument(self):
-        self.assertEquals(self.callback1.object, 2222)
+        self.assertEquals(self.callback1.obj, 2222)
 
 class TestCallbackCall(TestCallback):
     def setUp(self):

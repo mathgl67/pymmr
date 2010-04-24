@@ -21,13 +21,22 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+"""
+This module contain the :class:`Config` class.
+"""
+
+import sys
+import codecs
+
 # Display a fatal error when yaml is not installed.
 # Yaml is require to parse the config file.
 try:
     import yaml
 except ImportError as exception:
-    print "FATAL: Yaml python module is require and must be installed. (python-yaml)"
-    import sys
+    print u"".join(
+        "FATAL: Yaml python module is require and must ",
+        "be installed. (python-yaml)"
+    )
     sys.exit(1)
 
 # try to load the libyaml Loader and Dumper
@@ -38,14 +47,16 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-import sys
-import codecs
 
 class Config(dict):
     """
     This class is used for configutation operation
     ( Loading, saving, accessing configuration values ).
     """
+
+    def __init__(self, values=None):
+        super(Config, self).__init__(values if values else {})
+        self.previous_file = None
 
     def load(self, file_name):
         """
@@ -54,20 +65,18 @@ class Config(dict):
         :param file_name: the yaml file
         :type file_name: :class:`unicode`
         """
-        file = codecs.open(
+        with codecs.open(
             file_name,
             "r",
             sys.getfilesystemencoding()
-        )
-        if file:
+        ) as f:
             self.clear()
             self.update(
                 yaml.load(
-                    file.read(),
+                    f.read(),
                     Loader=Loader
                 )
             )
-            file.close()
             self.previous_file = file_name
 
     def save(self, file_name=None):
@@ -82,16 +91,15 @@ class Config(dict):
         if not file_name:
             file_name = self.previous_file
 
-        file = codecs.open(
+        with codecs.open(
             file_name,
             "w+",
             sys.getfilesystemencoding()
-        )
-        yaml.dump(
-            self,
-            file,
-            Dumper=Dumper,
-            default_flow_style=False
-        )
-        file.close()
+        ) as f:
+            yaml.dump(
+                self,
+                f,
+                Dumper=Dumper,
+                default_flow_style=False
+            )
 
