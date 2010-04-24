@@ -153,7 +153,8 @@ class TestPluginManagerConstructor(TestPluginManagerBase):
     
 class TestPluginManagerValidateConfig(TestPluginManagerBase):
     def testConfigInstance(self):
-        pm = PluginManager(config=None)
+        pm = PluginManager()
+        pm.config = None
         (status, message) = pm.validate_config()
         self.assertFalse(status)
         self.assertEquals(message, u"config must be a dict")

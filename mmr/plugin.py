@@ -124,11 +124,11 @@ class PluginManager(dict):
     :param values: the object can be pre-intialized
     :type values: :class:`dict`
     """
-    def __init__(self, config={}, values={}):
+    def __init__(self, config=None, values=None):
         # call parent constructor
-        super(PluginManager, self).__init__(values)
+        super(PluginManager, self).__init__(values if values else {})
         # define config data
-        self.config = config
+        self.config = config if config else {}
 
     def validate_config(self):
         """
