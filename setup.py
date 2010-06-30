@@ -22,72 +22,24 @@
 #
 
 import os
-from distutils.core import setup
-from distutils.cmd import Command
 
-import tests
-import unittest
+from distutils.core import setup
+from setup.test_command import TestCommand
+from setup.coverage_command import CoverageCommand
 
 # create cmdclass dict
 cmdclass = {}
 
 # add tests command
-class TestCommand(Command):
-    description = "Run tests"
-    user_options = [("verbosity=", None, "set the verbosity of the tests")]
-
-    def initialize_options(self):
-        self.verbosity = 1
-
-    def finalize_options(self):
-        self.verbosity = int(self.verbosity)
-        
-    def run(self):
-        unittest.TextTestRunner(verbosity=self.verbosity).run(tests.all_tests)
 
 cmdclass["tests"] = TestCommand
 
 # add coverage commade if coverage installed
-class CoverageCommand(Command):
-    description = "Tests coverage"
-    user_options = [("html", None, "Generate html report")]
-    
-    def initialize_options(self):
-        self.html = False
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        cov = coverage.coverage()
-        cov.erase()
-        cov.start()
-        ts = unittest.TestResult()
-        tests.all_tests.run(ts)
-        cov.stop()
-        # do import here for more understanding code.
-        from mmr import album, callback, config, file, folder
-        from mmr import plugin
-        
-        from mmr.tags import abstract_tag, flac, mp3, ogg, tag
-
-        module_list = [
-            album, callback, config, file, folder, plugin,
-            abstract_tag, flac, mp3, ogg, tag
-        ]
-
-        cov.report(morfs=module_list)
-        if self.html:
-            cov.html_report(morfs=module_list, directory="coverage_html")
-        
-        coverage.erase()
-
 try:
     import coverage
     cmdclass["coverage"] = CoverageCommand
 except ImportError:
     pass
-
 
 # add build_sphinx command if sphinx installed
 try:
@@ -95,7 +47,6 @@ try:
     cmdclass["build_sphinx"] = BuildDoc
 except ImportError:
     pass
-
 
 setup(
     name="mmr",
