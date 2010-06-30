@@ -5,3 +5,4 @@ pymmr.cfg
 *.pyc
 data/*
 .coverage
+coverage_html

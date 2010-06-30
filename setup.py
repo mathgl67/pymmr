@@ -50,30 +50,36 @@ cmdclass["tests"] = TestCommand
 # add coverage commade if coverage installed
 class CoverageCommand(Command):
     description = "Tests coverage"
-    user_options = []
+    user_options = [("html", None, "Generate html report")]
     
     def initialize_options(self):
-        pass
+        self.html = False
 
     def finalize_options(self):
         pass
 
     def run(self):
-        coverage.erase()
-        coverage.start()
+        cov = coverage.coverage()
+        cov.erase()
+        cov.start()
         ts = unittest.TestResult()
         tests.all_tests.run(ts)
-        coverage.stop()
+        cov.stop()
         # do import here for more understanding code.
         from mmr import album, callback, config, file, folder
         from mmr import plugin
         
         from mmr.tags import abstract_tag, flac, mp3, ogg, tag
 
-        coverage.report([
+        module_list = [
             album, callback, config, file, folder, plugin,
             abstract_tag, flac, mp3, ogg, tag
-        ])
+        ]
+
+        cov.report(morfs=module_list)
+        if self.html:
+            cov.html_report(morfs=module_list, directory="coverage_html")
+        
         coverage.erase()
 
 try:
