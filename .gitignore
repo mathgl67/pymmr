@@ -4,3 +4,4 @@ pymmr.cfg
 .*.swp
 *.pyc
 data/*
+.coverage

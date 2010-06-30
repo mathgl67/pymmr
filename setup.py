@@ -47,11 +47,47 @@ class TestCommand(Command):
 
 cmdclass["tests"] = TestCommand
 
+# add coverage commade if coverage installed
+class CoverageCommand(Command):
+    description = "Tests coverage"
+    user_options = []
+    
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        coverage.erase()
+        coverage.start()
+        ts = unittest.TestResult()
+        tests.all_tests.run(ts)
+        coverage.stop()
+        # do import here for more understanding code.
+        from mmr import album, callback, config, file, folder
+        from mmr import plugin
+        
+        from mmr.tags import abstract_tag, flac, mp3, ogg, tag
+
+        coverage.report([
+            album, callback, config, file, folder, plugin,
+            abstract_tag, flac, mp3, ogg, tag
+        ])
+        coverage.erase()
+
+try:
+    import coverage
+    cmdclass["coverage"] = CoverageCommand
+except ImportError:
+    pass
+
+
 # add build_sphinx command if sphinx installed
 try:
     from sphinx.setup_command import BuildDoc
     cmdclass["build_sphinx"] = BuildDoc
-except ImportError as exception:
+except ImportError:
     pass
 
 
