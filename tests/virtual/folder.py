@@ -21,18 +21,18 @@
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 from mmr.folder import Folder
-from mmr.file import BaseFile
+from mmr.file import factory 
 
 def create_folder1():
     return Folder(
         "folder1",
         "/somewhere", [
-            BaseFile("00-Artist-Album.m3u"),
-            BaseFile("00-Artist-Album.nfo"),
-            BaseFile("01-title1.mp3"),
-            BaseFile("02-title2.mp3"),
-            BaseFile("03-title3.mp3"),
-            BaseFile("04-title4.mp3"),
+            factory("00-Artist-Album.m3u"),
+            factory("00-Artist-Album.nfo"),
+            factory("01-title1.mp3"),
+            factory("02-title2.mp3"),
+            factory("03-title3.mp3"),
+            factory("04-title4.mp3"),
         ]
     )
 

@@ -26,6 +26,7 @@ import os
 
 from mmr.folder import Folder
 
+from tests.virtual.folder import *
 from tests.virtual.file import * 
 
 class TestFolder(unittest.TestCase):
@@ -101,8 +102,14 @@ class TestFolderFunctions(TestFolder):
     def setUp(self):
         self.folder = Folder("name", "path")
     
-    def testFolderFunctionStr(self):
-        self.assertEquals(self.folder.__str__(), "<Folder name='name' path='path'>\n</Folder>")
+    def testFolderFunctionRepr(self):
+        self.assertEquals(repr(self.folder), "<Folder name='name' path='path'>\n</Folder>")
+
+    def testFolderFunctionReprWithFiles(self):
+        folder = create_folder1()
+        self.assertEquals(repr(folder),
+            "<Folder name='folder1' path='/somewhere'>\n<File name='00-Artist-Album.m3u' extension='.m3u' path='' />\n<File name='00-Artist-Album.nfo' extension='.nfo' path='' />\n<File name='01-title1.mp3' extension='.mp3' path='' />\n<File name='02-title2.mp3' extension='.mp3' path='' />\n<File name='03-title3.mp3' extension='.mp3' path='' />\n<File name='04-title4.mp3' extension='.mp3' path='' />\n</Folder>"
+        )
     
     def testFolderFunctionGetFullpath(self):
         self.assertEquals(self.folder.get_fullpath(), os.path.join("path", "name"))
