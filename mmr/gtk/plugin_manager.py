@@ -67,7 +67,7 @@ class PluginManagerDialog(object):
 
     def update_plugin(self):
         self.model_plugin.clear()
-        for (plugin_fullpath, plugin) in self.plugin_manager.dict.iteritems():
+        for (plugin_fullpath, plugin) in self.plugin_manager.iteritems():
             row = [self._gobj_from_plugin(plugin), self.plugin_manager.is_activate(plugin_fullpath), plugin.available(), plugin.about["name"], plugin.about["short_description"]]
             self.model_plugin.append(row)
 

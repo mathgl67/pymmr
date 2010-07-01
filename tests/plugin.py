@@ -44,6 +44,7 @@ class TestPlugin(unittest.TestCase):
             TestPluginManagerWalkForPlugin,
             TestPluginManagerLoad,
             TestPluginManagerLoadAll,
+            TestPluginManagerActivateAndBlackList,
             TestPluginManagerFind,
         ]
         tests = []
@@ -83,6 +84,15 @@ class TestAbstractResearchPluginConstructor(TestPlugin):
         self.assertEquals(self.p.type, u"research")
         self.assertEquals(self.p.priority, 0)
         self.assertNone(self.p.investigate_class)
+
+    def testInvestigateFunction(self):
+        # @todo this function should be removed in mmr.plugin ?
+        class aTestClass(object):
+            def __init__(self, folder, album_list, config, base_score):
+                pass
+
+        self.p.investigate_class = aTestClass
+        self.assertTrue(isinstance(self.p.investigate(None, None, None, None), aTestClass))
 
 # base function
 class TestPluginBaseFunction(TestPlugin):
@@ -217,8 +227,30 @@ class TestPluginManagerLoad(TestPluginManagerBase):
         path = os.path.join(u"tests", u"data", u"plugins", u"three")
         pm = self.gen_pluginmanager([path])
         pm.ensure_path_list_in_sys_path()
-        pm.load("one.test1")
-        self.assertTrue(pm.has_key("one.test1"))
+        self.assertTrue(pm.load("one.test1"))
+
+    def getPmBad(self):
+        path = os.path.join(u"tests", u"data", u"plugins", u"bad")
+        pm = self.gen_pluginmanager([path])
+        pm.ensure_path_list_in_sys_path()
+        return pm
+
+    def testLoadNotAPythonModule(self):
+        pm = self.getPmBad()
+        self.assertFalse(pm.load("not_python"))
+
+    def testLoadModuleNotExists(self):
+        pm = self.getPmBad()
+        self.assertFalse(pm.load("not_exists"))
+
+    def testLoadModuleWithoutPluginClass(self):
+        pm = self.getPmBad()
+        self.assertFalse(pm.load("no_plugin_class"))
+
+    def testLoadModuleWithPluginClassNone(self):
+        pm = self.getPmBad()
+        self.assertFalse(pm.load("plugin_class_none"))
+        
 
 class TestPluginManagerLoadAll(TestPluginManagerBase):
     def testOne(self):
@@ -256,6 +288,37 @@ class TestPluginManagerLoadAll(TestPluginManagerBase):
         self.assertFalse(pm.is_activate(u"one.test1"))
         self.assertTrue(pm.is_activate(u"two.test2"))
         self.assertFalse(pm.is_activate(u"three.test3"))
+
+class TestPluginManagerActivateAndBlackList(TestPluginManagerBase):
+    def setUp(self):
+       path = os.path.join(u"tests", u"data", u"plugins", u"three")
+       self.pm = self.gen_pluginmanager([path])
+
+    def testBlackListNotSet(self):
+       del self.pm.config["black_list"]
+       self.assertFalse(self.pm.is_in_black_list(u"one.test1"))
+
+    def testBlackListNone(self):
+       self.pm.config["black_list"] = None
+       self.assertFalse(self.pm.is_in_black_list(u"one.test1"))
+
+    def testBlackListReturn(self):
+        self.pm.config["black_list"] = [u"one.test1"]
+        self.assertTrue(self.pm.is_in_black_list(u"one.test1"))
+        self.assertFalse(self.pm.is_in_black_list(u"two.test2"))
+
+    def testIsActivateListNotSet(self):
+        del self.pm.config["activate_list"]
+        self.assertFalse(self.pm.is_activate(u"one.test1"))
+
+    def testIsActivateListNone(self):
+        self.pm.config["activate_list"] = None
+        self.assertFalse(self.pm.is_activate(u"one.test1"))
+
+    def testIsActivateListReturn(self):
+        self.pm.config["activate_list"] = [u"one.test1"]
+        self.assertTrue(self.pm.is_activate(u"one.test1"))
+        self.assertFalse(self.pm.is_activate(u"two.test2"))
 
 class TestPluginManagerFind(TestPluginManagerBase):
     def setUp(self):

@@ -219,15 +219,17 @@ class PluginManager(dict):
             return False
 
         # load
-        module = __import__(
-            fullpath,
-            globals(),
-            locals(),
-            path.split('.')
-        )
-
-        if not module:
-            return False 
+        try:
+            module = __import__(
+                fullpath,
+                globals(),
+                locals(),
+                path.split('.')
+            )
+        except SyntaxError:
+            return False
+        except ImportError:
+            return False
 
         if not module.__dict__.has_key("plugin_class"):
             return False
