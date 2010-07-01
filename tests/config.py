@@ -53,11 +53,18 @@ class TestConfig(unittest.TestCase):
         os.close(fd) # not needed
         # save to file
         config_writer.save(file_path)
-        # load from file
+        # load from file and change a value
+        config_reader.load(file_path)
+        config_reader["test_key2"] = True
+        # save using previous file
+        config_reader.save()
+        # load the file again
+        config_reader = Config({})
         config_reader.load(file_path)
         # compare
         self.assertTrue(config_reader["test_key1"])
-        self.assertFalse(config_reader["test_key2"])
+        self.assertTrue(config_reader["test_key2"])
         # delete it
         os.unlink(file_path)
+
         
