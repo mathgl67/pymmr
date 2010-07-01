@@ -64,3 +64,7 @@ class TestCallbackCall(TestCallback):
         global passed
         self.assertTrue(passed["arguments"])
 
+    def testCallWithNoFunction(self):
+        self.callback = Callback()
+        self.assertEquals(self.callback(), None)
+
