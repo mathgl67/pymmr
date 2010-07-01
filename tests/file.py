@@ -95,6 +95,9 @@ class TestFileUnknown(TestFile):
     def testExtention(self):
         self.assertEquals(self.file.extension, None, "file extension on unknown file should be None != %s" % self.file.extension)
 
+    def testBaseFileRepr(self):
+        self.assertEquals(repr(self.file), "<File name='unknown' extension='None' path='tests/data/file' />")
+
 class TestFileAudio(TestFile):
     def setUp(self):
         self.file = {
