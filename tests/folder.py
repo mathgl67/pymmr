@@ -107,8 +107,9 @@ class TestFolderFunctions(TestFolder):
 
     def testFolderFunctionReprWithFiles(self):
         folder = create_folder1()
+        file_list_repr = "\n".join(map(repr, folder.file_list))
         self.assertEquals(repr(folder),
-            "<Folder name='folder1' path='/somewhere'>\n<File name='00-Artist-Album.m3u' extension='.m3u' path='' />\n<File name='00-Artist-Album.nfo' extension='.nfo' path='' />\n<File name='01-title1.mp3' extension='.mp3' path='' />\n<File name='02-title2.mp3' extension='.mp3' path='' />\n<File name='03-title3.mp3' extension='.mp3' path='' />\n<File name='04-title4.mp3' extension='.mp3' path='' />\n</Folder>"
+            "<Folder name='folder1' path='/somewhere'>\n%s\n</Folder>" % file_list_repr
         )
     
     def testFolderFunctionGetFullpath(self):
