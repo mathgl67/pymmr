@@ -291,16 +291,16 @@ class TestPluginManagerLoadAll(TestPluginManagerBase):
 
 class TestPluginManagerActivateAndBlackList(TestPluginManagerBase):
     def setUp(self):
-       path = os.path.join(u"tests", u"data", u"plugins", u"three")
-       self.pm = self.gen_pluginmanager([path])
+        path = os.path.join(u"tests", u"data", u"plugins", u"three")
+        self.pm = self.gen_pluginmanager([path])
 
     def testBlackListNotSet(self):
-       del self.pm.config["black_list"]
-       self.assertFalse(self.pm.is_in_black_list(u"one.test1"))
+        del self.pm.config["black_list"]
+        self.assertFalse(self.pm.is_in_black_list(u"one.test1"))
 
     def testBlackListNone(self):
-       self.pm.config["black_list"] = None
-       self.assertFalse(self.pm.is_in_black_list(u"one.test1"))
+        self.pm.config["black_list"] = None
+        self.assertFalse(self.pm.is_in_black_list(u"one.test1"))
 
     def testBlackListReturn(self):
         self.pm.config["black_list"] = [u"one.test1"]

@@ -44,7 +44,7 @@ class CoverageCommand(Command):
         from mmr import album, callback, config, file, folder, plugin
         from mmr.tags import abstract_tag, flac, mp3, ogg, tag
 
-    	# lauch tests silently
+        # lauch tests silently
         ts = unittest.TestResult()
         tests.all_tests.run(ts)
         cov.stop()

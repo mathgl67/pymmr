@@ -49,7 +49,7 @@ class MusicbrainzInvestigate(AbstractInvestigate):
         self._album_ = Album('musicbrainz', self._base_score_)
 
     def do_album(self):
-    	from musicbrainz2.webservice import Query, ArtistFilter, ReleaseFilter, WebServiceError
+        from musicbrainz2.webservice import Query, ArtistFilter, ReleaseFilter, WebServiceError
         from musicbrainz2.utils import extractUuid
 
         for res in self._album_list_:
