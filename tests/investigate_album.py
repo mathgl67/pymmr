@@ -26,14 +26,7 @@ import virtual.folder
 from mmr.config import Config
 from mmr.investigate_album import InvestigateAlbum
 
-class TestInvestigateAlbum(unittest.TestCase):
-    @staticmethod
-    def suite():
-        return unittest.TestSuite([
-          unittest.TestLoader().loadTestsFromTestCase(TestInvestigateAlbumConstructor),
-        ])
-
-class TestInvestigateAlbumConstructor(TestInvestigateAlbum):
+class TestInvestigateAlbumConstructor(unittest.TestCase):
     def setUp(self):
         self.folder1 = virtual.folder.create_folder1()
         self.config1 = Config()

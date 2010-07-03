@@ -23,7 +23,6 @@
 
 import unittest
 import os, sys
-from mmr.utils import DictProxy
 from mmr.plugin import AbstractPlugin, AbstractResearchPlugin, PluginManager, get_plugin_fullpath, get_plugin_path
 
 class TestPlugin(unittest.TestCase):
@@ -141,6 +140,7 @@ class TestPluginManagerBase(TestPlugin):
 class TestPluginManagerConstructor(TestPluginManagerBase):
     def testDefaultType(self):
         pm = PluginManager()
+        self.assertTrue(isinstance(pm, PluginManager))
 
     def testDefaultValue(self):
         pm = PluginManager()

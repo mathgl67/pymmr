@@ -26,16 +26,7 @@ import os
 import mmr.file
 from mmr.file import BaseFile, AudioFile
 
-class TestFile(unittest.TestCase):
-    @staticmethod
-    def suite():
-        return unittest.TestSuite([
-          unittest.TestLoader().loadTestsFromTestCase(TestFileFactory),
-          unittest.TestLoader().loadTestsFromTestCase(TestFileUnknown),
-          unittest.TestLoader().loadTestsFromTestCase(TestFileAudio),
-        ])
-
-class TestFileFactory(TestFile):
+class TestFileFactory(unittest.TestCase):
     def setUp(self):
         # create cross os compatible path
         self.file_name = "name.ext"
@@ -85,7 +76,7 @@ class TestFileFactory(TestFile):
         )
 
 
-class TestFileUnknown(TestFile):
+class TestFileUnknown(unittest.TestCase):
     def setUp(self):
         self.file = mmr.file.factory("tests/data/file/unknown")
 
@@ -98,7 +89,7 @@ class TestFileUnknown(TestFile):
     def testBaseFileRepr(self):
         self.assertEquals(repr(self.file), "<File name='unknown' extension='None' path='tests/data/file' />")
 
-class TestFileAudio(TestFile):
+class TestFileAudio(unittest.TestCase):
     def setUp(self):
         self.file = {
           ".mp3": mmr.file.factory("tests/data/tags/silence.mp3"),

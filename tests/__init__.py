@@ -22,24 +22,33 @@
 #
 
 import unittest
+import callback
+import config
+import file
+import folder
+import investigate_album
+import plugin
+import registry
+import tag
 
-from tag import TestTag
-from file import TestFile
-from config import TestConfig
-from folder import TestFolder
-from investigate_album import TestInvestigateAlbum
-from callback import TestCallback
-from registry import TestRegistry
-from plugin import TestPlugin
+ts = unittest.TestLoader()
+all_tests = unittest.TestSuite([])
+all_tests.addTest(ts.loadTestsFromModule(callback))
+all_tests.addTest(ts.loadTestsFromModule(config))
+all_tests.addTest(ts.loadTestsFromModule(file))
+all_tests.addTest(ts.loadTestsFromModule(folder))
+all_tests.addTest(ts.loadTestsFromModule(investigate_album))
+all_tests.addTest(ts.loadTestsFromModule(plugin))
+all_tests.addTest(ts.loadTestsFromModule(registry))
+all_tests.addTest(ts.loadTestsFromModule(tag))
 
-all_tests = unittest.TestSuite([
-  TestFile.suite(),
-  TestTag.suite(),
-  TestFolder.suite(),
-  TestInvestigateAlbum.suite(),
-  TestCallback.suite(),
-  unittest.TestLoader().loadTestsFromTestCase(TestConfig),
-  unittest.TestLoader().loadTestsFromTestCase(TestRegistry),
-  TestPlugin.suite(),
-])
+#  TestFile.suite(),
+#  TestTag.suite(),
+#  TestFolder.suite(),
+#  TestInvestigateAlbum.suite(),
+#  TestCallback.suite(),
+#  unittest.TestLoader().loadTestsFromTestCase(TestConfig),
+#  unittest.TestLoader().loadTestsFromTestCase(TestRegistry),
+#  TestPlugin.suite(),
+#])
 

@@ -29,14 +29,9 @@ from mmr.tags.mp3 import Mp3
 from mmr.tags.ogg import Ogg
 from mmr.tags.flac import Flac
 
-class TestTag(unittest.TestCase):
-    @staticmethod
-    def suite():
-        return unittest.TestSuite([
-          unittest.TestLoader().loadTestsFromTestCase(TestTagMp3),
-          unittest.TestLoader().loadTestsFromTestCase(TestTagFlac),
-          unittest.TestLoader().loadTestsFromTestCase(TestTagOgg),
-        ])
+class TestTagMp3(unittest.TestCase):
+    def setUp(self):
+        self.tag = Mp3(mmr.file.factory('tests/data/tags/silence.mp3'))
 
     def testArtist(self):
         self.assertEquals(self.tag.artist, u'artist')
@@ -56,15 +51,10 @@ class TestTag(unittest.TestCase):
     def testTrackNumber(self):
         self.assertEquals(self.tag.tracknumber, u'1')
 
-
-class TestTagMp3(TestTag):
-    def setUp(self):
-        self.tag = Mp3(mmr.file.factory('tests/data/tags/silence.mp3'))
-
-class TestTagFlac(TestTag):
+class TestTagFlac(TestTagMp3):
     def setUp(self):
         self.tag = Flac(mmr.file.factory('tests/data/tags/silence.flac'))
 
-class TestTagOgg(TestTag):
+class TestTagOgg(TestTagMp3):
     def setUp(self):
         self.tag = Ogg(mmr.file.factory('tests/data/tags/silence.ogg'))

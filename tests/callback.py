@@ -33,15 +33,7 @@ def callback1(obj, arg):
     if obj == 2222 and arg == 4444: 
         passed["arguments"] = True
 
-class TestCallback(unittest.TestCase):
-    @staticmethod
-    def suite():
-        return unittest.TestSuite([
-          unittest.TestLoader().loadTestsFromTestCase(TestCallbackConstructor),
-          unittest.TestLoader().loadTestsFromTestCase(TestCallbackCall),
-        ])
-
-class TestCallbackConstructor(TestCallback):
+class TestCallbackConstructor(unittest.TestCase):
     def setUp(self):
         self.callback1 = Callback(callback1, 2222)
 
@@ -51,7 +43,7 @@ class TestCallbackConstructor(TestCallback):
     def testConstructorSetArgument(self):
         self.assertEquals(self.callback1.obj, 2222)
 
-class TestCallbackCall(TestCallback):
+class TestCallbackCall(unittest.TestCase):
     def setUp(self):
         self.callback1 = Callback(callback1, 2222)
         self.callback1(4444)

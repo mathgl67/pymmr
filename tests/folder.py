@@ -29,16 +29,7 @@ from mmr.folder import Folder
 from tests.virtual.folder import *
 from tests.virtual.file import * 
 
-class TestFolder(unittest.TestCase):
-    @staticmethod
-    def suite():
-        return unittest.TestSuite([
-          unittest.TestLoader().loadTestsFromTestCase(TestFolderFactory),
-          unittest.TestLoader().loadTestsFromTestCase(TestFolderConstructor),
-          unittest.TestLoader().loadTestsFromTestCase(TestFolderFunctions),
-        ])
-
-class TestFolderFactory(TestFolder):
+class TestFolderFactory(unittest.TestCase):
     def setUp(self):
         # prepare test data
         self.folder_name = "folder"
@@ -84,7 +75,7 @@ class TestFolderFactory(TestFolder):
         self.assertEquals(len(self.folder.file_list), 1)
         self.assertTrue(isinstance(self.folder.file_list, list))
 
-class TestFolderConstructor(TestFolder):
+class TestFolderConstructor(unittest.TestCase):
     def setUp(self):
         self.folder = Folder("name", "path", ["file1", "file2"])
 
@@ -98,7 +89,7 @@ class TestFolderConstructor(TestFolder):
         ## @todo change to a real file list..
         self.assertEquals(self.folder.file_list, ["file1", "file2"])
 
-class TestFolderFunctions(TestFolder):
+class TestFolderFunctions(unittest.TestCase):
     def setUp(self):
         self.folder = Folder("name", "path")
     
