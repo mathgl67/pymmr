@@ -33,10 +33,10 @@ import codecs
 try:
     import yaml
 except ImportError as exception:
-    print u"".join(
+    print u"".join( [
         "FATAL: Yaml python module is require and must ",
         "be installed. (python-yaml)"
-    )
+    ] )
     sys.exit(1)
 
 # try to load the libyaml Loader and Dumper
