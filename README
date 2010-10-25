@@ -1,0 +1,49 @@
+            8888888b.           888b     d888 888b     d888
+            888   Y88b          8888b   d8888 8888b   d8888
+            888    888          88888b.d88888 88888b.d88888
+            888   d88P 888  888 888Y88888P888 888Y88888P888 888d888
+            8888888P"  888  888 888 Y888P 888 888 Y888P 888 888P"
+            888        888  888 888  Y8P  888 888  Y8P  888 888
+            888        Y88b 888 888   "   888 888   "   888 888
+            888         "Y88888 888       888 888       888 888
+                            888
+                       Y8b d88P
+                        "Y88P"
+
+________________________________________________________________________________
+                         ____ ____ ____ ___  _  _ ____ 
+                         |__/ |___ |__| |  \ |\/| |___ 
+                         |  \ |___ |  | |__/ |  | |___ 
+________________________________________________________________________________
+
+
+Dependancy
+==========
+
+ * python2
+ * python-mutagen
+ * python-yaml
+ * python gtk 
+
+Use
+===
+
+You must be in project directory.
+
+Copy pymmr.default.cfg to pymmr.cfg:
+
+	cp pymmr.default.cfg pymmr.cfg
+
+You may want to edit it.
+
+You can run it on terminal like that:
+
+	./pymmr /music/directory/on/your/system
+
+Even at this stage, files should not be modified by PyMMR.
+I recommand to try it on a copy.
+
+For the GTK client:
+
+	./gmmr
+
