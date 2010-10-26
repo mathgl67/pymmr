@@ -25,7 +25,6 @@ import os
 
 from distutils.core import setup
 from setup.test_command import TestCommand
-from setup.coverage_command import CoverageCommand
 
 # create cmdclass dict
 cmdclass = {}
@@ -37,6 +36,8 @@ cmdclass["tests"] = TestCommand
 # add coverage commade if coverage installed
 try:
     import coverage
+    from setup.coverage_command import CoverageCommand
+
     cmdclass["coverage"] = CoverageCommand
 except ImportError:
     pass
