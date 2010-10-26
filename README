@@ -20,10 +20,28 @@ ________________________________________________________________________________
 Dependancy
 ==========
 
+BASE
+----
+
  * python2
  * python-mutagen
  * python-yaml
+
+PLUGINS
+-------
+
+@TODO
+
+GUI
+---
+
  * python gtk 
+
+OTHER
+------
+
+ * Coverage (for coverage setup setup command)
+ * python-sphinx (for build_sphinx setup command)
 
 Use
 ===
@@ -46,4 +64,14 @@ I recommand to try it on a copy.
 For the GTK client:
 
 	./gmmr
+
+
+API DOCUMENTATION
+=================
+
+You can generate documentation if you have python-sphinx installed by the following command:
+
+	./setup.py build_sphinx
+
+Documentation will be store in: build/sphinx/html 
 
